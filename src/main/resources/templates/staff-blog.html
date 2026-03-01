@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>社員のブログ | チームb不動産</title>
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <!-- ===============================
+       ブログページ専用スタイル
+       ※共通CSSを壊さない範囲で最小限に追加
+  ================================== -->
+  <style>
+    /* 見出し＋右側操作（ログイン状態など） */
+    .blog-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .blog-header h2{
+      margin: 0;
+    }
+    .blog-header__actions{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .blog-header__status{
+      color: #444;
+      font-size: 0.95em;
+    }
+
+    /* 投稿カード */
+    .post-card{
+      border: 1px solid #ddd;
+      padding: 14px;
+      margin: 0 0 14px 0;
+      background: rgb(241, 242, 248);
+    }
+    .post-card__title{
+      margin: 0 0 8px 0;
+    }
+    .post-card__meta{
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    /* サムネイル */
+    .blog-thumb{
+      width: 220px;
+      max-width: 100%;
+      height: auto;
+      cursor: zoom-in;
+      border: 1px solid #eee;
+      border-radius: 6px;
+    }
+
+    /* 削除ボタンエリア */
+    .post-card__actions{
+      margin-top: 10px;
+      text-align: right;
+    }
+
+    /* ページネーション */
+    .pager{
+      margin: 20px 0;
+      text-align: center;
+    }
+    .pager a{
+      margin: 0 6px;
+      text-decoration: none;
+    }
+    .pager .current{
+      margin: 0 6px;
+      font-weight: bold;
+      color: #1976d2;
+    }
+
+    /* 画像モーダル */
+    .img-modal{
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 9999;
+    }
+    .img-modal.is-open{
+      display: block;
+    }
+    .img-modal__backdrop{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+    }
+    .img-modal__content{
+      position: relative;
+      max-width: min(92vw, 980px);
+      max-height: 86vh;
+      margin: 7vh auto 0;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .img-modal__content img{
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .img-modal__close{
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 22px;
+      line-height: 1;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<!-- ===============================
+     ヘッダー
+================================ -->
+<header id="top">
+  <h1>
+    不動産のチームBe
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+    </a>
+  </h1>
+</header>
+
+<!-- ===============================
+     グローバルナビ
+================================ -->
+<nav>
+  <ul>
+    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- ===============================
+     クイックナビ（右上ポップ追従）
+     ※既存CSS（floating-nav / nav-chip）前提
+================================ -->
+<nav class="floating-nav" aria-label="クイックナビ">
+  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip" th:href="@{/history}">履歴</a>
+</nav>
+
+<!-- ===============================
+     メイン
+================================ -->
+<main id="contents">
+  <div class="blog-header">
+    <h2>社員のブログ</h2>
+
+    <div class="blog-header__actions">
+      <!-- ログイン状態表示 -->
+      <span class="blog-header__status" th:if="${staffName != null}">
+        ログイン中：<b th:text="${staffName}"></b>
+      </span>
+
+      <!-- ログイン中のみ：新規投稿 -->
+      <a th:if="${staffName != null}" th:href="@{/staff/blog/new}">
+        ＋新規投稿
+      </a>
+
+      <!-- ログイン中のみ：ログアウト -->
+      <form th:if="${staffName != null}" th:action="@{/staff/logout}" method="post" style="display:inline;">
+        <button type="submit">ログアウト</button>
+      </form>
+
+      <!-- 未ログイン：ログイン導線 -->
+      <span th:if="${staffName == null}">
+        <a th:href="@{/staff/login}">スタッフログイン</a>
+      </span>
+    </div>
+  </div>
+
+  <hr style="margin:16px 0;">
+
+  <!-- 投稿なし -->
+  <section th:if="${#lists.isEmpty(posts)}">
+    <p>投稿はまだありません。</p>
+  </section>
+
+  <!-- ===============================
+       投稿一覧
+  ================================== -->
+  <section th:if="${!#lists.isEmpty(posts)}">
+    <article class="post-card" th:each="p : ${posts}">
+      <h3 class="post-card__title" th:text="${p.title}"></h3>
+
+      <div class="post-card__meta">
+        <span>投稿者：</span><span th:text="${p.author}"></span>
+        <span style="margin:0 8px;">|</span>
+        <span th:text="${#temporals.format(p.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+      </div>
+
+      <!-- 画像（サムネ→モーダル） -->
+      <div th:if="${p.imageUrl != null}" style="margin:10px 0;">
+        <img class="blog-thumb"
+             th:src="${p.imageUrl}"
+             th:attr="data-full=${p.imageUrl}"
+             alt="ブログ画像（クリックで拡大）">
+      </div>
+
+      <p th:text="${p.body}" style="white-space:pre-wrap; margin:0;"></p>
+
+      <!-- 削除（ログイン時のみ表示） -->
+      <div class="post-card__actions" th:if="${staffName != null}">
+        <form th:action="@{/staff/blog/delete}"
+              method="post"
+              onsubmit="return confirm('この記事を削除しますか？');"
+              style="display:inline;">
+          <input type="hidden" name="id" th:value="${p.id}">
+          <input type="hidden" name="page" th:value="${page}">
+          <button type="submit">削除</button>
+        </form>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===============================
+       ページネーション
+  ================================== -->
+  <nav class="pager" th:if="${totalPages > 1}" aria-label="ページネーション">
+    <a th:if="${page > 1}" th:href="@{/staff/blog(page=${page-1})}">←</a>
+
+    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+      <a th:if="${i != page}" th:href="@{/staff/blog(page=${i})}" th:text="${i}"></a>
+      <span th:if="${i == page}" class="current" th:text="${i}"></span>
+    </span>
+
+    <a th:if="${page < totalPages}" th:href="@{/staff/blog(page=${page+1})}">→</a>
+  </nav>
+</main>
+
+<!-- ===============================
+     フッター
+================================ -->
+<footer>
+  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+</footer>
+
+<!-- ===============================
+     画像モーダル
+================================ -->
+<div id="imgModal" class="img-modal" aria-hidden="true">
+  <div class="img-modal__backdrop" data-close></div>
+  <div class="img-modal__content" role="dialog" aria-modal="true">
+    <button type="button" class="img-modal__close" data-close aria-label="閉じる">×</button>
+    <img id="imgModalTarget" src="" alt="拡大画像">
+  </div>
+</div>
+
+<!-- ===============================
+     ブログ画像モーダル制御
+     ※クリックで拡大、Escで閉じる
+================================ -->
+<script>
+  (function () {
+    const modal = document.getElementById('imgModal');
+    const target = document.getElementById('imgModalTarget');
+
+    function openModal(src) {
+      target.src = src;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      target.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', function (e) {
+      const img = e.target.closest('.blog-thumb');
+      if (img) {
+        const src = img.getAttribute('data-full') || img.src;
+        openModal(src);
+        return;
+      }
+      if (e.target.matches('[data-close]')) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closeModal();
+      }
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>社員ブログ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="css/responsive.css" media="screen and (max-width: 767px)">
+	<style>
+		/* メイン画像用のスタイル */
+		  .staff {
+		    float: left;        /* 画像を左に寄せ、テキストを右に回り込ませる */
+		    width: 30%;         /* 画像の幅を画面（親要素）の30%にする */
+		    margin-right: 20px; /* 画像とテキストの間に余白を作る */
+		    margin-bottom: 10px;/* 画像の下に余白を作る */
+		    height: auto;
+		  }
+		/* 回り込みを解除するための設定（footerなどが崩れないように） */
+		#main::after {
+		    content: "";
+		    display: block;
+		    clear: both;
+		}
+		/*自己紹介後の分の後に会社自体のアピールテキストを追加したのでタイトル部分のPタグに指定
+		　二人目の紹介文を書こうと思いましたがレイアウトが崩れたのでテキストのみにしています。*/
+		.fudousanB {
+			color: red;
+			font-size: 200%;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body id="staff">
+    <header id="top">
+        <h1>不動産のチームBe<a th:href="@{/}"><img src="images/logo.png" alt="b不動産チームについて"></a></h1>
+    </header>
+    <nav>
+        <ul>
+            <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+            <li id="nav_staff"><a th:href="@{/staff}">社員ブログ</a></li>
+            <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+            <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+        </ul>
+    </nav>
+    
+    <!-- =======================================================
+	      右上ポップ追従ナビ（白背景）
+	      ======================================================= -->
+	 <nav class="floating-nav" aria-label="クイックナビ">
+	   <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
+	   <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
+	   <a class="nav-chip" th:href="@{/history}">履歴</a>
+	 </nav>
+    
+    
+    <div id="path">
+        <ol>
+            <li><a th:href="@{/}">ホーム</a></li>
+            <li>社員ブログ</li>
+        </ol>
+    </div>
+    <div id="contents">
+        <div id="main">
+            <article>
+                <h1>NEW FACE登場！新人営業の山田翠（みどり）です！</h1>
+            </article>
+        </div>
+		<img src="images/staff.jpg"  class="staff">
+		<h3>不動産Bチームに、期待のフレッシュな新メンバーが加わりました！<br>
+
+		不動産は多くのお客様にとって「一生に一度の大きな買い物」という、人生の輝かしい節目です。<br>
+		その大切な瞬間を、持ち前の明るさと全力の笑顔で、精一杯サポートさせていただきます。<br>
+		まだまだ勉強中の身ではありますが、物件の魅力はもちろんのこと、地元の方しか知らないような美味しいお店や便利な裏道など、「街の耳寄り情報」もSNSやブログを通じてどんどん発信していく予定です！<br>
+		お客様お一人おひとりの不安に寄り添い、ワクワクするお部屋探しをお手伝いできるよう、一生懸命頑張ります。新しい視点でチームに元気をお届けしますので、皆さま温かい応援をどうぞよろしくお願いいたします！
+		</h3>
+		<p class="fudousanB">【不動産Bチームのアピールポイント】</p>
+		<h3>
+			私たち不動産Bチームは、地域に根ざした「住まいのトータルアドバイザー」として、お客様の理想を形にするお手伝いをしております。<br>
+			不動産取引には、複雑な契約や資金計画など、専門的な判断が必要な場面が多々あります。私たちは「透明性の高い情報公開」と「迅速なレスポンス」を徹底し、初めての方でも安心して手続きを進められる体制を整えております。<br>
+			ベテランから若手まで、それぞれの強みを活かしたチームプレイで、多角的な視点から最善のご提案をさせていただきます。<br>
+			また、ご契約はゴールではなく、新しい生活のスタートです。<br>
+			お引渡し後のアフターフォローや、将来的なメンテナンスのご相談まで、末永く頼っていただける存在であり続けることをお約束いたします。<br>
+			「安心」と「満足」を第一に、スタッフ一同、誠心誠意向き合ってまいります。<br>
+			住まいに関するお悩みやご要望は、ぜひ私たち不動産Bチームにお任せください。
+		</h3>
+        <div id="sub">
+            <div class="bnr_area">
+                <a th:href="@{/properties}">
+                    <dl>
+                        <dt><img src="images/bnr_guide.png" alt="物件検索"></dt>
+                        <dd>物件の検索はこちらから</dd>
+                    </dl>
+                </a>
+            </div>
+            <div class="bnr_area">
+                <a th:href="@{/contact}">
+                    <p><img src="images/bnr_contact.png" alt="お問い合わせ"></p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+        <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+        <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+﻿@charset "utf-8";
+
+/* =========================================================
+   common.css
+   役割：全ページ共通の「基本スタイル（ベース）」
+   ========================================================= */
+
+/* ---------- Base ---------- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",
+               "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-size: 87.5%;
+  line-height: 1.4;
+}
+
+p { margin: 0 0 20px 0; }
+
+img { border: 0; }
+
+/* ---------- Link ---------- */
+a { color: #fa474d; }
+a:hover { color: #fc9698; }
+
+/* ---------- Header Logo ---------- */
+header h1 a {
+  display: inline-block;
+  vertical-align: bottom;
+}
+header h1 a img { vertical-align: bottom; }
+
+/* ---------- Breadcrumb (#path) ---------- */
+#path ol {
+  list-style-type: none;
+  padding: 0;
+}
+#path ol li {
+  display: inline;
+  margin-right: 5px;
+}
+#path ol li a {
+  padding-right: 15px;
+  background-image: url(../images/path_arrow.png);
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+/* ---------- Layout helpers ---------- */
+#contents { overflow: hidden; }
+
+/* ---------- Banner area ---------- */
+.bnr_area { margin-bottom: 30px; }
+
+.bnr_area dt img {
+  margin-bottom: 6px;
+  vertical-align: bottom;
+}
+.bnr_area a { text-decoration: none; }
+
+.bnr_area dl,
+.bnr_area dt,
+.bnr_area dd,
+.bnr_area p { margin: 0; }
+
+.bnr_area p img { vertical-align: text-bottom; }
+
+/* ---------- Page top ---------- */
+#pagetop {
+  margin-bottom: 0;
+  float: right;
+}
+#pagetop a {
+  display: block;
+  min-height: 16px;
+  padding: 6px 0 6px 28px;
+  background-image: url(../images/bg_arrow.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+/* ---------- Footer ---------- */
+footer address {
+  font-style: normal;
+  margin-bottom: 6px;
+}

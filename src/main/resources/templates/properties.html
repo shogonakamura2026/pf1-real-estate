@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>物件一覧 | チームb不動産</title>
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <!-- ===============================
+       物件一覧ページ専用スタイル
+       ※既存の共通CSSは残しつつ、カードレイアウト部分のみ定義
+  ================================== -->
+  <style>
+    /* --------- base --------- */
+    * { box-sizing: border-box; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    /* --------- sticky header（絞り込み） --------- */
+    .site-header{
+      background: rgb(241, 242, 248);
+      border-bottom: 1px solid #e6e9ee;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .site-title{
+      margin: 0 0 20px;
+      font-size: 26px;
+      letter-spacing: .02em;
+    }
+
+    /* --------- search form --------- */
+    .search-bar{
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      background: #f8fafc;
+      border: 1px solid #e6e9ee;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .field label{
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      color: #1f2a44;
+      margin-bottom: 6px;
+    }
+    .field select{
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+    }
+    .range{
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+    .tilde{ color: #6b7280; }
+
+    .actions{
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+      color: #1f2a44;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .btn.primary{
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #075985;
+    }
+    .btn.outline{
+      background: #fff;
+      border-color: #cdd6e4;
+      color: #1f2a44;
+    }
+    .btn.pink{
+      background: #fce7f3;
+      border-color: #f9a8d4;
+      color: #9d174d;
+    }
+    .btn.ghost{
+      background: transparent;
+      border-color: #cdd6e4;
+      color: #1f2a44;
+    }
+    .btn:hover{ filter: brightness(0.97); }
+
+    /* --------- results --------- */
+    .result-meta{
+      margin: 12px 0 18px;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    /* --------- cards --------- */
+    .cards{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .card{
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 14px;
+      border: 1px solid #e6e9ee;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .thumb{
+      position: relative;
+      display: block;
+      height: 100%;
+      background: #f1f5f9;
+    }
+    .thumb img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .badge{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .card-body{ padding: 14px 14px 16px; }
+    .top-row{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .title{
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .sub{
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .price{
+      min-width: 140px;
+      text-align: right;
+      background: #f8fafc;
+      border: 1px solid #e6e9ee;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .price-label{
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .price-value{
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .yen{ font-size: 14px; font-weight: 700; margin-left: 2px; }
+
+    .spec-grid{
+      margin: 12px 0 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 14px;
+    }
+    .kv{
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .kv dt{
+      color: #64748b;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .kv dd{
+      margin: 0;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .kv.wide{
+      grid-column: 1 / -1;
+      grid-template-columns: 70px 1fr;
+    }
+    .desc{
+      color: #334155;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .btn-row{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    /* --------- responsive --------- */
+    @media (max-width: 860px){
+      .card{ grid-template-columns: 1fr; }
+      .thumb{ height: 180px; }
+      .search-bar{
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+      .actions{ justify-content: flex-start; }
+      .price{ text-align: left; min-width: auto; }
+      .top-row{ flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+<!-- ===============================
+     ヘッダー
+================================ -->
+<header id="top">
+  <h1>
+    不動産のチームBe
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+    </a>
+  </h1>
+</header>
+
+<!-- ===============================
+     グローバルナビ
+================================ -->
+<nav>
+  <ul>
+    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- ===============================
+     右上ポップ追従ナビ（白背景）
+     ※ style.css 側の floating-nav / nav-chip 前提
+================================ -->
+<nav class="floating-nav" aria-label="クイックナビ">
+  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip" th:href="@{/history}">履歴</a>
+</nav>
+
+<!-- ===============================
+     絞り込み（sticky）
+================================ -->
+<div class="site-header">
+  <div class="container">
+    <h2 class="site-title">物件一覧</h2>
+
+    <form class="search-bar" th:action="@{/properties}" method="get">
+      <div class="field">
+        <label>家賃</label>
+        <div class="range">
+          <select name="minPrice">
+            <option value="">下限なし</option>
+            <option value="30000"  th:selected="${minPrice == 30000}">3万〜</option>
+            <option value="50000"  th:selected="${minPrice == 50000}">5万〜</option>
+            <option value="70000"  th:selected="${minPrice == 70000}">7万〜</option>
+            <option value="100000" th:selected="${minPrice == 100000}">10万〜</option>
+            <option value="150000" th:selected="${minPrice == 150000}">15万〜</option>
+            <option value="200000" th:selected="${minPrice == 200000}">20万〜</option>
+          </select>
+
+          <span class="tilde">〜</span>
+
+          <select name="maxPrice">
+            <option value="">上限なし</option>
+            <option value="50000"  th:selected="${maxPrice == 50000}">〜5万</option>
+            <option value="80000"  th:selected="${maxPrice == 80000}">〜8万</option>
+            <option value="100000" th:selected="${maxPrice == 100000}">〜10万</option>
+            <option value="150000" th:selected="${maxPrice == 150000}">〜15万</option>
+            <option value="200000" th:selected="${maxPrice == 200000}">〜20万</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>地域</label>
+        <select name="areaId">
+          <option value="">指定なし</option>
+          <option value="1" th:selected="${areaId == 1}">北部</option>
+          <option value="2" th:selected="${areaId == 2}">中部</option>
+          <option value="3" th:selected="${areaId == 3}">南部</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>間取り</label>
+        <select name="layout">
+          <option value="">指定なし</option>
+          <option value="1DK"  th:selected="${layout == '1DK'}">1DK</option>
+          <option value="2DK"  th:selected="${layout == '2DK'}">2DK</option>
+          <option value="3DK"  th:selected="${layout == '3DK'}">3DK</option>
+          <option value="1LDK" th:selected="${layout == '1LDK'}">1LDK</option>
+          <option value="2LDK" th:selected="${layout == '2LDK'}">2LDK</option>
+          <option value="3LDK" th:selected="${layout == '3LDK'}">3LDK</option>
+          <option value="4LDK" th:selected="${layout == '4LDK'}">4LDK</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">この条件で検索</button>
+        <a class="btn ghost" th:href="@{/properties}">条件クリア</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===============================
+     物件カード一覧
+================================ -->
+<main class="container">
+  <div class="result-meta">
+    検索結果：
+    <!-- Controller側は resultCountColor を渡しているので、それに合わせる -->
+    <span th:style="'color:' + (${resultCountColor} ?: 'red')"
+          th:text="${#lists.size(properties)}"></span>件
+  </div>
+
+  <section class="cards">
+    <article class="card" th:each="spec : ${properties}">
+
+      <!-- 画像：クリックで詳細 -->
+      <a class="thumb" th:href="@{/properties/{id}(id=${spec.id})}">
+        <img th:src="@{'/images/' + ${spec.imageUrl}}" alt="物件画像">
+        <span class="badge">NEW</span>
+      </a>
+
+      <!-- 右側：情報 -->
+      <div class="card-body">
+        <div class="top-row">
+          <div class="title-area">
+            <a class="title"
+               th:href="@{/properties/{id}(id=${spec.id})}"
+               th:text="${spec.title}">物件名</a>
+            <div class="sub">
+              <span th:text="${spec.address}">住所</span>
+            </div>
+          </div>
+
+          <!-- 家賃：強調 -->
+          <div class="price">
+            <div class="price-label">家賃</div>
+            <div class="price-value">
+              <span th:text="${spec.price}">0</span><span class="yen">円</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- スペック -->
+        <dl class="spec-grid">
+          <div class="kv">
+            <dt>間取り</dt>
+            <dd th:text="${spec.layout}">2LDK</dd>
+          </div>
+          <div class="kv">
+            <dt>面積</dt>
+            <dd><span th:text="${spec.floorArea}">0</span>㎡</dd>
+          </div>
+          <div class="kv wide">
+            <dt>説明</dt>
+            <dd class="desc" th:text="${spec.description}">説明文</dd>
+          </div>
+        </dl>
+
+        <!-- ボタン -->
+        <div class="btn-row">
+          <a class="btn outline" th:href="@{/contact}">お問い合わせ</a>
+
+          <button class="btn pink" type="button"
+                  th:attr="data-id=${spec.id},
+                           data-title=${spec.title},
+                           data-price=${spec.price},
+                           data-layout=${spec.layout},
+                           data-image=${spec.imageUrl}"
+                  onclick="addFavoriteFromBtn(this)">
+            お気に入り
+          </button>
+
+          <a class="btn primary" th:href="@{/properties/{id}(id=${spec.id})}">詳細を見る</a>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<!-- ===============================
+     フッター
+================================ -->
+<footer>
+  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+</footer>
+
+<!-- ===============================
+     お気に入り追加（localStorage）
+     ※ favorites.html は /images/ + imageUrl で表示する想定
+================================ -->
+<script>
+  const KEY = "favorites";
+
+  function addFavoriteFromBtn(btn) {
+    const item = {
+      id: Number(btn.dataset.id),
+      title: btn.dataset.title || "",
+      price: Number(btn.dataset.price || 0),
+      layout: btn.dataset.layout || "",
+      imageUrl: btn.dataset.image || ""
+    };
+    addFavoriteItem(item);
+  }
+
+  function addFavoriteItem(item) {
+    let list;
+    try { list = JSON.parse(localStorage.getItem(KEY) || "[]"); }
+    catch (e) { list = []; }
+
+    if (!list.some(x => Number(x.id) === Number(item.id))) {
+      list.push(item);
+      localStorage.setItem(KEY, JSON.stringify(list));
+      alert("お気に入りに追加しました");
+    } else {
+      alert("すでにお気に入りに入っています");
+    }
+  }
+</script>
+</body>
+</html>

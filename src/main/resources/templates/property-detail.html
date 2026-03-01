@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>物件詳細 | チームb不動産</title>
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <!-- ===============================
+       詳細ページ専用スタイル（UI部分）
+       ※共通CSSを壊さない範囲で最小限に追加
+  ================================== -->
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* 上段：画像＋右側情報 */
+    .top2{
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .card{
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card.pad{
+      padding: 14px;
+    }
+
+    .photo img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .title{
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .price{
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .meta{
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* ボタン */
+    .buttons{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+      color: #1f2a44;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .btn.primary{
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+      color: #075985;
+    }
+    .btn.outline{
+      background: #fff;
+      border-color: #cdd6e4;
+      color: #1f2a44;
+    }
+    .btn.pink{
+      background: #fce7f3;
+      border-color: #f9a8d4;
+      color: #9d174d;
+    }
+    .btn.small{
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    /* 詳細テーブル */
+    .detail table{
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .detail th,
+    .detail td{
+      border: 1px solid rgb(192, 192, 192);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .detail th{
+      width: 140px;
+      background: rgb(231, 239, 243);
+      color: #334155;
+      font-weight: 800;
+    }
+
+    /* マップ */
+    .map iframe{
+      width: 100%;
+      height: 360px;
+      border: 0;
+      display: block;
+    }
+
+    /* おすすめ */
+    .rec-title{
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .rec-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .rec-item{
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .rec-photo{
+      display: block;
+      background: #f1f5f9;
+    }
+    .rec-photo img{
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+    .rec-body{
+      padding: 10px;
+    }
+    .rec-price{
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .rec-meta{
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .rec-actions{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* SNS共有 */
+    .share{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .share-title{
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .share-row{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* トップへ戻る（右下固定） */
+    .back-to-top{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+      color: #0f172a;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      z-index: 20;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 860px){
+      .top2{ grid-template-columns: 1fr; }
+      .rec-grid{ grid-template-columns: 1fr; }
+      .rec-photo img{ height: 180px; }
+    }
+	
+	/* =========================
+	   背景の囲い：セクションを白カードで包む（目に優しい版）
+	   ========================= */
+	.section-card{
+	  background: rgba(255,255,255,0.88);  /* ちょい透け */
+	  border: 1px solid rgba(0,0,0,0.08);
+	  border-radius: 14px;
+	  padding: 16px;
+	  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+	  box-sizing: border-box;
+	}
+
+	/* カード内の「真っ白」を弱める（section-cardの中では透明に） */
+	.section-card .card{
+	  background: transparent;
+	  border: 0;
+	  border-radius: 0;
+	  box-shadow: none;
+	}
+
+	/* 画像の角丸だけは残す */
+	.section-card .photo img{
+	  border-radius: 12px;
+	}
+
+	/* セクション間の余白 */
+	.section-gap{ margin-top: 16px; }
+
+	/* スマホ：余白 */
+	@media (max-width: 767px){
+	  .section-card{ padding: 14px; }
+	}
+	
+	
+  </style>
+</head>
+
+<body>
+<!-- ===============================
+     ヘッダー
+================================ -->
+<header id="top">
+  <h1>
+    不動産のチームBe
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+    </a>
+  </h1>
+</header>
+
+<!-- ===============================
+     グローバルナビ
+================================ -->
+<nav>
+  <ul>
+    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- ===============================
+     右上ポップ追従ナビ（白背景）
+================================ -->
+<nav class="floating-nav" aria-label="クイックナビ">
+  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip" th:href="@{/history}">履歴</a>
+</nav>
+
+<main class="container">
+
+  <!-- =======================================================
+       上：画像＋右側情報/ボタン
+       ======================================================= -->
+	   <!-- =======================================================
+	        上：画像＋右側情報/ボタン（背景を白カードで覆う）
+	        ======================================================= -->
+	   <section class="section-card">
+	     <div class="top2">
+	       <div class="card">
+	         <div class="photo">
+	           <img th:src="@{/images/{img}(img=${property.imageUrl})}"
+	                src="images/house1.jpg"
+	                alt="物件写真">
+	         </div>
+	       </div>
+
+	       <div class="card pad">
+	         <h2 class="title" th:text="${property.title}">サンプル物件</h2>
+
+	         <p class="price">¥ <span th:text="${property.price}">78000</span> / 月</p>
+
+	         <div class="meta">
+	           <div>住所：<span th:text="${property.address}">住所</span></div>
+	           <div>間取り：<span th:text="${property.layout}">1LDK</span></div>
+	         </div>
+
+	         <div class="buttons">
+	           <a class="btn primary" th:href="@{/contact}">お問い合わせ</a>
+	           <a class="btn pink" href="#" onclick="addFavorite(); return false;">お気に入りに追加</a>
+	           <a class="btn outline" th:href="@{/properties}">一覧に戻る</a>
+	         </div>
+
+	         <div class="share">
+	           <div class="share-title">この物件を共有</div>
+	           <div class="share-row">
+	             <a class="btn small outline" id="shareLine" target="_blank" rel="noopener">LINE</a>
+	             <a class="btn small outline" id="shareX" target="_blank" rel="noopener">X</a>
+	             <a class="btn small outline" id="shareFb" target="_blank" rel="noopener">Facebook</a>
+	             <button class="btn small outline" type="button" onclick="copyShareUrl()">リンクをコピー</button>
+	           </div>
+	         </div>
+	       </div>
+	     </div>
+	   </section>
+
+  <!-- =======================================================
+       詳細テーブル（要望のtableを活用）
+       ======================================================= -->
+  <section class="card detail pad">
+    <table>
+      <tr><th>建物名</th><td th:text="${property.title}"></td></tr>
+      <tr><th>家賃</th><td th:text="${property.price}"></td></tr>
+      <tr><th>住所</th><td th:text="${property.address}"></td></tr>
+      <tr><th>間取り</th><td th:text="${property.layout}"></td></tr>
+      <tr><th>面積</th><td><span th:text="${property.floorArea}"></span>㎡</td></tr>
+      <tr><th>説明</th><td th:text="${property.description}"></td></tr>
+    </table>
+  </section>
+
+  <!-- =======================================================
+       Googleマップ（area_id代表地点）
+       ※Controllerで area_id → (mapLat, mapLng) に変換して渡している
+       ======================================================= -->
+  <section class="card map" style="margin-top:16px;">
+    <iframe
+      loading="lazy"
+      th:src="'https://www.google.com/maps?q=' + ${mapLat} + ',' + ${mapLng} + '&z=14&output=embed'">
+    </iframe>
+  </section>
+
+  <!-- =======================================================
+       こちらもチェック（同エリア3件・自分除外）
+       ======================================================= -->
+  <section class="card pad" style="margin-top:16px;">
+	<div class="section-card">
+    <h3 class="rec-title">こちらもチェック（同じエリアの物件）</h3>
+
+    <div class="rec-grid">
+      <article class="rec-item" th:each="p : ${recommendations}">
+        <a class="rec-photo" th:href="@{/properties/{id}(id=${p.id})}">
+          <img th:src="@{/images/{img}(img=${p.imageUrl})}" alt="物件写真">
+        </a>
+
+        <div class="rec-body">
+          <div class="rec-price">¥ <span th:text="${p.price}"></span> / 月</div>
+          <div class="rec-meta"><span th:text="${p.layout}"></span></div>
+
+          <div class="rec-actions">
+            <a class="btn primary small" th:href="@{/properties/{id}(id=${p.id})}">詳細</a>
+
+            <button class="btn pink small" type="button"
+                    th:attr="data-id=${p.id},
+                             data-title=${p.title},
+                             data-price=${p.price},
+                             data-layout=${p.layout},
+                             data-image=${p.imageUrl}"
+                    onclick="addFavoriteFromBtn(this)">
+              お気に入り
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+	</div>
+  </section>
+
+</main>
+
+<!-- =======================================================
+     トップへ戻る（右下固定）
+======================================================= -->
+<a href="#top" class="back-to-top" aria-label="ページ上部へ戻る">↑</a>
+
+<!-- ===============================
+     フッター
+================================ -->
+<footer>
+  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+</footer>
+
+<!-- =======================================================
+     JS：localStorage（お気に入り・履歴） + SNS共有
+======================================================= -->
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+  /*
+    propertyData：
+    サーバー側データをJSへ渡して localStorage に保存できる形にする。
+    localStorage は文字列しか保存できないため JSON.stringify / JSON.parse を使う。
+  */
+  const propertyData = {
+    id: /*[[${property.id}]]*/ 0,
+    title: /*[[${property.title}]]*/ "",
+    price: /*[[${property.price}]]*/ 0,
+    layout: /*[[${property.layout}]]*/ "",
+    imageUrl: /*[[${property.imageUrl}]]*/ ""
+  };
+
+  /* -------------------------------
+     お気に入り：現在ページの物件を追加
+     ------------------------------- */
+  function addFavorite() {
+    addFavoriteItem(propertyData);
+  }
+
+  /* -------------------------------
+     お気に入り：おすすめカードから追加（data-*を読む）
+     ------------------------------- */
+  function addFavoriteFromBtn(btn){
+    const item = {
+      id: Number(btn.dataset.id),
+      title: btn.dataset.title || "",
+      price: Number(btn.dataset.price || 0),
+      layout: btn.dataset.layout || "",
+      imageUrl: btn.dataset.image || ""
+    };
+    addFavoriteItem(item);
+  }
+
+  /* -------------------------------
+     お気に入り：共通処理（重複防止）
+     ------------------------------- */
+  function addFavoriteItem(item){
+    const key = "favorites";
+    let list;
+
+    try { list = JSON.parse(localStorage.getItem(key) || "[]"); }
+    catch(e){ list = []; }
+
+    if (!list.some(x => Number(x.id) === Number(item.id))) {
+      list.push(item);
+      localStorage.setItem(key, JSON.stringify(list));
+      alert("お気に入りに追加しました");
+    } else {
+      alert("すでにお気に入りに入っています");
+    }
+  }
+
+  /* -------------------------------
+     履歴：自動追加（ページ表示時）
+     ------------------------------- */
+  (function addHistory() {
+    const key = "history";
+    const max = 10;
+    let list;
+
+    try { list = JSON.parse(localStorage.getItem(key) || "[]"); }
+    catch(e){ list = []; }
+
+    const updated = [propertyData, ...list.filter(x => Number(x.id) !== Number(propertyData.id))];
+    localStorage.setItem(key, JSON.stringify(updated.slice(0, max)));
+  })();
+
+  /* -------------------------------
+     SNS共有：JS生成（テンプレ評価で落ちない）
+     ------------------------------- */
+  (function setupShareLinks() {
+    const url = window.location.href;
+    const encUrl = encodeURIComponent(url);
+    const encTitle = encodeURIComponent(propertyData?.title ?? "");
+
+    const line = document.getElementById("shareLine");
+    const x = document.getElementById("shareX");
+    const fb = document.getElementById("shareFb");
+
+    if (line) line.href = `https://social-plugins.line.me/lineit/share?url=${encUrl}`;
+    if (x) x.href = `https://twitter.com/intent/tweet?url=${encUrl}&text=${encTitle}`;
+    if (fb) fb.href = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+  })();
+
+  // 共有URLをクリップボードにコピー（デモで便利）
+  function copyShareUrl() {
+    const url = window.location.href;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url)
+        .then(() => alert("リンクをコピーしました"))
+        .catch(() => fallbackCopy(url));
+    } else {
+      fallbackCopy(url);
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      alert("リンクをコピーしました");
+    }
+  }
+
+/*]]>*/
+</script>
+</body>
+</html>

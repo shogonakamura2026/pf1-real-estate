@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ブログ投稿 | チームb不動産</title>
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <!-- ===============================
+       投稿ページ専用スタイル（最小）
+  ================================== -->
+  <style>
+    .post-wrap{
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .form-card{
+      background: rgb(241, 242, 248);
+      border: 1px solid #ddd;
+      padding: 16px;
+    }
+    .form-row{
+      margin-bottom: 12px;
+    }
+    .form-row label{
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .form-row input[type="text"],
+    .form-row textarea{
+      width: 90%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    .form-row textarea{
+      min-height: 160px;
+      resize: vertical;
+    }
+    .form-actions{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .msg-error{
+      padding: 10px 12px;
+      border: 1px solid #f2b8b5;
+      background: #fff2f2;
+      color: #b00020;
+      margin-bottom: 12px;
+    }
+    .hint{
+      font-size: 0.95em;
+      color: #666;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+<!-- ===============================
+     ヘッダー
+================================ -->
+<header id="top">
+  <h1>
+    不動産のチームBe
+    <a th:href="@{/}">
+      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+    </a>
+  </h1>
+</header>
+
+<!-- ===============================
+     グローバルナビ
+================================ -->
+<nav>
+  <ul>
+    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- ===============================
+     クイックナビ（右上ポップ追従）
+================================ -->
+<nav class="floating-nav" aria-label="クイックナビ">
+  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip" th:href="@{/history}">履歴</a>
+</nav>
+
+<!-- ===============================
+     メイン
+================================ -->
+<main id="contents" class="post-wrap">
+  <h2>ブログ投稿</h2>
+
+  <p class="hint">
+    タイトルと本文は必須です。画像はURL指定（任意）です。
+  </p>
+
+  <!-- エラーメッセージ -->
+  <div class="msg-error" th:if="${error}" th:text="${error}"></div>
+
+  <!-- ===============================
+       投稿フォーム
+       ※ /staff/blog (POST) に送信
+  ================================== -->
+  <div class="form-card">
+    <form th:action="@{/staff/blog}" method="post">
+      <div class="form-row">
+        <label for="title">タイトル</label>
+        <input id="title" name="title" type="text" maxlength="80"
+               th:value="${title}">
+      </div>
+
+      <div class="form-row">
+        <label for="body">本文</label>
+        <textarea id="body" name="body" maxlength="2000"
+                  th:text="${body}"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label for="imageUrl">画像URL（任意）</label>
+        <input id="imageUrl" name="imageUrl" type="text" maxlength="300"
+               placeholder="例：https://example.com/photo.jpg"
+               th:value="${imageUrl}">
+        <div class="hint">※空欄なら画像なしで投稿されます。<br>
+			※↓お試し用URLです↓<br>
+			「https://kunnren202511.com/images/staff.jpg」<br>
+			「https://kunnren202511.com/images/blogtest01.png」<br>
+			「https://kunnren202511.com/images/graphic2.png」
+		</div>
+      </div>
+
+      <div class="form-actions">
+        <a th:href="@{/staff/blog(page=1)}">← 一覧に戻る</a>
+        <button type="submit">投稿する</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<!-- ===============================
+     フッター
+================================ -->
+<footer>
+  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+</footer>
+</body>
+</html>

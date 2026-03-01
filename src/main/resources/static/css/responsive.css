@@ -1,0 +1,84 @@
+@charset "utf-8";
+
+/* =========================================================
+   responsive.css
+   役割：スマホ幅でのレイアウト調整（主にナビと幅）
+   ========================================================= */
+
+header, nav, #graphic, #contents, footer {
+  width: 100%;
+}
+
+header h1 img {
+  width: 100%;
+  max-width: 244px;
+}
+
+/* ---------- Nav (mobile) ---------- */
+nav ul {
+  margin: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+
+nav ul li#nav_properties,
+nav ul li#nav_staff,
+nav ul li#nav_about,
+nav ul li#nav_contact,
+nav ul li#nav_home {
+  width: 100%;
+}
+
+nav ul li#nav_properties,
+nav ul li#nav_about {
+  border: 1px solid #f3f2e9;
+  border-top: none;
+  border-left: none;
+}
+nav ul li#nav_staff,
+nav ul li#nav_contact,
+nav ul li#nav_home {
+  border: 1px solid #f3f2e9;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+
+nav ul li#nav_properties a,
+nav ul li#nav_staff a,
+nav ul li#nav_about a,
+nav ul li#nav_contact a,
+nav ul li#nav_home a {
+  height: auto;
+  margin-bottom: 0;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  background-image: none;
+  background-color: #84e19d;
+  color: #6e4c39;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+nav ul li#nav_properties a:hover,
+nav ul li#nav_staff a:hover,
+nav ul li#nav_about a:hover,
+nav ul li#nav_contact a:hover,
+nav ul li#nav_home a:hover {
+  opacity: 0.85;
+}
+
+/* ---------- Top graphic ---------- */
+#graphic { padding-top: 10px; }
+
+#graphic ul li img { width: 100%; }
+
+/* ---------- Main blocks ---------- */
+#main,
+#news ul li,
+h2 {
+  width: auto;
+  float: none;
+  margin: 0;
+}

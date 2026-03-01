@@ -1,0 +1,321 @@
+@charset "utf-8";
+
+/* =========================================================
+   style.css
+   役割：PC向けの基本レイアウト + 各ページの見た目
+   ========================================================= */
+
+@import url(common.css);
+
+/* =========================================================
+   1) Page Base
+   ========================================================= */
+body {
+  background-image: url(../images/bg.jpg);
+  background-repeat: repeat-x;
+  background-position: center top;
+  color: #666666;
+}
+
+/* PC幅（従来仕様：860px） */
+header, nav, #path, #contents, footer {
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+header h1 {
+  margin: 0 0 26px 0;
+  padding-top: 18px;
+  text-align: center;
+  font-family: "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",
+               "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+/* =========================================================
+   2) Global Navigation（画像ボタン方式）
+   ========================================================= */
+nav ul {
+  list-style-type: none;
+  margin: 0 0 20px 0;
+  padding-left: 0;
+  overflow: hidden;
+}
+
+nav ul li {
+  width: 215px;
+  float: left;
+}
+
+nav ul li a {
+  display: block;
+  height: 0;
+  padding-top: 60px;
+  overflow: hidden;
+}
+
+/* 各ナビ背景画像 */
+nav ul li#nav_properties a { background-image: url(../images/nav1.png); }
+nav ul li#nav_staff a      { background-image: url(../images/nav2.png); }
+nav ul li#nav_about a      { background-image: url(../images/nav3.png); }
+nav ul li#nav_contact a    { background-image: url(../images/nav4.png); }
+nav ul li#nav_home a       { background-image: url(../images/nav5.png); }
+
+/* 現在地/hover（※loginは旧仕様の名残。あっても害はない） */
+#properties #nav_properties a,
+#login #nav_login a,
+#about #nav_about a,
+#contact #nav_contact a,
+nav ul li a:hover {
+  background-position: 0 -60px;
+}
+
+/* =========================================================
+   3) Main Area / Footer
+   ========================================================= */
+#main {
+  width: 860px;
+  background-color: #ffffff;
+  margin: 0 auto;
+}
+#main article { padding: 20px; }
+
+footer {
+  clear: both;
+  padding-top: 10px;
+}
+
+/* H1見出し（共通） */
+#main h1,
+#staff_news h1 {
+  margin-bottom: 30px;
+  padding: 0 40px 20px 10px;
+  background-image: url(../images/bg_h1_left.png), url(../images/bg_h1_bottom.gif);
+  background-repeat: no-repeat, repeat-x;
+  background-position: right top, left bottom;
+  font-size: 180%;
+}
+
+/* =========================================================
+   4) Top page parts（news / banner）
+   ========================================================= */
+#news ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+#news ul li {
+  margin: 20px 0 20px 160px;
+  border-bottom: 1px dotted #fb484e;
+  text-indent: -160px;
+}
+
+#staff_news {
+  width: 860px;
+  margin: 50px auto 0 auto;
+}
+
+/* 画像回り込み（スタッフ紹介などで使用） */
+.staff {
+  float: left;
+  width: 30%;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  height: auto;
+}
+
+/* 強調用（任意） */
+.fudousanB {
+  color: red;
+  font-size: 200%;
+  font-weight: bold;
+}
+
+.bnr_area {
+  float: left;
+  text-align: center;
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+/* =========================================================
+   5) Properties page parts
+   ========================================================= */
+.properties_area {
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+.properties_area:last-child { margin-bottom: 0; }
+
+/* =========================================================
+   6) Staff blog parts
+   ========================================================= */
+#staff_login {
+  font-weight: bold;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+#staff_login a {
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: #cccccc;
+}
+#staff_login a:hover { opacity: 0.5; }
+
+/* =========================================================
+   7) About page parts
+   ========================================================= */
+table thead tr th { background-color: #ffdd63; }
+table tbody tr:nth-child(even) td { background-color: #eef8fa; }
+
+#map {
+  text-align: center;
+  width: 860px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   8) Contact page parts
+   ========================================================= */
+input[type="text"]  { width: 200px; }
+input[type="email"] { width: 300px; }
+
+/* =========================================================
+   9) Floating Quick Nav（右上ポップ追従・白背景メイン）
+   ========================================================= */
+.floating-nav {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 1500;
+
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+}
+
+.nav-chip {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  color: #111827;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+.nav-chip:hover { background: #e5e7eb; }
+
+/* style.cssの nav 幅指定＆float影響を打ち消す（追従ナビ専用） */
+nav.floating-nav {
+  width: auto !important;
+  margin: 0 !important;
+}
+nav.floating-nav ul,
+nav.floating-nav li {
+  float: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* スマホ：被りやすいので少し小さく */
+@media (max-width: 800px) {
+  .floating-nav {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+    padding: 8px;
+  }
+  .nav-chip {
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+}
+
+
+/* =========================
+   Modern Nav (card style)
+   ========================= */
+nav ul{
+  list-style:none;
+  margin: 0 0 20px 0;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+nav ul li{
+  width: auto;      /* 固定幅やめる */
+  float: none;      /* floatやめる */
+}
+
+nav ul li a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+  padding: 0 18px;
+
+  background: rgb(192, 192, 192);               /* 白ベース */
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;           /* ピル型 */
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: .02em;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+nav ul li a:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  background: #f8fafc;
+}
+
+/* 現状の「height:0 + padding-top」で文字を消してるのを無効化 */
+nav ul li a{
+  padding-top: 0 !important;
+  overflow: visible !important;
+  height: 44px !important;
+}
+
+/* スマホ */
+@media screen and (max-width: 767px){
+  nav ul{
+    justify-content: stretch;
+  }
+  nav ul li{
+    flex: 1 1 calc(90%); /* 1列 */
+  }
+  nav ul li a{
+    width: 90%;
+  }
+}
+
+nav ul li#nav_home a,
+nav ul li#nav_properties a,
+nav ul li#nav_staff a,
+nav ul li#nav_about a,
+nav ul li#nav_contact a,
+nav ul li#nav_login a{
+  background-image: none !important;
+}
+
+
