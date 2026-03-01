@@ -85,7 +85,7 @@ MariaDB
 
 ---
 
-## 🚀 ローカル起動方法
+## ローカル起動方法
 
 ```bash
 mvn spring-boot:run
