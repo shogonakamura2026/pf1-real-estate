@@ -13,17 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * スタッフブログ機能のController（画面の入口）。
  *
- * <p>提供機能：</p>
- * <ul>
- *   <li>ログイン（学習用：固定ID/固定PW）</li>
- *   <li>投稿</li>
- *   <li>一覧表示（ページング：5件/ページ）</li>
- *   <li>削除</li>
- *   <li>ログアウト</li>
- * </ul>
- *
- * <p>保存方式：</p>
- * DBは使用せず {@link BlogFileStore} を通して JSONファイルに保存する。</p>
+ * 提供機能：
+ *   ログイン（学習用：固定ID/固定PW）
+ *   投稿
+ *   一覧表示（ページング：5件/ページ）
+ *   削除
+ *   ログアウト
+ * 保存方式：
+ * DBは使用せず {@link BlogFileStore} を通して JSONファイルに保存する。
  */
 @Controller
 public class StaffBlogController {
