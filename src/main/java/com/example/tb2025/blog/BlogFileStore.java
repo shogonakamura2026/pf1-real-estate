@@ -18,10 +18,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 /**
  * DBの代わりに JSONファイルへブログ記事を保存・読込するストアクラス。
  *
- * <p>保存先：実行ディレクトリ基準 {@code ./data/staff-blog.json}</p>
- * <p>形式：{@link BlogPost} の {@code List} を丸ごと保存する</p>
+ * 保存先：実行ディレクトリ基準 {@code ./data/staff-blog.json}
+ * 形式：{@link BlogPost} の {@code List} を丸ごと保存する
  *
- * <p>学習用途のため、簡易的に synchronized で排他制御を行う（同時投稿対策）。</p>
+ * 学習用途のため、簡易的に synchronized で排他制御を行う（同時投稿対策）。
  */
 @Service
 public class BlogFileStore {
