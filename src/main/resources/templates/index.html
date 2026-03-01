@@ -117,6 +117,38 @@
       color: #1f2a44;
     }
 
+	/* -------------------------------
+	   ポートフォリオ注記（主旨明記）
+	   ※全体デザインを崩さない控えめなカード
+	-------------------------------- */
+	.portfolio-note{
+	  margin-top: 16px;
+	  background:rgb(237, 241, 245);
+	  border:1px solid #e5e7eb;
+	  border-radius: 12px;
+	  padding: 14px;
+	}
+	.portfolio-note h3{
+	  margin: 0 0 8px;
+	  font-size: 15px;
+	  font-weight: 900;
+	  color:#0f172a;
+	}
+	.portfolio-note p{
+	  margin: 0;
+	  color:#334155;
+	  font-weight: 600;
+	  line-height: 1.7;
+	  font-size: 14px;
+	}
+	.portfolio-note .small{
+	  margin-top: 8px;
+	  color:#64748b;
+	  font-weight: 700;
+	  font-size: 13px;
+	}
+	
+	
     /* -------------------------------
        3カラム案内カード
     -------------------------------- */
@@ -337,6 +369,7 @@
       <a class="btn pink" th:href="@{/contact}">相談・お問い合わせ</a>
     </div>
   </section>
+  
 
   <!-- ===============================
        3つの案内（イメージカラー）
@@ -362,6 +395,22 @@
         <p>スタッフが最新情報を発信。学習用にJSON保存で投稿・削除ができます。（擬似的なDBを作成）</p>
       </a>
     </div>
+  </section>
+  
+  <!-- ===============================
+       ポートフォリオの主旨（学習目的の明記）
+       ※3つの案内が「学習した主機能」であることを明確化
+  ================================== -->
+  <section class="portfolio-note" aria-label="ポートフォリオの主旨">
+    <h3>このサイトについて（学習ポートフォリオ）</h3>
+    <p>
+      本サイトは <strong>Nakamura</strong> の学習継続・習熟を目的として制作したポートフォリオです。
+      上の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」</strong> の3項目は、
+      学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
+    </p>
+    <p class="small">
+      ※実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
+    </p>
   </section>
 
   <!-- ===============================
