@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>お問い合わせ確認 | チームb不動産</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+  <style>
+    #main article{
+      background:#fff;border:1px solid #e5e7eb;border-radius:12px;
+      padding:22px 18px;max-width:900px;margin:0 auto;
+    }
+    .row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;}
+    .k{width:220px;color:#666;font-size:13px;}
+    .v{flex:1;color:#111;}
+    @media (max-width:767px){ .row{flex-direction:column;} .k{width:auto;} }
+    .actions{margin-top:18px;display:flex;gap:10px;justify-content:flex-end;}
+    .btn{border:1px solid #111;background:#111;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;}
+    .btn-sub{border:1px solid #d1d5db;background:#fff;color:#111;padding:10px 14px;border-radius:10px;cursor:pointer;}
+    .actions form{display:inline;}
+  </style>
+</head>
+<body id="contact-confirm">
+
+<header id="top">
+  <h1>不動産のチームBe <a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="チームb不動産について"></a></h1>
+</header>
+
+<nav>
+  <ul>
+    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<div id="path">
+  <ol>
+    <li><a th:href="@{/}">ホーム</a></li>
+    <li>お問い合わせ確認</li>
+  </ol>
+</div>
+
+<div id="main">
+  <article>
+    <h1>お問い合わせ内容の確認</h1>
+    <p>内容をご確認のうえ、問題なければ「送信確定」を押してください。</p>
+
+    <div class="row"><div class="k">お名前</div><div class="v" th:text="${contactForm.name}"></div></div>
+    <div class="row"><div class="k">メール</div><div class="v" th:text="${contactForm.mail}"></div></div>
+    <div class="row"><div class="k">電話</div><div class="v" th:text="${contactForm.tel}"></div></div>
+    <div class="row"><div class="k">希望連絡方法</div><div class="v" th:text="${contactForm.contactMethod}"></div></div>
+
+    <div class="row"><div class="k">お問い合わせ種別</div><div class="v" th:text="${contactForm.inquiryType}"></div></div>
+    <div class="row"><div class="k">物件ID/物件名</div><div class="v" th:text="${contactForm.propertyId}"></div></div>
+
+    <div class="row"><div class="k">希望エリア</div><div class="v" th:text="${contactForm.area}"></div></div>
+    <div class="row"><div class="k">ご予算</div><div class="v" th:text="${contactForm.budget}"></div></div>
+    <div class="row"><div class="k">間取り</div><div class="v" th:text="${contactForm.layout}"></div></div>
+    <div class="row"><div class="k">入居/引渡し時期</div><div class="v" th:text="${contactForm.moveIn}"></div></div>
+
+    <div class="row">
+      <div class="k">内見希望（第1）</div>
+      <div class="v"><span th:text="${contactForm.date1}"></span> <span th:text="${contactForm.time1}"></span></div>
+    </div>
+    <div class="row">
+      <div class="k">内見希望（第2）</div>
+      <div class="v"><span th:text="${contactForm.date2}"></span> <span th:text="${contactForm.time2}"></span></div>
+    </div>
+    <div class="row">
+      <div class="k">内見希望（第3）</div>
+      <div class="v"><span th:text="${contactForm.date3}"></span> <span th:text="${contactForm.time3}"></span></div>
+    </div>
+
+    <div class="row"><div class="k">お問い合わせ詳細</div><div class="v" th:text="${contactForm.message}"></div></div>
+
+    <div class="actions">
+
+      <!-- ★戻って修正：POSTで /contact に戻し、入力値を保持 -->
+      <form th:action="@{/contact}" th:object="${contactForm}" method="post">
+        <input type="hidden" th:field="*{name}">
+        <input type="hidden" th:field="*{mail}">
+        <input type="hidden" th:field="*{tel}">
+        <input type="hidden" th:field="*{contactMethod}">
+        <input type="hidden" th:field="*{inquiryType}">
+        <input type="hidden" th:field="*{propertyId}">
+        <input type="hidden" th:field="*{area}">
+        <input type="hidden" th:field="*{budget}">
+        <input type="hidden" th:field="*{layout}">
+        <input type="hidden" th:field="*{moveIn}">
+        <input type="hidden" th:field="*{date1}">
+        <input type="hidden" th:field="*{time1}">
+        <input type="hidden" th:field="*{date2}">
+        <input type="hidden" th:field="*{time2}">
+        <input type="hidden" th:field="*{date3}">
+        <input type="hidden" th:field="*{time3}">
+        <input type="hidden" th:field="*{message}">
+        <!-- ★agreeではなく consent -->
+        <input type="hidden" th:field="*{consent}">
+        <button class="btn-sub" type="submit">戻って修正</button>
+      </form>
+
+      <!-- 送信確定：DB保存へ -->
+      <form th:action="@{/contact/complete}" th:object="${contactForm}" method="post">
+        <input type="hidden" th:field="*{name}">
+        <input type="hidden" th:field="*{mail}">
+        <input type="hidden" th:field="*{tel}">
+        <input type="hidden" th:field="*{contactMethod}">
+        <input type="hidden" th:field="*{inquiryType}">
+        <input type="hidden" th:field="*{propertyId}">
+        <input type="hidden" th:field="*{area}">
+        <input type="hidden" th:field="*{budget}">
+        <input type="hidden" th:field="*{layout}">
+        <input type="hidden" th:field="*{moveIn}">
+        <input type="hidden" th:field="*{date1}">
+        <input type="hidden" th:field="*{time1}">
+        <input type="hidden" th:field="*{date2}">
+        <input type="hidden" th:field="*{time2}">
+        <input type="hidden" th:field="*{date3}">
+        <input type="hidden" th:field="*{time3}">
+        <input type="hidden" th:field="*{message}">
+        <input type="hidden" th:field="*{consent}">
+        <button class="btn" type="submit">送信確定</button>
+      </form>
+
+    </div>
+  </article>
+</div>
+
+<footer>
+  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
+  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
+  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
+</footer>
+
+</body>
+</html>
