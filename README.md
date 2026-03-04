@@ -28,7 +28,7 @@ https://kunnren202511.com/
 
 ## バックエンド
 - Java 17
-- Spring Boot 3.2.3
+- Spring Boot 3.4.2
 - Maven
 - Thymeleaf
 
