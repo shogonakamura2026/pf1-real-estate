@@ -3,138 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>履歴 | チームb不動産</title>
+  <title>閲覧履歴 | チームb不動産</title>
 
-  <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- ===============================
-       履歴ページ専用スタイル（最小）
-       ※favoritesと同じ見た目に寄せる
-  ================================== -->
   <style>
-    .container{ max-width: 1100px; margin: 24px auto; padding: 0 16px; }
-
-    .page-head{
-      display:flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .page-head h2{ margin: 0; }
-
-    .actions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .container{ max-width:1100px; margin:0 auto; padding:24px 16px; }
+    .header-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .page-title{ margin:0; font-size:22px; font-weight:900; color:#0f172a; }
 
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #1f2a44;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px; border-radius:12px; border:1px solid #cdd6e4;
+      background:#fff; color:#1f2a44; font-weight:700; cursor:pointer; text-decoration:none;
       line-height: 1;
       white-space: nowrap;
     }
-    .btn.primary{
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #075985;
-    }
-    .btn.danger{
-      background: #fee2e2;
-      border-color: #fecaca;
-      color: #991b1b;
-    }
-    .btn.outline{
-      background: #fff;
-      border-color: #cdd6e4;
-      color: #1f2a44;
-    }
+    .btn.outline{	background: #e0f2fe; border-color: #7dd3fc; color: #075985; }
+    .btn.pink{ background:#fce7f3; border-color:#f9a8d4; color:#9d174d; }
+    .btn.danger{ background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
+    .btn.small{ padding:8px 10px; border-radius:10px; font-size:13px; }
 
     .empty{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-      color:#334155;
+      margin-top:16px; padding:14px; border:1px solid #e5e7eb; border-radius:12px;
+      background:#fff; color:#334155; font-weight:700;
     }
 
-    .note{
-      color:#64748b;
-      font-size: 14px;
-      margin-top: 4px;
-    }
+    .grid{ margin-top:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
+    .thumb{ display:block; background:#f1f5f9; }
+    .thumb img{ width:100%; height:160px; object-fit:cover; display:block; }
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow:hidden;
-      display:flex;
-      flex-direction: column;
-      min-height: 100%;
-    }
-    .card img{
-      width:100%;
-      height: 150px;
-      object-fit: cover;
-      display:block;
-      background:#f1f5f9;
-    }
-    .card-body{
-      padding: 12px;
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-    .title{
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .meta{
-      color:#64748b;
-      font-size: 14px;
-    }
-    .card-actions{
-      margin-top:auto;
-      display:flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+    .body{ padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .title{ font-weight:900; color:#0f172a; line-height:1.3; }
+    .meta{ color:#64748b; font-weight:700; font-size:13px; }
+    .price{ font-weight:900; color:#0f172a; }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
 
     @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-      .card img{ height: 180px; }
+      .grid{ grid-template-columns:1fr; }
+      .thumb img{ height:180px; }
     }
   </style>
 </head>
 
 <body>
-<!-- ===============================
-     ヘッダー
-================================ -->
 <header id="top">
   <h1>
     不動産のチームBe
@@ -144,9 +59,6 @@
   </h1>
 </header>
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
 <nav>
   <ul>
     <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
@@ -156,176 +68,204 @@
   </ul>
 </nav>
 
-<!-- ===============================
-     右上ポップ追従ナビ
-================================ -->
 <nav class="floating-nav" aria-label="クイックナビ">
   <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
   <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
   <a class="nav-chip" th:href="@{/history}">履歴</a>
 </nav>
 
-<!-- ===============================
-     メイン
-================================ -->
 <main class="container">
-  <div class="page-head">
-    <div>
-      <h2>履歴</h2>
-      <div class="note">※直近10件まで保存します（同じ物件は最新に更新）。</div>
-    </div>
 
-    <div class="actions">
-      <a class="btn primary" th:href="@{/properties}">物件一覧へ</a>
-      <button class="btn danger" type="button" onclick="clearAll()">全削除</button>
+  <div class="header-row">
+    <h2 class="page-title">閲覧履歴</h2>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
+      <button class="btn danger" type="button" id="clearHistoryBtn">履歴を全削除</button>
     </div>
   </div>
 
-  <div id="emptyBox" class="empty" style="display:none;">
-    履歴はまだありません。物件の詳細ページを開くと自動で追加されます。
+  <div class="empty" id="emptyBox" style="display:none;">
+    まだ閲覧履歴がありません。物件を見るとここに追加されます。
   </div>
 
-  <section id="grid" class="grid" aria-label="履歴一覧"></section>
+  <section class="grid" id="historyGrid"></section>
+
 </main>
 
-<!-- ===============================
-     フッター
-================================ -->
 <footer>
   <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
   <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
   <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
 </footer>
 
-<!-- ===============================
-     履歴（localStorage）制御
-================================ -->
 <script>
-  const KEY = "history";
-  const MAX = 10;
+  // ==========================================
+  // localStorage keys
+  // ==========================================
+  const HISTORY_KEY = "history";
+  const FAV_KEY = "favorites";
 
-  // ページ初期表示
-  document.addEventListener("DOMContentLoaded", render);
-
-  function getList() {
-    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-    catch (e) { return []; }
+  // ==========================================
+  // 共通：安全に読み込む（壊れてても落ちない）
+  // ==========================================
+  function loadJsonArray(key){
+    try { return JSON.parse(localStorage.getItem(key) || "[]"); }
+    catch(e){ return []; }
   }
 
-  function setList(list) {
-    // 念のため最大件数を保証
-    localStorage.setItem(KEY, JSON.stringify(list.slice(0, MAX)));
+  function saveJsonArray(key, list){
+    localStorage.setItem(key, JSON.stringify(list));
   }
 
-  function render() {
-    const list = getList();
-    const grid = document.getElementById("grid");
-    const emptyBox = document.getElementById("emptyBox");
+  // ==========================================
+  // XSS対策：最小限（表示文字列をHTMLエスケープ）
+  // ==========================================
+  function escapeHtml(v){
+    return String(v ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  // ==========================================
+  // お気に入り：判定/表示/トグル
+  // ==========================================
+  function isFavorite(favs, id){
+    return favs.some(x => Number(x.id) === Number(id));
+  }
+
+  function updateFavBtnText(btn, favs){
+    const id = Number(btn.dataset.id);
+    btn.textContent = isFavorite(favs, id)
+      ? "お気に入りから削除"
+      : "お気に入りに追加";
+  }
+
+  function toggleFavoriteByBtn(btn){
+    const id = Number(btn.dataset.id);
+
+    // 今のfavoritesを読み直す（他ページで変わっててもOK）
+    const favs = loadJsonArray(FAV_KEY);
+
+    const idx = favs.findIndex(x => Number(x.id) === id);
+    if (idx !== -1) {
+      // 削除
+      favs.splice(idx, 1);
+    } else {
+      // 追加（履歴カードの data-* を使って保存）
+      favs.push({
+        id: id,
+        title: btn.dataset.title || "",
+        price: Number(btn.dataset.price || 0),
+        layout: btn.dataset.layout || "",
+        imageUrl: btn.dataset.image || ""
+      });
+    }
+
+    saveJsonArray(FAV_KEY, favs);
+
+    // 同ページ内の fav-btn を全部更新
+    document.querySelectorAll(".fav-btn").forEach(b => updateFavBtnText(b, favs));
+  }
+
+  // ==========================================
+  // 画面描画：履歴カードを作る（ここで fav-btn も出す）
+  // ==========================================
+  function render(){
+    const grid = document.getElementById("historyGrid");
+    const empty = document.getElementById("emptyBox");
+
+    const history = loadJsonArray(HISTORY_KEY);
+    const favs = loadJsonArray(FAV_KEY);
 
     grid.innerHTML = "";
 
-    if (!list.length) {
-      emptyBox.style.display = "block";
+    if (!history.length){
+      empty.style.display = "block";
       return;
     }
-    emptyBox.style.display = "none";
+    empty.style.display = "none";
 
-    for (const item of list) {
-      grid.appendChild(createCard(item));
+    history.forEach(item => {
+      const id = Number(item.id);
+
+      // favorites.html と同じ想定：/images/ + imageUrl
+      const imgSrc = "/images/" + (item.imageUrl || "");
+
+      const card = document.createElement("article");
+      card.className = "card";
+
+      // ✅ fav-btn をここで出す（data-* に必要情報を全部入れる）
+      card.innerHTML = `
+        <a class="thumb" href="/properties/${id}">
+          <img src="${imgSrc}" alt="物件画像">
+        </a>
+
+        <div class="body">
+          <div class="title">${escapeHtml(item.title || "")}</div>
+          <div class="price">¥ ${escapeHtml(item.price ?? "")} / 月</div>
+          <div class="meta">${escapeHtml(item.layout || "")}</div>
+
+          <div class="actions">
+            <a class="btn small outline" href="/properties/${id}">物件詳細</a>
+
+            <button class="btn small pink fav-btn" type="button"
+              data-id="${id}"
+              data-title="${escapeHtml(item.title || "")}"
+              data-price="${escapeHtml(item.price ?? "")}"
+              data-layout="${escapeHtml(item.layout || "")}"
+              data-image="${escapeHtml(item.imageUrl || "")}">
+              お気に入りに追加
+            </button>
+
+            <button class="btn small danger history-del-btn" type="button" data-id="${id}">
+              履歴を削除
+            </button>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    // ✅ 初期表示：favorites状態に合わせてボタン文言を更新
+    document.querySelectorAll(".fav-btn").forEach(btn => updateFavBtnText(btn, favs));
+  }
+
+  // ==========================================
+  // クリック処理（イベント委譲）
+  // ==========================================
+  document.addEventListener("click", function(e){
+
+    // お気に入りトグル
+    const favBtn = e.target.closest(".fav-btn");
+    if (favBtn) {
+      toggleFavoriteByBtn(favBtn);
+      return;
     }
-  }
 
-  function createCard(item) {
-    const card = document.createElement("article");
-    card.className = "card";
-
-    const img = document.createElement("img");
-    img.alt = "物件画像";
-    img.src = `/images/${item.imageUrl || ""}`;
-    card.appendChild(img);
-
-    const body = document.createElement("div");
-    body.className = "card-body";
-
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = item.title || "（タイトル未設定）";
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = `家賃：${Number(item.price || 0).toLocaleString()}円 / 間取り：${item.layout || "-"}`;
-
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-
-    // 詳細へ
-    const detail = document.createElement("a");
-    detail.className = "btn primary";
-    detail.textContent = "詳細";
-    detail.href = `/properties/${Number(item.id)}`;
-
-    // 履歴から削除
-    const del = document.createElement("button");
-    del.className = "btn danger";
-    del.type = "button";
-    del.textContent = "削除";
-    del.addEventListener("click", () => removeOne(item.id));
-
-    // お気に入りへ追加（履歴から直接追加したい時用）
-    const fav = document.createElement("button");
-    fav.className = "btn outline";
-    fav.type = "button";
-    fav.textContent = "お気に入りへ";
-    fav.addEventListener("click", () => addToFavorites(item));
-
-    actions.appendChild(detail);
-    actions.appendChild(fav);
-    actions.appendChild(del);
-
-    body.appendChild(title);
-    body.appendChild(meta);
-    body.appendChild(actions);
-
-    card.appendChild(body);
-    return card;
-  }
-
-  function removeOne(id) {
-    const list = getList().filter(x => Number(x.id) !== Number(id));
-    setList(list);
-    render();
-  }
-
-  function clearAll() {
-    if (!confirm("履歴をすべて削除しますか？")) return;
-    localStorage.removeItem(KEY);
-    render();
-  }
-
-  // ===============================
-  // お気に入り追加（履歴→お気に入り）
-  // ===============================
-  function addToFavorites(item) {
-    const favKey = "favorites";
-    let favs;
-
-    try { favs = JSON.parse(localStorage.getItem(favKey) || "[]"); }
-    catch (e) { favs = []; }
-
-    if (!favs.some(x => Number(x.id) === Number(item.id))) {
-      favs.push({
-        id: Number(item.id),
-        title: item.title || "",
-        price: Number(item.price || 0),
-        layout: item.layout || "",
-        imageUrl: item.imageUrl || ""
-      });
-      localStorage.setItem(favKey, JSON.stringify(favs));
-      alert("お気に入りに追加しました");
-    } else {
-      alert("すでにお気に入りに入っています");
+    // 履歴の個別削除
+    const delBtn = e.target.closest(".history-del-btn");
+    if (delBtn) {
+      const id = Number(delBtn.dataset.id);
+      const next = loadJsonArray(HISTORY_KEY).filter(x => Number(x.id) !== id);
+      saveJsonArray(HISTORY_KEY, next);
+      render();
+      return;
     }
-  }
+  });
+
+  // 履歴の全削除
+  document.getElementById("clearHistoryBtn").addEventListener("click", function(){
+    localStorage.removeItem(HISTORY_KEY);
+    render();
+  });
+
+  // 初回描画
+  document.addEventListener("DOMContentLoaded", render);
 </script>
 </body>
 </html>

@@ -9,10 +9,7 @@
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- ===============================
-       詳細ページ専用スタイル（UI部分）
-       ※共通CSSを壊さない範囲で最小限に追加
-  ================================== -->
+  <!-- 詳細ページ専用スタイル（UI部分） -->
   <style>
     html { scroll-behavior: smooth; }
 
@@ -37,9 +34,7 @@
       border-radius: 12px;
       overflow: hidden;
     }
-    .card.pad{
-      padding: 14px;
-    }
+    .card.pad{ padding: 14px; }
 
     .photo img{
       width: 100%;
@@ -163,9 +158,7 @@
       object-fit: cover;
       display: block;
     }
-    .rec-body{
-      padding: 10px;
-    }
+    .rec-body{ padding: 10px; }
     .rec-price{
       font-weight: 900;
       color: #0f172a;
@@ -224,48 +217,31 @@
       .rec-grid{ grid-template-columns: 1fr; }
       .rec-photo img{ height: 180px; }
     }
-	
-	/* =========================
-	   背景の囲い：セクションを白カードで包む（目に優しい版）
-	   ========================= */
-	.section-card{
-	  background: rgba(255,255,255,0.88);  /* ちょい透け */
-	  border: 1px solid rgba(0,0,0,0.08);
-	  border-radius: 14px;
-	  padding: 16px;
-	  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-	  box-sizing: border-box;
-	}
 
-	/* カード内の「真っ白」を弱める（section-cardの中では透明に） */
-	.section-card .card{
-	  background: transparent;
-	  border: 0;
-	  border-radius: 0;
-	  box-shadow: none;
-	}
-
-	/* 画像の角丸だけは残す */
-	.section-card .photo img{
-	  border-radius: 12px;
-	}
-
-	/* セクション間の余白 */
-	.section-gap{ margin-top: 16px; }
-
-	/* スマホ：余白 */
-	@media (max-width: 767px){
-	  .section-card{ padding: 14px; }
-	}
-	
-	
+    /* 背景の囲い（目に優しい版） */
+    .section-card{
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+    .section-card .card{
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .section-card .photo img{ border-radius: 12px; }
+    .section-gap{ margin-top: 16px; }
+    @media (max-width: 767px){
+      .section-card{ padding: 14px; }
+    }
   </style>
 </head>
 
 <body>
-<!-- ===============================
-     ヘッダー
-================================ -->
 <header id="top">
   <h1>
     不動産のチームBe
@@ -275,9 +251,6 @@
   </h1>
 </header>
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
 <nav>
   <ul>
     <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
@@ -287,9 +260,6 @@
   </ul>
 </nav>
 
-<!-- ===============================
-     右上ポップ追従ナビ（白背景）
-================================ -->
 <nav class="floating-nav" aria-label="クイックナビ">
   <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
   <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
@@ -298,55 +268,59 @@
 
 <main class="container">
 
-  <!-- =======================================================
-       上：画像＋右側情報/ボタン
-       ======================================================= -->
-	   <!-- =======================================================
-	        上：画像＋右側情報/ボタン（背景を白カードで覆う）
-	        ======================================================= -->
-	   <section class="section-card">
-	     <div class="top2">
-	       <div class="card">
-	         <div class="photo">
-	           <img th:src="@{/images/{img}(img=${property.imageUrl})}"
-	                src="images/house1.jpg"
-	                alt="物件写真">
-	         </div>
-	       </div>
+  <!-- 上：画像＋右側情報/ボタン -->
+  <section class="section-card">
+    <div class="top2">
+      <div class="card">
+        <div class="photo">
+          <img th:src="@{/images/{img}(img=${property.imageUrl})}"
+               src="images/house1.jpg"
+               alt="物件写真">
+        </div>
+      </div>
 
-	       <div class="card pad">
-	         <h2 class="title" th:text="${property.title}">サンプル物件</h2>
+      <div class="card pad">
+        <h2 class="title" th:text="${property.title}">サンプル物件</h2>
 
-	         <p class="price">¥ <span th:text="${property.price}">78000</span> / 月</p>
+        <p class="price">¥ <span th:text="${property.price}">78000</span> / 月</p>
 
-	         <div class="meta">
-	           <div>住所：<span th:text="${property.address}">住所</span></div>
-	           <div>間取り：<span th:text="${property.layout}">1LDK</span></div>
-	         </div>
+        <div class="meta">
+          <div>住所：<span th:text="${property.address}">住所</span></div>
+          <div>間取り：<span th:text="${property.layout}">1LDK</span></div>
+        </div>
 
-	         <div class="buttons">
-	           <a class="btn primary" th:href="@{/contact}">お問い合わせ</a>
-	           <a class="btn pink" href="#" onclick="addFavorite(); return false;">お気に入りに追加</a>
-	           <a class="btn outline" th:href="@{/properties}">一覧に戻る</a>
-	         </div>
+        <div class="buttons">
+          <a class="btn primary" th:href="@{/contact}">お問い合わせ</a>
 
-	         <div class="share">
-	           <div class="share-title">この物件を共有</div>
-	           <div class="share-row">
-	             <a class="btn small outline" id="shareLine" target="_blank" rel="noopener">LINE</a>
-	             <a class="btn small outline" id="shareX" target="_blank" rel="noopener">X</a>
-	             <a class="btn small outline" id="shareFb" target="_blank" rel="noopener">Facebook</a>
-	             <button class="btn small outline" type="button" onclick="copyShareUrl()">リンクをコピー</button>
-	           </div>
-	         </div>
-	       </div>
-	     </div>
-	   </section>
+          <!-- ✅ ここが重要：お気に入りトグル用ボタン（class fav-btn に統一） -->
+          <button class="btn pink fav-btn" type="button"
+                  id="favoriteBtn"
+                  th:attr="data-id=${property.id},
+                           data-title=${property.title},
+                           data-price=${property.price},
+                           data-layout=${property.layout},
+                           data-image=${property.imageUrl}">
+            お気に入りに追加
+          </button>
 
-  <!-- =======================================================
-       詳細テーブル（要望のtableを活用）
-       ======================================================= -->
-  <section class="card detail pad">
+          <a class="btn outline" th:href="@{/properties}">一覧に戻る</a>
+        </div>
+
+        <div class="share">
+          <div class="share-title">この物件を共有</div>
+          <div class="share-row">
+            <a class="btn small outline" id="shareLine" target="_blank" rel="noopener">LINE</a>
+            <a class="btn small outline" id="shareX" target="_blank" rel="noopener">X</a>
+            <a class="btn small outline" id="shareFb" target="_blank" rel="noopener">Facebook</a>
+            <button class="btn small outline" type="button" onclick="copyShareUrl()">リンクをコピー</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 詳細テーブル -->
+  <section class="card detail pad section-gap">
     <table>
       <tr><th>建物名</th><td th:text="${property.title}"></td></tr>
       <tr><th>家賃</th><td th:text="${property.price}"></td></tr>
@@ -357,63 +331,52 @@
     </table>
   </section>
 
-  <!-- =======================================================
-       Googleマップ（area_id代表地点）
-       ※Controllerで area_id → (mapLat, mapLng) に変換して渡している
-       ======================================================= -->
-  <section class="card map" style="margin-top:16px;">
+  <!-- Googleマップ -->
+  <section class="card map section-gap">
     <iframe
       loading="lazy"
       th:src="'https://www.google.com/maps?q=' + ${mapLat} + ',' + ${mapLng} + '&z=14&output=embed'">
     </iframe>
   </section>
 
-  <!-- =======================================================
-       こちらもチェック（同エリア3件・自分除外）
-       ======================================================= -->
-  <section class="card pad" style="margin-top:16px;">
-	<div class="section-card">
-    <h3 class="rec-title">こちらもチェック（同じエリアの物件）</h3>
+  <!-- こちらもチェック -->
+  <section class="card pad section-gap">
+    <div class="section-card">
+      <h3 class="rec-title">こちらもチェック（同じエリアの物件）</h3>
 
-    <div class="rec-grid">
-      <article class="rec-item" th:each="p : ${recommendations}">
-        <a class="rec-photo" th:href="@{/properties/{id}(id=${p.id})}">
-          <img th:src="@{/images/{img}(img=${p.imageUrl})}" alt="物件写真">
-        </a>
+      <div class="rec-grid">
+        <article class="rec-item" th:each="p : ${recommendations}">
+          <a class="rec-photo" th:href="@{/properties/{id}(id=${p.id})}">
+            <img th:src="@{/images/{img}(img=${p.imageUrl})}" alt="物件写真">
+          </a>
 
-        <div class="rec-body">
-          <div class="rec-price">¥ <span th:text="${p.price}"></span> / 月</div>
-          <div class="rec-meta"><span th:text="${p.layout}"></span></div>
+          <div class="rec-body">
+            <div class="rec-price">¥ <span th:text="${p.price}"></span> / 月</div>
+            <div class="rec-meta"><span th:text="${p.layout}"></span></div>
 
-          <div class="rec-actions">
-            <a class="btn primary small" th:href="@{/properties/{id}(id=${p.id})}">詳細</a>
+            <div class="rec-actions">
+              <a class="btn primary small" th:href="@{/properties/{id}(id=${p.id})}">詳細</a>
 
-            <button class="btn pink small" type="button"
-                    th:attr="data-id=${p.id},
-                             data-title=${p.title},
-                             data-price=${p.price},
-                             data-layout=${p.layout},
-                             data-image=${p.imageUrl}"
-                    onclick="addFavoriteFromBtn(this)">
-              お気に入り
-            </button>
+              <!-- ✅ おすすめ側もトグル対応（同じ fav-btn で統一） -->
+              <button class="btn pink small fav-btn" type="button"
+                      th:attr="data-id=${p.id},
+                               data-title=${p.title},
+                               data-price=${p.price},
+                               data-layout=${p.layout},
+                               data-image=${p.imageUrl}">
+                お気に入りに追加
+              </button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
-	</div>
   </section>
 
 </main>
 
-<!-- =======================================================
-     トップへ戻る（右下固定）
-======================================================= -->
 <a href="#top" class="back-to-top" aria-label="ページ上部へ戻る">↑</a>
 
-<!-- ===============================
-     フッター
-================================ -->
 <footer>
   <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
   <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
@@ -421,16 +384,15 @@
 </footer>
 
 <!-- =======================================================
-     JS：localStorage（お気に入り・履歴） + SNS共有
+     JS：お気に入り（トグル）＋履歴＋SNS共有
+     ※ fav-btn クラスのボタンは全て「追加/削除の切替」対象になる
 ======================================================= -->
 <script th:inline="javascript">
 /*<![CDATA[*/
 
-  /*
-    propertyData：
-    サーバー側データをJSへ渡して localStorage に保存できる形にする。
-    localStorage は文字列しか保存できないため JSON.stringify / JSON.parse を使う。
-  */
+  // -----------------------------
+  // 物件データ（Thymeleaf → JSへ）
+  // -----------------------------
   const propertyData = {
     id: /*[[${property.id}]]*/ 0,
     title: /*[[${property.title}]]*/ "",
@@ -439,50 +401,74 @@
     imageUrl: /*[[${property.imageUrl}]]*/ ""
   };
 
-  /* -------------------------------
-     お気に入り：現在ページの物件を追加
-     ------------------------------- */
-  function addFavorite() {
-    addFavoriteItem(propertyData);
+  // ==========================================
+  // お気に入り：localStorage トグル 共通ロジック
+  // ==========================================
+  const FAV_KEY = "favorites";
+
+  // favorites配列を取得（壊れてても落ちない）
+  function loadFavorites(){
+    try { return JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); }
+    catch(e){ return []; }
   }
 
-  /* -------------------------------
-     お気に入り：おすすめカードから追加（data-*を読む）
-     ------------------------------- */
-  function addFavoriteFromBtn(btn){
-    const item = {
-      id: Number(btn.dataset.id),
-      title: btn.dataset.title || "",
-      price: Number(btn.dataset.price || 0),
-      layout: btn.dataset.layout || "",
-      imageUrl: btn.dataset.image || ""
-    };
-    addFavoriteItem(item);
+  // favorites配列を保存
+  function saveFavorites(list){
+    localStorage.setItem(FAV_KEY, JSON.stringify(list));
   }
 
-  /* -------------------------------
-     お気に入り：共通処理（重複防止）
-     ------------------------------- */
-  function addFavoriteItem(item){
-    const key = "favorites";
-    let list;
-
-    try { list = JSON.parse(localStorage.getItem(key) || "[]"); }
-    catch(e){ list = []; }
-
-    if (!list.some(x => Number(x.id) === Number(item.id))) {
-      list.push(item);
-      localStorage.setItem(key, JSON.stringify(list));
-      alert("お気に入りに追加しました");
-    } else {
-      alert("すでにお気に入りに入っています");
-    }
+  // 指定idが favorites に入ってるか？
+  function isFavorite(list, id){
+    return list.some(x => Number(x.id) === Number(id));
   }
 
-  /* -------------------------------
-     履歴：自動追加（ページ表示時）
-     ------------------------------- */
-  (function addHistory() {
+  // 表示文言を更新（入ってたら「削除」、無ければ「追加」）
+  function updateFavButtonText(btn, list){
+    const id = Number(btn.dataset.id);
+    btn.textContent = isFavorite(list, id)
+      ? "お気に入りから削除"
+      : "お気に入りに追加";
+  }
+
+  // ボタンにクリックイベントを付けて「追加/削除」を切替
+  function bindFavButton(btn, list){
+    // 初期表示
+    updateFavButtonText(btn, list);
+
+    btn.addEventListener("click", function(){
+      const id = Number(btn.dataset.id);
+
+      // 既に入ってたら削除、無ければ追加
+      const idx = list.findIndex(x => Number(x.id) === id);
+      if (idx !== -1) {
+        list.splice(idx, 1);
+      } else {
+        list.push({
+          id: id,
+          title: btn.dataset.title || "",
+          price: Number(btn.dataset.price || 0),
+          layout: btn.dataset.layout || "",
+          imageUrl: btn.dataset.image || ""
+        });
+      }
+
+      saveFavorites(list);
+
+      // ✅ ここがミソ：同ページ内の fav-btn を全部更新（詳細＋おすすめ）
+      document.querySelectorAll(".fav-btn").forEach(b => updateFavButtonText(b, list));
+    });
+  }
+
+  // ページ読み込み時に fav-btn を全部トグル化
+  document.addEventListener("DOMContentLoaded", function(){
+    const list = loadFavorites();
+    document.querySelectorAll(".fav-btn").forEach(btn => bindFavButton(btn, list));
+  });
+
+  // ======================
+  // 履歴：ページ表示時に自動追加
+  // ======================
+  (function addHistory(){
     const key = "history";
     const max = 10;
     let list;
@@ -490,14 +476,15 @@
     try { list = JSON.parse(localStorage.getItem(key) || "[]"); }
     catch(e){ list = []; }
 
+    // 同IDは除外して先頭へ（最新が上）
     const updated = [propertyData, ...list.filter(x => Number(x.id) !== Number(propertyData.id))];
     localStorage.setItem(key, JSON.stringify(updated.slice(0, max)));
   })();
 
-  /* -------------------------------
-     SNS共有：JS生成（テンプレ評価で落ちない）
-     ------------------------------- */
-  (function setupShareLinks() {
+  // ======================
+  // SNS共有リンク生成
+  // ======================
+  (function setupShareLinks(){
     const url = window.location.href;
     const encUrl = encodeURIComponent(url);
     const encTitle = encodeURIComponent(propertyData?.title ?? "");
@@ -511,8 +498,8 @@
     if (fb) fb.href = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
   })();
 
-  // 共有URLをクリップボードにコピー（デモで便利）
-  function copyShareUrl() {
+  // 共有URLコピー（フォールバックあり）
+  function copyShareUrl(){
     const url = window.location.href;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -523,7 +510,7 @@
       fallbackCopy(url);
     }
 
-    function fallbackCopy(text) {
+    function fallbackCopy(text){
       const ta = document.createElement("textarea");
       ta.value = text;
       document.body.appendChild(ta);

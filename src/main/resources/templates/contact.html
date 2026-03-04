@@ -5,26 +5,126 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>お問い合わせ | チームb不動産</title>
 
+  <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- お問い合わせページ専用：入力欄の最低限の整形（機能とは独立） -->
+  <!-- お問い合わせページ専用（共通CSSを壊さない範囲で整える） -->
   <style>
+    /* 既存ページの雰囲気に寄せた、最小限の整形 */
+    #main .form-card{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:16px;
+      max-width: 860px;
+    }
+    #contactForm .row{
+      display:grid;
+      grid-template-columns: 220px 1fr;
+      gap:12px;
+      align-items:start;
+      padding:10px 0;
+      border-bottom:1px dashed #e5e7eb;
+    }
+    #contactForm .row:last-child{ border-bottom:none; }
+    #contactForm .label{
+      font-weight:700;
+      color:#333;
+    }
+    #contactForm .req{
+      display:inline-block;
+      margin-left:8px;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#fee2e2;
+      color:#991b1b;
+      vertical-align:middle;
+    }
     #contactForm input[type="text"],
     #contactForm input[type="email"],
+    #contactForm input[type="tel"],
+    #contactForm input[type="number"],
+    #contactForm select,
     #contactForm textarea{
-      width: 100%;
-      max-width: 560px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width:100%;
+      max-width:560px;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      background:#fff;
     }
     #contactForm textarea{
-      min-height: 140px;
-      resize: vertical;
+      min-height:140px;
+      resize:vertical;
     }
-    .radio-row label{
-      margin-right: 12px;
+    #contactForm .hint{
+      font-size:12px;
+      color:#6b7280;
+      margin-top:6px;
+    }
+    #contactForm .radio-row,
+    #contactForm .check-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      padding-top:6px;
+    }
+    #contactForm .triple{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    #contactForm .triple input[type="date"],
+    #contactForm .triple input[type="time"]{
+      max-width: 200px;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+    }
+    #contactForm .actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-start;
+      padding-top:14px;
+    }
+    #contactForm .btn{
+      appearance:none;
+      border:none;
+      border-radius:10px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    #contactForm .btn-primary{
+      background:#111827;
+      color:#fff;
+    }
+    #contactForm .btn-ghost{
+      background:#f3f4f6;
+      color:#111827;
+    }
+    .notice{
+      background:#ecfeff;
+      border:1px solid #a5f3fc;
+      color:#155e75;
+      border-radius:10px;
+      padding:10px 12px;
+      margin:12px 0 0;
+      max-width: 860px;
+    }
+    .error{
+      color:#b91c1c;
+      font-size:12px;
+      margin-top:6px;
+    }
+
+    @media (max-width: 767px){
+      #contactForm .row{ grid-template-columns: 1fr; }
+      #main .form-card{ padding:14px; }
     }
   </style>
 </head>
@@ -65,50 +165,266 @@
 <div id="main">
   <article>
     <h1>お問い合わせ</h1>
-    <p>物件に関する疑問など、お気軽にお問い合わせください。</p>
+    <p>物件に関する疑問や内見予約など、お気軽にお問い合わせください。</p>
     <ul>
-      <li>必要事項を記入し、「確認する」をクリックしてください。</li>
-      <li>ご記入いただいた個人情報は、お問い合わせの回答以外には使用いたしません。</li>
+      <li>必要事項を記入し、「確認画面へ」をクリックしてください。</li>
+      <li>ご記入いただいた個人情報は、お問い合わせ対応以外には使用いたしません。</li>
     </ul>
 
-    <!-- 学習用：送信はJSで疑似処理（ページ遷移なし） -->
-    <form id="contactForm" action="#" method="post" >
-      <p>
-        <label for="name">お名前（必須）</label><br>
-        <input id="name" type="text" name="name" required>
-      </p>
+    <!-- 完了後に表示したい場合（任意） -->
+    <div class="notice" th:if="${success}">
+      送信ありがとうございました！担当者より3営業日以内にご連絡します。
+    </div>
 
-      <p>
-        <label for="mail">メールアドレス（必須）</label><br>
-        <input id="mail" type="email" name="mail" required>
-      </p>
+    <div class="form-card">
+      <!-- ★重要：confirmへ送る -->
+      <form id="contactForm"
+            th:action="@{/contact/confirm}"
+            method="post"
+            th:object="${contactForm}">
 
-      <p>お問い合わせ種類</p>
-      <p class="radio-row">
-        <label><input type="radio" name="kind" value="property" checked> 物件に関すること</label>
-        <label><input type="radio" name="kind" value="other"> その他</label>
-      </p>
+        <!-- 物件詳細から来た場合に埋める（任意） -->
+        <input type="hidden" th:field="*{propertyId}">
 
-      <p>
-        <label for="message">お問い合わせ内容</label><br>
-        <textarea id="message" name="message"></textarea>
-      </p>
+        <!-- お問い合わせ種類 -->
+        <div class="row">
+          <div class="label">お問い合わせ種別<span class="req">必須</span></div>
+          <div>
+            <select th:field="*{inquiryType}" required>
+              <option value="" disabled selected>選択してください</option>
+              <option value="document">資料請求</option>
+              <option value="viewing">内見予約</option>
+              <option value="visit">来店予約</option>
+              <option value="consult">入居・購入相談</option>
+              <option value="other">その他</option>
+            </select>
+            <div class="hint">目的に近い種別を選ぶと、担当がスムーズにご案内できます。</div>
+            <div class="error" th:if="${#fields.hasErrors('inquiryType')}" th:errors="*{inquiryType}">エラー</div>
+          </div>
+        </div>
 
-      <p><input type="submit" value="確認する"></p>
-    </form>
+        <!-- お名前 -->
+        <div class="row">
+          <div class="label">お名前<span class="req">必須</span></div>
+          <div>
+            <input type="text" th:field="*{name}" autocomplete="name" required>
+            <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">エラー</div>
+          </div>
+        </div>
+
+        <!-- メール -->
+        <div class="row">
+          <div class="label">メールアドレス<span class="req">必須</span></div>
+          <div>
+            <input type="email" th:field="*{mail}" autocomplete="email" required>
+            <div class="error" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">エラー</div>
+          </div>
+        </div>
+
+        <!-- 希望連絡方法 -->
+        <div class="row">
+          <div class="label">希望連絡方法<span class="req">必須</span></div>
+          <div>
+            <div class="radio-row">
+              <label><input type="radio" th:field="*{contactMethod}" value="email" required> メール</label>
+              <label><input type="radio" th:field="*{contactMethod}" value="phone"> 電話</label>
+            </div>
+            <div class="hint">「電話」を選択した場合、電話番号が必須になります。</div>
+            <div class="error" th:if="${#fields.hasErrors('contactMethod')}" th:errors="*{contactMethod}">エラー</div>
+          </div>
+        </div>
+
+        <!-- 電話番号 -->
+        <div class="row">
+          <div class="label">電話番号</div>
+          <div>
+            <!-- ★修正①：入力補助（スマホで電話キーボード出やすい） -->
+            <!-- ★注意：ハイフンあり/なしどちらでもOK。サーバ側で「数字だけ」に正規化して保存する -->
+            <input id="tel" type="tel" th:field="*{tel}"
+                   inputmode="tel"
+                   autocomplete="tel"
+                   placeholder="例）090-1234-5678 / 09012345678">
+            <div class="error" th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}">エラー</div>
+            <!-- ※「電話を選んだ時に必須＆桁チェック」は ContactForm の @AssertTrue でサーバ側保証 -->
+          </div>
+        </div>
+
+        <!-- 希望エリア -->
+        <div class="row">
+          <div class="label">希望エリア</div>
+          <div>
+            <input type="text" th:field="*{area}" placeholder="例）那覇市 / 宜野湾市 / 浦添市 など">
+          </div>
+        </div>
+
+        <!-- 予算 -->
+        <div class="row">
+          <div class="label">ご予算</div>
+          <div>
+            <input type="text" th:field="*{budget}" placeholder="例）家賃 8万円まで / 価格 3,000万円まで など">
+          </div>
+        </div>
+
+        <!-- 間取り -->
+        <div class="row">
+          <div class="label">希望間取り</div>
+          <div>
+            <select th:field="*{layout}">
+              <option value="">選択しない</option>
+              <option value="1R">1R</option>
+              <option value="1K">1K</option>
+              <option value="1DK">1DK</option>
+              <option value="1LDK">1LDK</option>
+              <option value="2K">2K</option>
+              <option value="2DK">2DK</option>
+              <option value="2LDK">2LDK</option>
+              <option value="3LDK+">3LDK以上</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 入居希望時期 -->
+        <div class="row">
+          <div class="label">入居希望時期</div>
+          <div>
+            <select th:field="*{moveIn}">
+              <option value="">選択しない</option>
+              <option value="asap">できるだけ早く</option>
+              <option value="1m">1ヶ月以内</option>
+              <option value="2m">2ヶ月以内</option>
+              <option value="3m">3ヶ月以内</option>
+              <option value="later">それ以降</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 内見希望日時（第1〜第3希望） -->
+        <div class="row">
+          <div class="label">内見希望日時（任意）</div>
+          <div>
+            <div class="hint">
+              ★現在日時より前の「日付」「時刻」は選べないようにしています（JSでmin制御）。
+            </div>
+
+            <div class="hint">第1希望</div>
+            <div class="triple">
+              <input type="date" class="date-field" th:field="*{date1}">
+              <input type="time" class="time-field" th:field="*{time1}">
+            </div>
+
+            <div class="hint">第2希望</div>
+            <div class="triple">
+              <input type="date" class="date-field" th:field="*{date2}">
+              <input type="time" class="time-field" th:field="*{time2}">
+            </div>
+
+            <div class="hint">第3希望</div>
+            <div class="triple">
+              <input type="date" class="date-field" th:field="*{date3}">
+              <input type="time" class="time-field" th:field="*{time3}">
+            </div>
+          </div>
+        </div>
+
+        <!-- お問い合わせ内容 -->
+        <div class="row">
+          <div class="label">お問い合わせ内容</div>
+          <div>
+            <textarea th:field="*{message}" placeholder="例）○○マンションの内見希望、駐車場の空き状況、初期費用の目安など"></textarea>
+          </div>
+        </div>
+
+        <!-- 個人情報同意 -->
+        <div class="row">
+          <div class="label">個人情報の取り扱い<span class="req">必須</span></div>
+          <div>
+            <div class="check-row">
+              <label>
+                <!-- ★agree ではなく consent に統一 -->
+                <input type="checkbox" th:field="*{consent}" required>
+                個人情報の取り扱いに同意します
+              </label>
+            </div>
+            <div class="hint">同意いただけない場合、送信できません。</div>
+            <div class="error" th:if="${#fields.hasErrors('consent')}" th:errors="*{consent}">エラー</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">確認画面へ</button>
+          <button type="reset" class="btn btn-ghost">入力をクリア</button>
+        </div>
+      </form>
+    </div>
   </article>
 </div>
 
 <script>
-  (function () {
-    const form = document.getElementById("contactForm");
+  // -----------------------------
+  // ①「電話」を選んだら電話番号を必須にする（UI補助）
+  // ※サーバ側でも ContactForm のチェックで最終保証する
+  // -----------------------------
+  (function(){
+    const form = document.getElementById('contactForm');
     if (!form) return;
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault(); // ページ遷移を止める（学習用デモ）
-      alert("送信ありがとうございました！3営業日以内にご返信します。");
-      form.reset(); // 入力内容をクリア
-    });
+    const tel = document.getElementById('tel');
+    const methodRadios = form.querySelectorAll('input[name="contactMethod"]');
+
+    function refreshTelRequired(){
+      const checked = form.querySelector('input[name="contactMethod"]:checked');
+      const isPhone = checked && checked.value === 'phone';
+      if (tel) tel.required = !!isPhone;
+    }
+
+    methodRadios.forEach(r => r.addEventListener('change', refreshTelRequired));
+    refreshTelRequired();
+  })();
+
+  // -----------------------------
+  // ② 過去日付・過去時刻を選べないようにする（UI補助）
+  //
+  // - dateのminを「今日」に設定
+  // - 日付が「今日」のときだけ、timeのminを「現在時刻」に設定
+  // -----------------------------
+  (function(){
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const dateInputs = form.querySelectorAll('.date-field');
+    const timeInputs = form.querySelectorAll('.time-field');
+
+    function pad2(n){ return String(n).padStart(2, '0'); }
+
+    function todayStr(){
+      const d = new Date();
+      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+    }
+
+    function nowTimeStr(){
+      const d = new Date();
+      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    const minDate = todayStr();
+    dateInputs.forEach(di => di.min = minDate);
+
+    function refreshTimeMin(){
+      const nowMin = nowTimeStr();
+      dateInputs.forEach((di, idx) => {
+        const ti = timeInputs[idx];
+        if (!ti) return;
+
+        if (!di.value || di.value !== minDate) {
+          ti.min = "";
+          return;
+        }
+        ti.min = nowMin;
+      });
+    }
+
+    dateInputs.forEach(di => di.addEventListener('change', refreshTimeMin));
+    refreshTimeMin();
   })();
 </script>
 

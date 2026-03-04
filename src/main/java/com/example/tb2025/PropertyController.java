@@ -38,11 +38,11 @@ public class PropertyController {
         return "staff";
     }
 
-    /** お問い合わせページ（今回はダミー） */
-    @GetMapping("/contact")
-    public String contact() {
-        return "contact";
-    }
+    /** お問い合わせページ（Contact用Controllerと競合するためコメントアウト） */
+	/* @GetMapping("/contact")
+	public String contact() {
+	    return "contact";
+	}*/
 
     /** 会社概要ページ */
     @GetMapping("/about")
