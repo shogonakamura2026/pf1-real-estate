@@ -3,44 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>閲覧履歴 | チームb不動産</title>
+  <title>閲覧履歴 | チームBe不動産</title>
 
+  <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
+  <!-- =========================================================
+       閲覧履歴ページ専用スタイル（UIのみ）
+       ---------------------------------------------------------
+       ★ favorites.html と構造を合わせる目的
+       - グリッド表示（PC:3列 / SP:1列）
+       - カード構造：thumb(画像リンク) + body(情報) + actions(ボタン)
+       - 画像クリックで詳細へ（favorites と同じ導線）
+  ========================================================= -->
   <style>
     .container{ max-width:1100px; margin:0 auto; padding:24px 16px; }
-    .header-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
-    .page-title{ margin:0; font-size:22px; font-weight:900; color:#0f172a; }
 
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:10px 14px; border-radius:12px; border:1px solid #cdd6e4;
-      background:#fff; color:#1f2a44; font-weight:700; cursor:pointer; text-decoration:none;
-      line-height: 1;
-      white-space: nowrap;
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
     }
-    .btn.outline{	background: #e0f2fe; border-color: #7dd3fc; color: #075985; }
+
+    .page-title{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      color:#0f172a;
+      line-height:1.2;
+    }
+
+    /* 仕様表示（最新10件） */
+    .note{
+      margin-top:6px;
+      color:#64748b;
+      font-weight:700;
+      font-size:13px;
+    }
+
+    /* ---------------------------------------------------------
+       ボタン（共通）
+       ---------------------------------------------------------
+       ・outline: 物件一覧/詳細などの導線
+       ・pink:    お気に入りトグル
+       ・danger:  削除系
+       ・small:   カード内のボタンは小さめ
+    --------------------------------------------------------- */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid #cdd6e4;
+      background:#fff;
+      color:#1f2a44;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      line-height:1;
+      white-space:nowrap;
+      gap:6px;
+    }
+    .btn.outline{ background:#e0f2fe; border-color:#7dd3fc; color:#075985; }
     .btn.pink{ background:#fce7f3; border-color:#f9a8d4; color:#9d174d; }
     .btn.danger{ background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
     .btn.small{ padding:8px 10px; border-radius:10px; font-size:13px; }
 
     .empty{
-      margin-top:16px; padding:14px; border:1px solid #e5e7eb; border-radius:12px;
-      background:#fff; color:#334155; font-weight:700;
+      margin-top:16px;
+      padding:14px;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      background:#fff;
+      color:#334155;
+      font-weight:700;
     }
 
-    .grid{ margin-top:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-    .card{ background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
-    .thumb{ display:block; background:#f1f5f9; }
-    .thumb img{ width:100%; height:160px; object-fit:cover; display:block; }
+    /* ---------------------------------------------------------
+       グリッド/カード
+       ---------------------------------------------------------
+       ★ favorites.html と整合性を持たせるため、
+       画像は <a class="thumb" href="/properties/{id}"> で包む
+    --------------------------------------------------------- */
+    .grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+    .card{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
 
-    .body{ padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .thumb{
+      display:block;
+      background:#f1f5f9;
+    }
+    .thumb img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      display:block;
+    }
+
+    .body{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      flex:1;
+    }
     .title{ font-weight:900; color:#0f172a; line-height:1.3; }
-    .meta{ color:#64748b; font-weight:700; font-size:13px; }
     .price{ font-weight:900; color:#0f172a; }
+    .meta{ color:#64748b; font-weight:700; font-size:13px; }
 
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
 
     @media (max-width: 860px){
       .grid{ grid-template-columns:1fr; }
@@ -50,6 +142,9 @@
 </head>
 
 <body>
+<!-- ===============================
+     ヘッダー
+================================ -->
 <header id="top">
   <h1>
     不動産のチームBe
@@ -59,6 +154,9 @@
   </h1>
 </header>
 
+<!-- ===============================
+     グローバルナビ
+================================ -->
 <nav>
   <ul>
     <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
@@ -68,16 +166,34 @@
   </ul>
 </nav>
 
+<!-- ===============================
+     右上ポップ追従ナビ
+================================ -->
 <nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip" th:href="@{/history}">履歴</a>
+  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
 </nav>
 
+<!-- =========================================================
+     メイン
+     ---------------------------------------------------------
+     役割分離（学習ポイント）
+     - 保存（履歴を追加し10件に制限）：本来は物件詳細ページで実施
+     - 表示（このページ）：history を読んで描画する
+     - 連携（このページ）：favorites を読んでトグルできるようにする
+========================================================= -->
 <main class="container">
 
   <div class="header-row">
-    <h2 class="page-title">閲覧履歴</h2>
+    <div>
+      <h2 class="page-title">閲覧履歴</h2>
+
+      <!-- ✅ 仕様が伝わる「最新10件」表記 -->
+      <div class="note">
+        ※閲覧履歴は最新10件まで保存されます（古い履歴から自動削除）
+      </div>
+    </div>
 
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
       <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
@@ -89,26 +205,36 @@
     まだ閲覧履歴がありません。物件を見るとここに追加されます。
   </div>
 
-  <section class="grid" id="historyGrid"></section>
-
+  <section class="grid" id="historyGrid" aria-label="閲覧履歴一覧"></section>
 </main>
 
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- ===============================
+     cookie同意：fragments
+================================ -->
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 <script>
-  // ==========================================
+  // =========================================================
   // localStorage keys
-  // ==========================================
+  // ---------------------------------------------------------
+  // HISTORY_KEY: 閲覧履歴の保存場所（配列）
+  // FAV_KEY:     お気に入りの保存場所（favorites.html と共通）
+  // =========================================================
   const HISTORY_KEY = "history";
   const FAV_KEY = "favorites";
 
-  // ==========================================
-  // 共通：安全に読み込む（壊れてても落ちない）
-  // ==========================================
+  // =========================================================
+  // 共通：JSON配列を安全に読み書き
+  // ---------------------------------------------------------
+  // localStorageは「文字列」保存なので JSON.parse/stringify を使う
+  // 壊れたJSONが入っていても画面が落ちないように try/catch
+  // =========================================================
   function loadJsonArray(key){
     try { return JSON.parse(localStorage.getItem(key) || "[]"); }
     catch(e){ return []; }
@@ -118,9 +244,12 @@
     localStorage.setItem(key, JSON.stringify(list));
   }
 
-  // ==========================================
-  // XSS対策：最小限（表示文字列をHTMLエスケープ）
-  // ==========================================
+  // =========================================================
+  // XSS対策：innerHTMLに埋める文字列の最小エスケープ
+  // ---------------------------------------------------------
+  // favorites.html は createElement + textContent 中心で比較的安全
+  // history.html は innerHTML を使うため escapeHtml が重要
+  // =========================================================
   function escapeHtml(v){
     return String(v ?? "")
       .replaceAll("&", "&amp;")
@@ -130,9 +259,9 @@
       .replaceAll("'", "&#39;");
   }
 
-  // ==========================================
-  // お気に入り：判定/表示/トグル
-  // ==========================================
+  // =========================================================
+  // お気に入り判定 / ボタン文言更新
+  // =========================================================
   function isFavorite(favs, id){
     return favs.some(x => Number(x.id) === Number(id));
   }
@@ -144,18 +273,26 @@
       : "お気に入りに追加";
   }
 
+  // =========================================================
+  // お気に入りトグル（追加/削除）
+  // ---------------------------------------------------------
+  // ★ favorites.html と同じ保存形式に合わせる（整合性）
+  // { id, title, price, layout, imageUrl }
+  //
+  // ★ data-* 属性に必要情報を詰めておき、押したときに保存する
+  // =========================================================
   function toggleFavoriteByBtn(btn){
     const id = Number(btn.dataset.id);
 
-    // 今のfavoritesを読み直す（他ページで変わっててもOK）
+    // 他ページで変更されてもズレないよう「押下時に最新を読む」
     const favs = loadJsonArray(FAV_KEY);
 
     const idx = favs.findIndex(x => Number(x.id) === id);
     if (idx !== -1) {
-      // 削除
+      // すでにお気に入り → 削除
       favs.splice(idx, 1);
     } else {
-      // 追加（履歴カードの data-* を使って保存）
+      // 未登録 → 追加
       favs.push({
         id: id,
         title: btn.dataset.title || "",
@@ -167,13 +304,19 @@
 
     saveJsonArray(FAV_KEY, favs);
 
-    // 同ページ内の fav-btn を全部更新
+    // 同ページ内の全 fav-btn を “今の状態” に揃える
     document.querySelectorAll(".fav-btn").forEach(b => updateFavBtnText(b, favs));
   }
 
-  // ==========================================
-  // 画面描画：履歴カードを作る（ここで fav-btn も出す）
-  // ==========================================
+  // =========================================================
+  // 描画：履歴をカード化して表示
+  // ---------------------------------------------------------
+  // ・history を読む
+  // ・favorites を読む（ボタン文言同期用）
+  // ・空なら emptyBox を表示
+  //
+  // ★「10件制限」は保存側（物件詳細ページ）で担保する設計
+  // =========================================================
   function render(){
     const grid = document.getElementById("historyGrid");
     const empty = document.getElementById("emptyBox");
@@ -192,13 +335,14 @@
     history.forEach(item => {
       const id = Number(item.id);
 
-      // favorites.html と同じ想定：/images/ + imageUrl
+      // favorites.html と同じ想定：/images/ + imageUrl（ファイル名）
       const imgSrc = "/images/" + (item.imageUrl || "");
 
       const card = document.createElement("article");
       card.className = "card";
 
-      // ✅ fav-btn をここで出す（data-* に必要情報を全部入れる）
+      // ✅ 画像クリックで詳細へ（favorites.html と同じ導線）
+      // ✅ fav-btn: data-* に保存用データを詰めておく
       card.innerHTML = `
         <a class="thumb" href="/properties/${id}">
           <img src="${imgSrc}" alt="物件画像">
@@ -231,13 +375,15 @@
       grid.appendChild(card);
     });
 
-    // ✅ 初期表示：favorites状態に合わせてボタン文言を更新
+    // 初期表示：お気に入り状態に合わせてボタン文言を揃える
     document.querySelectorAll(".fav-btn").forEach(btn => updateFavBtnText(btn, favs));
   }
 
-  // ==========================================
+  // =========================================================
   // クリック処理（イベント委譲）
-  // ==========================================
+  // ---------------------------------------------------------
+  // innerHTMLで作ったボタンでも確実に拾える
+  // =========================================================
   document.addEventListener("click", function(e){
 
     // お気に入りトグル
@@ -258,13 +404,17 @@
     }
   });
 
+  // =========================================================
   // 履歴の全削除
+  // =========================================================
   document.getElementById("clearHistoryBtn").addEventListener("click", function(){
     localStorage.removeItem(HISTORY_KEY);
     render();
   });
 
+  // =========================================================
   // 初回描画
+  // =========================================================
   document.addEventListener("DOMContentLoaded", render);
 </script>
 </body>

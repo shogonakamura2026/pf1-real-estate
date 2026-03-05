@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>お問い合わせ確認 | チームb不動産</title>
+  <title>お問い合わせ確認 | チームBe不動産</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
   <style>
@@ -129,11 +129,17 @@
   </article>
 </div>
 
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- ===============================
+     cookie同意：fragments
+================================ -->
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
 
 </body>
 </html>

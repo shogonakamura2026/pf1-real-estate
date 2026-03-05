@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>お問い合わせ | チームb不動産</title>
+  <title>お問い合わせ | チームBe不動産</title>
 
   <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -11,27 +11,33 @@
 
   <!-- お問い合わせページ専用（共通CSSを壊さない範囲で整える） -->
   <style>
-    /* 既存ページの雰囲気に寄せた、最小限の整形 */
+    /* ===============================
+       Contact page - minimal styling
+       =============================== */
+
     #main .form-card{
       background:#fff;
       border:1px solid #e5e7eb;
       border-radius:12px;
       padding:16px;
-      max-width: 860px;
+      max-width:860px;
     }
+
     #contactForm .row{
       display:grid;
-      grid-template-columns: 220px 1fr;
+      grid-template-columns:220px 1fr;
       gap:12px;
       align-items:start;
       padding:10px 0;
       border-bottom:1px dashed #e5e7eb;
     }
     #contactForm .row:last-child{ border-bottom:none; }
+
     #contactForm .label{
       font-weight:700;
       color:#333;
     }
+
     #contactForm .req{
       display:inline-block;
       margin-left:8px;
@@ -42,10 +48,12 @@
       color:#991b1b;
       vertical-align:middle;
     }
+
     #contactForm input[type="text"],
     #contactForm input[type="email"],
     #contactForm input[type="tel"],
     #contactForm input[type="number"],
+    #contactForm input[type="date"],
     #contactForm select,
     #contactForm textarea{
       width:100%;
@@ -54,16 +62,20 @@
       border:1px solid #ccc;
       border-radius:8px;
       background:#fff;
+      box-sizing:border-box;
     }
+
     #contactForm textarea{
       min-height:140px;
       resize:vertical;
     }
+
     #contactForm .hint{
       font-size:12px;
       color:#6b7280;
       margin-top:6px;
     }
+
     #contactForm .radio-row,
     #contactForm .check-row{
       display:flex;
@@ -72,25 +84,24 @@
       align-items:center;
       padding-top:6px;
     }
+
+    /* date + time(select) row */
     #contactForm .triple{
       display:flex;
       flex-wrap:wrap;
       gap:10px;
       align-items:center;
     }
-    #contactForm .triple input[type="date"],
-    #contactForm .triple input[type="time"]{
-      max-width: 200px;
-      padding:10px;
-      border:1px solid #ccc;
-      border-radius:8px;
-    }
+    #contactForm .triple .date-field{ max-width:200px; }
+    #contactForm .triple .time-field{ max-width:200px; }
+
     #contactForm .actions{
       display:flex;
       gap:10px;
       justify-content:flex-start;
       padding-top:14px;
     }
+
     #contactForm .btn{
       appearance:none;
       border:none;
@@ -107,6 +118,7 @@
       background:#f3f4f6;
       color:#111827;
     }
+
     .notice{
       background:#ecfeff;
       border:1px solid #a5f3fc;
@@ -114,17 +126,46 @@
       border-radius:10px;
       padding:10px 12px;
       margin:12px 0 0;
-      max-width: 860px;
+      max-width:860px;
     }
+
     .error{
       color:#b91c1c;
       font-size:12px;
       margin-top:6px;
     }
 
+    /* 休業日メッセージ表示（JSで使う） */
+    #closedNotice{
+      margin-top:8px;
+      font-size:12px;
+      color:#b91c1c;
+      display:none;
+    }
+	
+	/*chckの見栄え*/
+	#contactForm .check-row a{
+	  text-decoration: underline;
+	  color: inherit;
+	}
+	#contactForm .check-row a:focus{
+	  outline: 2px solid #111827;
+	  outline-offset: 2px;
+	  border-radius: 6px;
+	}
+
     @media (max-width: 767px){
-      #contactForm .row{ grid-template-columns: 1fr; }
+      #contactForm .row{ grid-template-columns:1fr; }
       #main .form-card{ padding:14px; }
+      #contactForm input[type="text"],
+      #contactForm input[type="email"],
+      #contactForm input[type="tel"],
+      #contactForm input[type="number"],
+      #contactForm input[type="date"],
+      #contactForm select,
+      #contactForm textarea{
+        max-width:100%;
+      }
     }
   </style>
 </head>
@@ -157,9 +198,9 @@
 
 <!-- 右上ポップ追従ナビ（白背景） -->
 <nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip" th:href="@{/history}">履歴</a>
+  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
 </nav>
 
 <div id="main">
@@ -177,7 +218,6 @@
     </div>
 
     <div class="form-card">
-      <!-- ★重要：confirmへ送る -->
       <form id="contactForm"
             th:action="@{/contact/confirm}"
             method="post"
@@ -190,14 +230,15 @@
         <div class="row">
           <div class="label">お問い合わせ種別<span class="req">必須</span></div>
           <div>
-            <select th:field="*{inquiryType}" required>
-              <option value="" disabled selected>選択してください</option>
-              <option value="document">資料請求</option>
-              <option value="viewing">内見予約</option>
-              <option value="visit">来店予約</option>
-              <option value="consult">入居・購入相談</option>
-              <option value="other">その他</option>
-            </select>
+			<select th:field="*{inquiryType}" required>
+			  <option value="" disabled>選択してください</option>
+			  <option value="document">資料請求</option>
+			  <option value="viewing">内見予約</option>
+			  <option value="visit">来店予約</option>
+			  <option value="consult">入居・購入相談</option>
+			  <option value="listing">掲載申し込み</option>
+			  <option value="other">その他</option>
+			</select>
             <div class="hint">目的に近い種別を選ぶと、担当がスムーズにご案内できます。</div>
             <div class="error" th:if="${#fields.hasErrors('inquiryType')}" th:errors="*{inquiryType}">エラー</div>
           </div>
@@ -238,14 +279,11 @@
         <div class="row">
           <div class="label">電話番号</div>
           <div>
-            <!-- ★修正①：入力補助（スマホで電話キーボード出やすい） -->
-            <!-- ★注意：ハイフンあり/なしどちらでもOK。サーバ側で「数字だけ」に正規化して保存する -->
             <input id="tel" type="tel" th:field="*{tel}"
                    inputmode="tel"
                    autocomplete="tel"
                    placeholder="例）090-1234-5678 / 09012345678">
             <div class="error" th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}">エラー</div>
-            <!-- ※「電話を選んだ時に必須＆桁チェック」は ContactForm の @AssertTrue でサーバ側保証 -->
           </div>
         </div>
 
@@ -303,25 +341,36 @@
           <div class="label">内見希望日時（任意）</div>
           <div>
             <div class="hint">
-              ★現在日時より前の「日付」「時刻」は選べないようにしています（JSでmin制御）。
+              内見時間は <strong>11:00〜16:00</strong> の範囲で <strong>30分刻み</strong>。
+              さらに「今日」の場合は <strong>現在時刻より前は選べません</strong>。
+              <br>※ 定休日：毎週月曜／年末年始(12/29〜1/3)／休業日(2026/06/23・2026/09/03〜05) は選べません。
             </div>
+
+            <!-- 休業日メッセージ（JSで表示） -->
+            <div id="closedNotice"></div>
 
             <div class="hint">第1希望</div>
             <div class="triple">
               <input type="date" class="date-field" th:field="*{date1}">
-              <input type="time" class="time-field" th:field="*{time1}">
+              <select class="time-field" name="time1" th:field="*{time1}">
+                <option value="">選択してください</option>
+              </select>
             </div>
 
             <div class="hint">第2希望</div>
             <div class="triple">
               <input type="date" class="date-field" th:field="*{date2}">
-              <input type="time" class="time-field" th:field="*{time2}">
+              <select class="time-field" name="time2" th:field="*{time2}">
+                <option value="">選択してください</option>
+              </select>
             </div>
 
             <div class="hint">第3希望</div>
             <div class="triple">
               <input type="date" class="date-field" th:field="*{date3}">
-              <input type="time" class="time-field" th:field="*{time3}">
+              <select class="time-field" name="time3" th:field="*{time3}">
+                <option value="">選択してください</option>
+              </select>
             </div>
           </div>
         </div>
@@ -330,25 +379,28 @@
         <div class="row">
           <div class="label">お問い合わせ内容</div>
           <div>
-            <textarea th:field="*{message}" placeholder="例）○○マンションの内見希望、駐車場の空き状況、初期費用の目安など"></textarea>
+            <textarea th:field="*{message}" placeholder="例）○○マンションの内見希望、駐車場の空き状況、初期費用の目安など。"></textarea>
           </div>
         </div>
 
-        <!-- 個人情報同意 -->
-        <div class="row">
-          <div class="label">個人情報の取り扱い<span class="req">必須</span></div>
-          <div>
-            <div class="check-row">
-              <label>
-                <!-- ★agree ではなく consent に統一 -->
-                <input type="checkbox" th:field="*{consent}" required>
-                個人情報の取り扱いに同意します
-              </label>
-            </div>
-            <div class="hint">同意いただけない場合、送信できません。</div>
-            <div class="error" th:if="${#fields.hasErrors('consent')}" th:errors="*{consent}">エラー</div>
-          </div>
-        </div>
+		<!-- 個人情報同意 -->
+		<div class="row">
+		  <div class="label">個人情報の取り扱い<span class="req">必須</span></div>
+		  <div>
+		    <div class="check-row">
+		      <label>
+		        <input type="checkbox" th:field="*{consent}" required>
+		        個人情報の取り扱いに同意します（
+		        <a th:href="@{/privacy}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+		        ／
+		        <a th:href="@{/external-transmission}" target="_blank" rel="noopener noreferrer">外部送信ポリシー</a>
+		        ）
+		      </label>
+		    </div>
+		    <div class="hint">同意いただけない場合、送信できません。</div>
+		    <div class="error" th:if="${#fields.hasErrors('consent')}" th:errors="*{consent}">エラー</div>
+		  </div>
+		</div>
 
         <div class="actions">
           <button type="submit" class="btn btn-primary">確認画面へ</button>
@@ -359,79 +411,252 @@
   </article>
 </div>
 
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- ===============================
+     cookie同意：fragments
+================================ -->
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
+
 <script>
-  // -----------------------------
-  // ①「電話」を選んだら電話番号を必須にする（UI補助）
-  // ※サーバ側でも ContactForm のチェックで最終保証する
-  // -----------------------------
+  // =============================
+  // ① 「電話」を選んだら電話番号を必須にする（UI補助）
+  // =============================
   (function(){
     const form = document.getElementById('contactForm');
     if (!form) return;
 
     const tel = document.getElementById('tel');
-    const methodRadios = form.querySelectorAll('input[name="contactMethod"]');
+    const radios = form.querySelectorAll('input[type="radio"]');
 
-    function refreshTelRequired(){
-      const checked = form.querySelector('input[name="contactMethod"]:checked');
+    function getChecked(){
+      return [...radios].find(r => r.checked && (r.value === 'email' || r.value === 'phone')) || null;
+    }
+
+    function refresh(){
+      const checked = getChecked();
       const isPhone = checked && checked.value === 'phone';
       if (tel) tel.required = !!isPhone;
     }
 
-    methodRadios.forEach(r => r.addEventListener('change', refreshTelRequired));
-    refreshTelRequired();
+    radios.forEach(r => r.addEventListener('change', refresh));
+    refresh();
   })();
 
-  // -----------------------------
-  // ② 過去日付・過去時刻を選べないようにする（UI補助）
-  //
-  // - dateのminを「今日」に設定
-  // - 日付が「今日」のときだけ、timeのminを「現在時刻」に設定
-  // -----------------------------
+  // =============================
+  // 共通ユーティリティ（日付文字列など）
+  // =============================
+  function pad2(n){ return String(n).padStart(2, '0'); }
+  function todayStr(){
+    const d = new Date();
+    return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  }
+  function toMinutes(h, m){ return h * 60 + m; }
+  function minutesNow(){
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  }
+
+  // =============================
+  // ② 過去日付を選べない（date min = 今日）
+  // =============================
+  (function(){
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    const dateInputs = form.querySelectorAll('.date-field');
+    const minDate = todayStr();
+    dateInputs.forEach(di => di.min = minDate);
+  })();
+
+  // =============================
+  // ③ 定休日・休業日を選べない（選んだらクリア＋メッセージ）
+  // - 毎週 月曜
+  // - 年末年始 12/29〜1/3（毎年）
+  // - 2026/06/23
+  // - 2026/09/03〜09/05
+  // =============================
   (function(){
     const form = document.getElementById('contactForm');
     if (!form) return;
 
     const dateInputs = form.querySelectorAll('.date-field');
-    const timeInputs = form.querySelectorAll('.time-field');
+    const notice = document.getElementById('closedNotice');
 
-    function pad2(n){ return String(n).padStart(2, '0'); }
+    // 0=日,1=月,...6=土
+    const WEEKLY_CLOSED = [1]; // 月曜
 
-    function todayStr(){
-      const d = new Date();
-      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+    // 毎年固定の休業日（MM-DD）
+    const YEARLY_CLOSED_MD = [
+      "12-29","12-30","12-31",
+      "01-01","01-02","01-03"
+    ];
+
+    // 今年(2026)の特定休業日（YYYY-MM-DD）
+    const CLOSED_DATES = new Set([
+      "2026-06-23",
+      "2026-09-03","2026-09-04","2026-09-05"
+    ]);
+
+    function show(msg){
+      if (!notice) return;
+      notice.textContent = msg;
+      notice.style.display = "block";
+      clearTimeout(show._t);
+      show._t = setTimeout(() => {
+        notice.style.display = "none";
+        notice.textContent = "";
+      }, 4500);
     }
 
-    function nowTimeStr(){
-      const d = new Date();
-      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    function mdOf(dateStr){
+      return dateStr.slice(5); // "YYYY-MM-DD" -> "MM-DD"
     }
 
-    const minDate = todayStr();
-    dateInputs.forEach(di => di.min = minDate);
+    function isClosed(dateStr){
+      if (!dateStr) return false;
 
-    function refreshTimeMin(){
-      const nowMin = nowTimeStr();
-      dateInputs.forEach((di, idx) => {
-        const ti = timeInputs[idx];
-        if (!ti) return;
+      // 特定日
+      if (CLOSED_DATES.has(dateStr)) return true;
 
-        if (!di.value || di.value !== minDate) {
-          ti.min = "";
-          return;
+      // 年末年始など毎年固定
+      if (YEARLY_CLOSED_MD.includes(mdOf(dateStr))) return true;
+
+      // 毎週の定休日（月曜）
+      const d = new Date(dateStr + "T00:00:00");
+      const dow = d.getDay();
+      if (WEEKLY_CLOSED.includes(dow)) return true;
+
+      return false;
+    }
+
+    // 外から使えるように window に載せる（時間候補生成でも使う）
+    window.__isClosedDate = isClosed;
+
+    dateInputs.forEach(di => {
+      di.addEventListener('change', () => {
+        if (!di.value) return;
+
+        if (isClosed(di.value)){
+          di.value = "";
+          show("選択した日は定休日/休業日のため指定できません。別の日付をお選びください。");
         }
-        ti.min = nowMin;
+      });
+    });
+  })();
+
+  // =============================
+  // ④ 内見時間の制限（プルダウン）
+  // - 30分刻み
+  // - 11:00〜16:00 の範囲のみ
+  // - 「今日」の場合、現在時刻より前は選べない（次の30分へ丸め）
+  // - 日付が未選択/休業日のときは時間候補は空にする
+  // =============================
+  (function(){
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const dateInputs = form.querySelectorAll('.date-field');
+    const timeSelects = form.querySelectorAll('.time-field');
+
+    const OPEN_HOUR = 11;
+    const CLOSE_HOUR = 16; // 含める
+    const STEP_MIN = 30;
+
+    const openMin = toMinutes(OPEN_HOUR, 0);
+    const closeMin = toMinutes(CLOSE_HOUR, 0);
+    const today = todayStr();
+
+    function fmtHM(min){
+      const h = Math.floor(min / 60);
+      const m = min % 60;
+      return `${pad2(h)}:${pad2(m)}`;
+    }
+
+    // 11:00,11:30,...,16:00
+    const slots = (function buildSlots(){
+      const a = [];
+      for (let t = openMin; t <= closeMin; t += STEP_MIN) a.push(t);
+      return a;
+    })();
+
+    function fillSelect(sel, minAllowedMinutes){
+      const current = sel.value;
+      sel.innerHTML = '<option value="">選択してください</option>';
+
+      slots.forEach(t => {
+        if (t < minAllowedMinutes) return;
+        const v = fmtHM(t);
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        sel.appendChild(opt);
+      });
+
+      if ([...sel.options].some(o => o.value === current)) sel.value = current;
+      else sel.value = "";
+    }
+
+    function clearSelect(sel){
+      sel.innerHTML = '<option value="">選択してください</option>';
+      sel.value = "";
+    }
+
+    function refreshOne(di, sel){
+      // 日付未選択 → 時間は選べない（空）
+      if (!di.value){
+        clearSelect(sel);
+        return;
+      }
+
+      // 休業日 → 時間は選べない（空）
+      if (typeof window.__isClosedDate === "function" && window.__isClosedDate(di.value)){
+        clearSelect(sel);
+        return;
+      }
+
+      // 今日以外 → 営業時間のみ
+      if (di.value !== today){
+        fillSelect(sel, openMin);
+        return;
+      }
+
+      // 今日 → 現在時刻より前を禁止（ただし11:00未満は11:00）
+      let minAllowed = Math.max(openMin, minutesNow());
+      minAllowed = Math.ceil(minAllowed / STEP_MIN) * STEP_MIN;
+
+      // 16:00を超えているなら候補なし
+      if (minAllowed > closeMin){
+        fillSelect(sel, closeMin + 9999);
+        return;
+      }
+
+      fillSelect(sel, minAllowed);
+    }
+
+    function refreshAll(){
+      dateInputs.forEach((di, idx) => {
+        const sel = timeSelects[idx];
+        if (!sel) return;
+        refreshOne(di, sel);
       });
     }
 
-    dateInputs.forEach(di => di.addEventListener('change', refreshTimeMin));
-    refreshTimeMin();
+    // 日付変更で更新
+    dateInputs.forEach(di => di.addEventListener('change', refreshAll));
+
+    // 初期表示
+    refreshAll();
+
+    // 今日を選んだまま時間が進むので1分ごとに更新
+    setInterval(refreshAll, 60 * 1000);
   })();
 </script>
 
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+
 </body>
 </html>

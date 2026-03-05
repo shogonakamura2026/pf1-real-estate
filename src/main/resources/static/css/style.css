@@ -10,7 +10,7 @@
 /* =========================================================
    1) Page Base
    ========================================================= */
-body {
+body{
   background-image: url(../images/bg.jpg);
   background-repeat: repeat-x;
   background-position: center top;
@@ -18,7 +18,7 @@ body {
 }
 
 /* PC幅（従来仕様：860px） */
-header, nav, #path, #contents, footer {
+header, nav, #path, #contents, footer{
   max-width: 860px;
   width: 100%;
   margin: 0 auto;
@@ -26,7 +26,7 @@ header, nav, #path, #contents, footer {
   box-sizing: border-box;
 }
 
-header h1 {
+header h1{
   margin: 0 0 26px 0;
   padding-top: 18px;
   text-align: center;
@@ -35,221 +35,11 @@ header h1 {
 }
 
 /* =========================================================
-   2) Global Navigation（画像ボタン方式）
+   2) Global Navigation（Modern Nav：ピル型に統一）
+   ※旧「画像ボタン方式」は撤去（競合・崩れの原因）
    ========================================================= */
-nav ul {
-  list-style-type: none;
-  margin: 0 0 20px 0;
-  padding-left: 0;
-  overflow: hidden;
-}
-
-nav ul li {
-  width: 215px;
-  float: left;
-}
-
-nav ul li a {
-  display: block;
-  height: 0;
-  padding-top: 60px;
-  overflow: hidden;
-}
-
-/* 各ナビ背景画像 */
-nav ul li#nav_properties a { background-image: url(../images/nav1.png); }
-nav ul li#nav_staff a      { background-image: url(../images/nav2.png); }
-nav ul li#nav_about a      { background-image: url(../images/nav3.png); }
-nav ul li#nav_contact a    { background-image: url(../images/nav4.png); }
-nav ul li#nav_home a       { background-image: url(../images/nav5.png); }
-
-/* 現在地/hover（※loginは旧仕様の名残。あっても害はない） */
-#properties #nav_properties a,
-#login #nav_login a,
-#about #nav_about a,
-#contact #nav_contact a,
-nav ul li a:hover {
-  background-position: 0 -60px;
-}
-
-/* =========================================================
-   3) Main Area / Footer
-   ========================================================= */
-#main {
-  width: 860px;
-  background-color: #ffffff;
-  margin: 0 auto;
-}
-#main article { padding: 20px; }
-
-footer {
-  clear: both;
-  padding-top: 10px;
-}
-
-/* H1見出し（共通） */
-#main h1,
-#staff_news h1 {
-  margin-bottom: 30px;
-  padding: 0 40px 20px 10px;
-  background-image: url(../images/bg_h1_left.png), url(../images/bg_h1_bottom.gif);
-  background-repeat: no-repeat, repeat-x;
-  background-position: right top, left bottom;
-  font-size: 180%;
-}
-
-/* =========================================================
-   4) Top page parts（news / banner）
-   ========================================================= */
-#news ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-#news ul li {
-  margin: 20px 0 20px 160px;
-  border-bottom: 1px dotted #fb484e;
-  text-indent: -160px;
-}
-
-#staff_news {
-  width: 860px;
-  margin: 50px auto 0 auto;
-}
-
-/* 画像回り込み（スタッフ紹介などで使用） */
-.staff {
-  float: left;
-  width: 30%;
-  margin-right: 20px;
-  margin-bottom: 10px;
-  height: auto;
-}
-
-/* 強調用（任意） */
-.fudousanB {
-  color: red;
-  font-size: 200%;
-  font-weight: bold;
-}
-
-.bnr_area {
-  float: left;
-  text-align: center;
-  margin-top: 15px;
-  margin-left: 30px;
-}
-
-/* =========================================================
-   5) Properties page parts
-   ========================================================= */
-.properties_area {
-  margin-bottom: 30px;
-  overflow: hidden;
-}
-.properties_area:last-child { margin-bottom: 0; }
-
-/* =========================================================
-   6) Staff blog parts
-   ========================================================= */
-#staff_login {
-  font-weight: bold;
-  margin: 10px 0 0 0;
-  padding: 0;
-}
-#staff_login a {
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0;
-  padding: 0 10px;
-  border-radius: 20px;
-  color: #ffffff;
-  background-color: #cccccc;
-}
-#staff_login a:hover { opacity: 0.5; }
-
-/* =========================================================
-   7) About page parts
-   ========================================================= */
-table thead tr th { background-color: #ffdd63; }
-table tbody tr:nth-child(even) td { background-color: #eef8fa; }
-
-#map {
-  text-align: center;
-  width: 860px;
-  margin: 0 auto;
-}
-
-/* =========================================================
-   8) Contact page parts
-   ========================================================= */
-input[type="text"]  { width: 200px; }
-input[type="email"] { width: 300px; }
-
-/* =========================================================
-   9) Floating Quick Nav（右上ポップ追従・白背景メイン）
-   ========================================================= */
-.floating-nav {
-  position: fixed;
-  top: 14px;
-  right: 14px;
-  z-index: 1500;
-
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 999px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(6px);
-}
-
-.nav-chip {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 800;
-  color: #111827;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-}
-.nav-chip:hover { background: #e5e7eb; }
-
-/* style.cssの nav 幅指定＆float影響を打ち消す（追従ナビ専用） */
-nav.floating-nav {
-  width: auto !important;
-  margin: 0 !important;
-}
-nav.floating-nav ul,
-nav.floating-nav li {
-  float: none !important;
-  width: auto !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* スマホ：被りやすいので少し小さく */
-@media (max-width: 800px) {
-  .floating-nav {
-    top: 10px;
-    right: 10px;
-    gap: 6px;
-    padding: 8px;
-  }
-  .nav-chip {
-    padding: 7px 10px;
-    font-size: 13px;
-  }
-}
-
-
-/* =========================
-   Modern Nav (card style)
-   ========================= */
 nav ul{
-  list-style:none;
+  list-style: none;
   margin: 0 0 20px 0;
   padding: 0;
   display: flex;
@@ -259,24 +49,24 @@ nav ul{
 }
 
 nav ul li{
-  width: auto;      /* 固定幅やめる */
-  float: none;      /* floatやめる */
+  width: auto;
+  float: none; /* 旧float撤去 */
 }
 
 nav ul li a{
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 
   height: 44px;
   padding: 0 18px;
 
-  background: rgb(192, 192, 192);               /* 白ベース */
+  background: rgb(192, 192, 192);
   border: 1px solid #e5e7eb;
-  border-radius: 999px;           /* ピル型 */
+  border-radius: 999px;
   color: #333;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: .02em;
 
   box-shadow: 0 6px 16px rgba(0,0,0,.06);
@@ -289,26 +79,16 @@ nav ul li a:hover{
   background: #f8fafc;
 }
 
-/* 現状の「height:0 + padding-top」で文字を消してるのを無効化 */
-nav ul li a{
-  padding-top: 0 !important;
-  overflow: visible !important;
-  height: 44px !important;
+/* 「現在地」表現：hoverと同じ方向で軽く強調 */
+#properties #nav_properties a,
+#about #nav_about a,
+#contact #nav_contact a,
+#staff #nav_staff a{
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
-/* スマホ */
-@media screen and (max-width: 767px){
-  nav ul{
-    justify-content: stretch;
-  }
-  nav ul li{
-    flex: 1 1 calc(90%); /* 1列 */
-  }
-  nav ul li a{
-    width: 90%;
-  }
-}
-
+/* 旧画像ボタン用の background-image を確実に無効化 */
 nav ul li#nav_home a,
 nav ul li#nav_properties a,
 nav ul li#nav_staff a,
@@ -318,4 +98,276 @@ nav ul li#nav_login a{
   background-image: none !important;
 }
 
+/* =========================================================
+   3) Main Area / Footer
+   ========================================================= */
+#main{
+  width: 860px;
+  background-color: #ffffff;
+  margin: 0 auto;
+}
+#main article{ padding: 20px; }
 
+footer{
+  clear: both;
+  padding-top: 10px;
+}
+
+/* H1見出し（共通） */
+#main h1,
+#staff_news h1{
+  margin-bottom: 30px;
+  padding: 0 40px 20px 10px;
+  background-image: url(../images/bg_h1_left.png), url(../images/bg_h1_bottom.gif);
+  background-repeat: no-repeat, repeat-x;
+  background-position: right top, left bottom;
+  font-size: 180%;
+}
+
+/* =========================================================
+   4) Top page parts（news / banner）
+   ========================================================= */
+#news ul{
+  list-style-type: none;
+  padding-left: 0;
+}
+#news ul li{
+  margin: 20px 0 20px 160px;
+  border-bottom: 1px dotted #fb484e;
+  text-indent: -160px;
+}
+
+#staff_news{
+  width: 860px;
+  margin: 50px auto 0 auto;
+}
+
+/* 画像回り込み（スタッフ紹介などで使用） */
+.staff{
+  float: left;
+  width: 30%;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  height: auto;
+}
+
+/* 強調用（任意） */
+.fudousanB{
+  color: red;
+  font-size: 200%;
+  font-weight: bold;
+}
+
+.bnr_area{
+  float: left;
+  text-align: center;
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+/* =========================================================
+   5) Properties page parts
+   ========================================================= */
+.properties_area{
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+.properties_area:last-child{ margin-bottom: 0; }
+
+/* =========================================================
+   6) Staff blog parts
+   ========================================================= */
+#staff_login{
+  font-weight: bold;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+#staff_login a{
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: #cccccc;
+}
+#staff_login a:hover{ opacity: 0.5; }
+
+/* =========================================================
+   7) About page parts
+   ========================================================= */
+table thead tr th{ background-color: #ffdd63; }
+table tbody tr:nth-child(even) td{ background-color: #eef8fa; }
+
+#map{
+  text-align: center;
+  width: 860px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   8) Contact page parts
+   ========================================================= */
+input[type="text"]{ width: 200px; }
+input[type="email"]{ width: 300px; }
+
+/* =========================================================
+   9) Floating Quick Nav（PC:右上 / SP:下固定バー）
+   ※レスポンシブで下バー化するので、PCの基本だけstyle.cssに置く
+   ========================================================= */
+
+/* 共通 */
+.floating-nav{
+  position: fixed;
+  z-index: 1500;
+  display: flex;
+  gap: 10px;
+}
+
+.floating-nav .nav-chip{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: .02em;
+
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transition: transform .15s ease, filter .15s ease, opacity .15s ease;
+}
+.floating-nav .nav-chip:hover{
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+}
+
+/* PC（右上） */
+@media (min-width: 768px){
+  .floating-nav{
+    top: 14px;
+    right: 14px;
+    padding: 10px;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* 色分け */
+.floating-nav .nav-chip.prop{
+  background: #e0f2fe;
+  color: #075985;
+  border-color: #7dd3fc;
+}
+.floating-nav .nav-chip.fav{
+  background: #fce7f3;
+  color: #9d174d;
+  border-color: #f9a8d4;
+}
+.floating-nav .nav-chip.hist{
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+/* 追従ナビだけ「860px中央寄せnav」の影響を打ち消す */
+nav.floating-nav{
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+/* =========================
+   Cookie Consent Banner
+   同意のやーつ
+   ========================= */
+.cookie-banner{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: linear-gradient(180deg,#ffffff,#f8fafc);
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.12);
+}
+
+.cookie-banner__inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cookie-icon{
+  font-size: 28px;
+}
+
+.cookie-banner__text{
+  flex: 1;
+  margin: 0;
+  color:#334155;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight:600;
+}
+
+.cookie-banner__tech{
+  font-size:12px;
+  color:#64748b;
+  font-weight:700;
+}
+
+.cookie-banner__actions{
+  display:flex;
+  gap:10px;
+}
+
+.cookie-btn{
+  border-radius:999px;
+  padding:10px 16px;
+  font-weight:800;
+  border:1px solid #cbd5e1;
+  background:#fff;
+  cursor:pointer;
+  transition:all .2s;
+}
+
+.cookie-btn--primary{
+  background:#0ea5e9;
+  color:#fff;
+  border-color:#0ea5e9;
+}
+
+.cookie-btn--primary:hover{
+  background:#0284c7;
+}
+
+.cookie-btn--ghost:hover{
+  background:#f1f5f9;
+}
+
+/* スマホ */
+@media (max-width:767px){
+  .cookie-banner__inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .cookie-banner__actions{
+    width:100%;
+  }
+
+  .cookie-btn{
+    flex:1;
+  }
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>物件一覧 | チームb不動産</title>
+  <title>物件一覧 | チームBe不動産</title>
 
   <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -242,7 +242,10 @@
   </style>
 </head>
 
-<body>
+<body id="properties">
+<!-- ===============================
+     ヘッダー
+================================ -->
 <header id="top">
   <h1>
     不動産のチームBe
@@ -252,6 +255,9 @@
   </h1>
 </header>
 
+<!-- ===============================
+     グローバルナビ
+================================ -->
 <nav>
   <ul>
     <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
@@ -261,10 +267,13 @@
   </ul>
 </nav>
 
+<!-- ===============================
+     右上ポップ追従ナビ
+================================ -->
 <nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip" th:href="@{/history}">履歴</a>
+  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
 </nav>
 
 <div class="site-header">
@@ -399,11 +408,17 @@
   </section>
 </main>
 
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- ===============================
+     cookie同意：fragments
+================================ -->
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
 
 <!-- =======================================================
      JS：お気に入り（トグル）

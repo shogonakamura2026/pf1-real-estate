@@ -5,19 +5,26 @@
    役割：スマホ幅でのレイアウト調整（主にナビと幅）
    ========================================================= */
 
-header, nav, #graphic, #contents, footer {
+/* =========================================================
+   0) Base (responsive)
+   ========================================================= */
+header, nav, #graphic, #contents, footer{
   width: 100%;
 }
 
-header h1 img {
+header h1 img{
   width: 100%;
   max-width: 244px;
 }
 
-/* ---------- Nav (mobile) ---------- */
-nav ul {
+/* =========================================================
+   1) Global Nav (mobile)
+   ※ 上部の通常ナビ（物件/ブログ/会社/お問い合わせ）
+   ========================================================= */
+nav ul{
   margin: 0;
-  list-style-type: none;
+  padding: 0;
+  list-style: none;
   overflow: hidden;
 }
 
@@ -25,60 +32,207 @@ nav ul li#nav_properties,
 nav ul li#nav_staff,
 nav ul li#nav_about,
 nav ul li#nav_contact,
-nav ul li#nav_home {
+nav ul li#nav_home{
   width: 100%;
 }
 
+/* 枠線（元仕様を維持） */
 nav ul li#nav_properties,
-nav ul li#nav_about {
+nav ul li#nav_about{
   border: 1px solid #f3f2e9;
   border-top: none;
   border-left: none;
 }
+
 nav ul li#nav_staff,
 nav ul li#nav_contact,
-nav ul li#nav_home {
+nav ul li#nav_home{
   border: 1px solid #f3f2e9;
   border-top: none;
   border-right: none;
   border-left: none;
 }
 
+/* ナビリンク（元仕様を維持） */
 nav ul li#nav_properties a,
 nav ul li#nav_staff a,
 nav ul li#nav_about a,
 nav ul li#nav_contact a,
-nav ul li#nav_home a {
+nav ul li#nav_home a{
   height: auto;
   margin-bottom: 0;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding: 7px 0;
   background-image: none;
   background-color: #84e19d;
   color: #6e4c39;
   font-size: 14px;
   text-align: center;
   text-decoration: none;
+  display: block;
 }
 
 nav ul li#nav_properties a:hover,
 nav ul li#nav_staff a:hover,
 nav ul li#nav_about a:hover,
 nav ul li#nav_contact a:hover,
-nav ul li#nav_home a:hover {
+nav ul li#nav_home a:hover{
   opacity: 0.85;
 }
 
-/* ---------- Top graphic ---------- */
-#graphic { padding-top: 10px; }
+/* =========================================================
+   2) Top graphic (mobile)
+   ========================================================= */
+#graphic{
+  padding-top: 10px;
+}
 
-#graphic ul li img { width: 100%; }
+#graphic ul li img{
+  width: 100%;
+}
 
-/* ---------- Main blocks ---------- */
+/* =========================================================
+   3) Main blocks (mobile)
+   ========================================================= */
 #main,
 #news ul li,
-h2 {
+h2{
   width: auto;
   float: none;
   margin: 0;
+}
+
+/* =========================================================
+   4) Floating Buttons (PC)
+   ※ もし他ページで floating-buttons を使っている場合の既存仕様
+   ========================================================= */
+.floating-buttons{
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
+}
+
+.floating-buttons a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 60px;
+  height: 60px;
+
+  background: #0ea5e9;
+  color: #fff;
+
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform .2s;
+}
+
+.floating-buttons a:hover{
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   5) Mobile: Floating Quick Nav → Bottom Bar
+   ※ 全ページ共通の nav.floating-nav（物件/お気に入り/履歴）
+   ========================================================= */
+@media (max-width: 767px){
+
+  /* 横スクロール事故防止（100vw使用時の保険） */
+  html, body{
+    overflow-x: hidden;
+  }
+
+  /* ▼重要：style.css の nav 共通(860px中央寄せ)を無効化して“全幅”へ */
+  nav.floating-nav{
+    max-width: none !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;      /* 下で .floating-nav 側に padding を付ける */
+    left: 0 !important;
+    right: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* 下固定バー本体 */
+  .floating-nav{
+    position: fixed;
+    top: auto !important;
+    right: auto !important;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    gap: 8px;
+    justify-content: space-around;
+
+    width: 100vw;
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+
+    background: rgba(255,255,255,0.98);
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0;
+    box-shadow: 0 -10px 24px rgba(0,0,0,0.10);
+
+    z-index: 1500;
+  }
+
+  /* 3分割ボタン */
+  .floating-nav .nav-chip{
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 8px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+
+    /* 影はバー側で表現するので、ボタンは軽く */
+    box-shadow: none;
+  }
+
+  /* 色分け（スマホでも維持） */
+  .floating-nav .nav-chip.prop{
+    background: #e0f2fe;
+    color: #075985;
+    border: 1px solid #7dd3fc;
+  }
+  .floating-nav .nav-chip.fav{
+    background: #fce7f3;
+    color: #9d174d;
+    border: 1px solid #f9a8d4;
+  }
+  .floating-nav .nav-chip.hist{
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
+
+  /* 下バーで本文が隠れないように余白確保 */
+  body{
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  /* =======================================================
+     既存：floating-buttons をスマホで下ナビ化している場合
+     → floating-nav と両方あると二重になるので、スマホは隠す
+     （floating-buttons をもう使わないなら消してOK）
+     ======================================================= */
+  .floating-buttons{
+    display: none;
+  }
 }

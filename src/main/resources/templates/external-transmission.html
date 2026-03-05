@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>外部送信ポリシー | チームBe不動産</title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <style>
+    .doc-wrap{ max-width: 860px; margin: 0 auto; padding: 24px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+    .doc-wrap h1{ margin: 0 0 16px; font-size: 22px; }
+    .doc-wrap h2{ margin: 24px 0 8px; font-size: 18px; }
+    .doc-wrap p, .doc-wrap li{ line-height: 1.8; }
+    .note{ background:#f8fafc; border:1px solid #e5e7eb; padding:12px; border-radius:10px; }
+  </style>
+</head>
+<body>
+	
+	<!-- ===============================
+	     ヘッダー
+	================================ -->
+	<header id="top">
+	  <h1>
+	    不動産のチームBe
+	    <a th:href="@{/}">
+	      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+	    </a>
+	  </h1>
+	</header>
+
+	<!-- ===============================
+	     グローバルナビ
+	================================ -->
+	<nav>
+	  <ul>
+	    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+	    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+	    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+	    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+	  </ul>
+	</nav>
+
+	<!-- ===============================
+	     右上ポップ追従ナビ
+	================================ -->
+	<nav class="floating-nav" aria-label="クイックナビ">
+	  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+	  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+	  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
+	</nav>
+	
+	
+  <main class="doc-wrap" role="main">
+    <h1>外部送信ポリシー</h1>
+
+    <p class="note">
+      当サイトは、アクセス解析・広告・SNS共有ボタン等の外部サービスを利用する場合、
+      Cookie等を通じて利用者に関する情報が外部事業者へ送信されることがあります。
+    </p>
+
+    <h2>1. 送信され得る情報の例</h2>
+    <ul>
+      <li>Cookie等の識別子</li>
+      <li>閲覧したページURL、参照元、操作履歴</li>
+      <li>IPアドレス、端末情報、ブラウザ情報</li>
+      <li>アクセス日時</li>
+    </ul>
+
+    <h2>2. 利用目的</h2>
+    <ul>
+      <li>アクセス状況の分析</li>
+      <li>広告配信の最適化</li>
+      <li>SNS共有機能の提供</li>
+    </ul>
+
+    <h2>3. 外部サービス一覧</h2>
+    <ul>
+      <li>Google Analytics（アクセス解析）</li>
+      <li>Google Maps（地図埋め込み）</li>
+      <li>X / Facebook / LINE 共有（共有リンク）</li>
+      <li>reCAPTCHA</li>
+    </ul>
+
+    <h2>4. 無効化（オプトアウト）</h2>
+    <p>
+      ブラウザ設定でCookieを無効化することで送信を抑制できる場合があります。
+      ただし、機能の一部が利用できなくなることがあります。<br>
+      また、各事業者が提供するオプトアウト手段がある場合は、当ページに追記してください。
+    </p>
+
+    <h2>5. 改定</h2>
+    <p>外部サービスの導入・変更に応じて本ポリシーを更新します。</p>
+  </main>
+
+  
+  <!-- ===============================
+       フッター：fragments
+  ================================ -->
+
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+  <!-- ===============================
+       cookie同意：fragments
+  ================================ -->
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
+  
+</body>
+</html>

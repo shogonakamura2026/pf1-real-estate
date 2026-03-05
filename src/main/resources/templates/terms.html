@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>利用規約 | チームBe不動産</title>
+
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+
+  <style>
+    .doc-wrap{ max-width: 860px; margin: 0 auto; padding: 24px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
+    .doc-wrap h1{ margin: 0 0 16px; font-size: 22px; }
+    .doc-wrap h2{ margin: 24px 0 8px; font-size: 18px; }
+    .doc-wrap p, .doc-wrap li{ line-height: 1.8; }
+    .doc-meta{ color:#666; font-size: 13px; }
+  </style>
+</head>
+<body>
+	<!-- ===============================
+	     ヘッダー
+	================================ -->
+	<header id="top">
+	  <h1>
+	    不動産のチームBe
+	    <a th:href="@{/}">
+	      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+	    </a>
+	  </h1>
+	</header>
+
+	<!-- ===============================
+	     グローバルナビ
+	================================ -->
+	<nav>
+	  <ul>
+	    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+	    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+	    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+	    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+	  </ul>
+	</nav>
+
+	<!-- ===============================
+	     右上ポップ追従ナビ
+	================================ -->
+	<nav class="floating-nav" aria-label="クイックナビ">
+	  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+	  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+	  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
+	</nav>
+	
+	
+	
+  <main class="doc-wrap" role="main">
+    <h1>利用規約</h1>
+    <p class="doc-meta">
+      本規約は、<span th:text="${siteName}">チームb不動産</span>（以下「当サイト」）の利用条件を定めるものです。<br>
+      最終更新日：<span th:text="${thisYear}">2026</span>年
+    </p>
+
+    <h2>1. 適用</h2>
+    <p>本規約は、利用者と当サイト運営者との間の一切の関係に適用されます。</p>
+
+    <h2>2. 禁止事項</h2>
+    <ul>
+      <li>法令または公序良俗に反する行為</li>
+      <li>当サイトの運営を妨害する行為、過度な負荷をかける行為</li>
+      <li>不正アクセス、スクレイピング等（許諾なく大量取得する行為）</li>
+      <li>虚偽の情報を入力する行為</li>
+      <li>第三者の権利・利益を侵害する行為</li>
+    </ul>
+
+    <h2>3. 掲載情報について（重要）</h2>
+    <p>
+      当サイトに掲載される物件情報（賃料、面積、設備、空室状況等）は、可能な限り正確な情報提供に努めますが、
+      最新性・正確性・完全性を保証するものではありません。<br>
+      最終的な取引条件は、必ずお問い合わせの上でご確認ください。
+    </p>
+
+    <h2>4. 免責事項</h2>
+    <ul>
+      <li>当サイトの利用により発生した損害について、当サイトは故意または重過失がある場合を除き責任を負いません。</li>
+      <li>通信回線、端末、外部サービスの障害等により利用できない場合でも責任を負いません。</li>
+      <li>当サイトからリンクされた外部サイトの内容について責任を負いません。</li>
+    </ul>
+
+    <h2>5. 著作権</h2>
+    <p>
+      当サイトに掲載される文章・画像・デザイン等の著作権は、当サイト運営者または正当な権利者に帰属します。
+      無断転載は禁止複製・転載・改変を禁止します。
+    </p>
+
+    <h2>6. 規約の変更</h2>
+    <p>当サイトは必要に応じて本規約を変更でき、変更後は当ページで周知します。</p>
+
+    <h2>7. 準拠法・裁判管轄</h2>
+    <p>本規約は日本法に準拠し、紛争が生じた場合は当サイト運営者所在地を管轄する裁判所を第一審の専属的合意管轄とします。</p>
+  </main>
+  
+  <!-- ===============================
+       フッター：fragments
+  ================================ -->
+
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+  <!-- ===============================
+       cookie同意：fragments
+  ================================ -->
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+  
+</body>
+</html>

@@ -33,8 +33,9 @@ build/
 .vscode/
 
 # secret config (do not commit)
+/tb2025/src/main/resources/application.properties
 src/main/resources/application-tunnel.properties
 src/main/resources/application-local.properties
 src/main/resources/application-prod.properties
 /tb2025/start-tunnel.bat
-/tb2025/src/main/resources/application.properties
+

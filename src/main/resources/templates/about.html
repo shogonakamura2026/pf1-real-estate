@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>会社概要 | チームb不動産</title>
+  <title>会社概要 | チームBe不動産</title>
 
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
@@ -31,23 +31,38 @@
 </head>
 
 <body id="about">
-<header id="top">
-  <h1>
-	不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産について">
-    </a>
-  </h1>
-</header>
+	<!-- ===============================
+	     ヘッダー
+	================================ -->
+	<header id="top">
+	  <h1>
+	    不動産のチームBe
+	    <a th:href="@{/}">
+	      <img th:src="@{/images/logo.png}" alt="チームb不動産">
+	    </a>
+	  </h1>
+	</header>
 
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
+	<!-- ===============================
+	     グローバルナビ
+	================================ -->
+	<nav>
+	  <ul>
+	    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
+	    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
+	    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
+	    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
+	  </ul>
+	</nav>
+
+	<!-- ===============================
+	     右上ポップ追従ナビ
+	================================ -->
+	<nav class="floating-nav" aria-label="クイックナビ">
+	  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+	  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+	  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
+	</nav>
 
 <div id="path">
   <ol>
@@ -58,9 +73,9 @@
 
 <!-- 右上ポップ追従ナビ（白背景） -->
 <nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip" th:href="@{/history}">履歴</a>
+  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
 </nav>
 
 <div id="main">
@@ -111,10 +126,16 @@
   </iframe>
 </div>
 
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- ===============================
+     cookie同意：fragments
+================================ -->
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
 </body>
 </html>

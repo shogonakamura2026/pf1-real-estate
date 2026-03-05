@@ -340,9 +340,9 @@
      右上ポップ追従ナビ
 ================================ -->
 <nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip" th:href="@{/history}">履歴</a>
+  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
+  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
+  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
 </nav>
 
 <main class="container">
@@ -369,6 +369,21 @@
     </div>
   </section>
   
+  <!-- ===============================
+       ポートフォリオの主旨（学習目的の明記）
+       ※3つの案内が「学習した主機能」であることを明確化
+  ================================== -->
+  <section class="portfolio-note" aria-label="ポートフォリオの主旨">
+    <h3>このサイトについて（学習ポートフォリオ）</h3>
+    <p>
+      本サイトは <strong>Nakamura</strong> の学習継続・習熟を目的として制作したポートフォリオです。
+      下記の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」など</strong> の項目は、
+      学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
+    </p>
+    <p class="small">
+      ※クリックで各実装ページへ移動できます。実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
+    </p>
+  </section>
 
   <!-- ===============================
        3つの案内（イメージカラー）
@@ -377,7 +392,7 @@
     <div class="card card-search">
       <a class="card-link" th:href="@{/properties}">
         <h3>物件を探す</h3>
-        <p>家賃・地域・間取りで絞り込み。気になる物件は詳細からチェックできます。（DBを構築）</p>
+        <p>家賃・地域・間取りで絞り込み。気になる物件は詳細からチェックできます。（DBにて管理）</p>
       </a>
     </div>
 
@@ -394,23 +409,37 @@
         <p>スタッフが最新情報を発信。学習用にJSON保存で投稿・削除ができます。（擬似的なDBを作成）</p>
       </a>
     </div>
+	
+	<div class="card card-search">
+	  <a class="card-link" th:href="@{/staff/login}">
+	    <h3>ログインセッション</h3>
+	    <p>
+	      HttpSessionによるログイン状態管理とControllerでの認証チェックを組み合わせ、
+	      スタッフのみがブログ投稿・削除などの管理操作を行えるアクセス制御を実装。（アクセス制御）
+	    </p>
+	  </a>
+	</div>
+
+	 <div class="card card-favorite">
+	   <a class="card-link" th:href="@{/contact}">
+	     <h3>お問い合わせフォーム</h3>
+	     <p>電話、メールの選択肢により「必須」切り替え。電話番号は「-」を取り除きDB保存。現時点より前の日付、時間、定休日等を選択時アラート実装。（DBを構築）</p>
+	   </a>
+	 </div>
+
+	 <div class="card card-blog">
+	   <a class="card-link" th:href="@{/#footer-anchor}">
+	     <h3>フッターを共通パーツ化</h3>
+	     <p>
+	       サイト全体で共通のフッターをThymeleafのフラグメント機能を利用。
+	       サイト名や著作権年などの共通データはSpringの@ControllerAdviceを利用。（保守性の向上）
+	     </p>
+	   </a>
+	 </div>
+	
   </section>
   
-  <!-- ===============================
-       ポートフォリオの主旨（学習目的の明記）
-       ※3つの案内が「学習した主機能」であることを明確化
-  ================================== -->
-  <section class="portfolio-note" aria-label="ポートフォリオの主旨">
-    <h3>このサイトについて（学習ポートフォリオ）</h3>
-    <p>
-      本サイトは <strong>Nakamura</strong> の学習継続・習熟を目的として制作したポートフォリオです。
-      上の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」</strong> の3項目は、
-      学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
-    </p>
-    <p class="small">
-      ※実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
-    </p>
-  </section>
+
 
   <!-- ===============================
        追加トピック（お知らせ / スタッフ紹介）
@@ -471,15 +500,18 @@
   </section>
 
 </main>
+<div id="footer-anchor"></div>
+<!-- ===============================
+     フッター：fragments
+================================ -->
+
+<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
 <!-- ===============================
-     フッター
+     cookie同意：fragments
 ================================ -->
-<footer>
-  <p id="pagetop"><a href="#top">ページの先頭へ戻る</a></p>
-  <address>沖縄県那覇市X-X-X 電話 098-XXX-XXX 営業時間 9:00～17:00(休業日：月曜日、年末年始、旧盆)</address>
-  <p id="copyright"><small>Copyright 2026 All rights reserved.</small></p>
-</footer>
+<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
 
 <!-- スライドショー制御 -->
 <script th:src="@{/js/slideshow.js}"></script>
