@@ -28,28 +28,7 @@ public class PropertyController {
         this.repo = repo;
     }
 
-    // ==============================
-    // 固定ページ（ダミー含む）
-    // ==============================
-
-    /** スタッフページ（今回はダミー） */
-    @GetMapping("/staff")
-    public String staff() {
-        return "staff";
-    }
-
-    /** お問い合わせページ（Contact用Controllerと競合するためコメントアウト） */
-	/* @GetMapping("/contact")
-	public String contact() {
-	    return "contact";
-	}*/
-
-    /** 会社概要ページ */
-    @GetMapping("/about")
-    public String about() {
-        return "about";
-    }
-
+ 
     // ==============================
     // 物件一覧（絞り込み）
     // ==============================

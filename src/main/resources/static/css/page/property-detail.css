@@ -1,0 +1,225 @@
+@charset "utf-8";
+
+/* =========================================================
+   property-detail.css
+   役割：property-detail.html 専用スタイル
+   ※ 既存HTML内の style を外出しした版
+   ========================================================= */
+
+@import url(../components.css);
+
+    html { scroll-behavior: smooth; }
+
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    /* 上段：画像＋右側情報 */
+    .top2{
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .card{
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card.pad{ padding: 14px; }
+
+    .photo img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .title{
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .price{
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .meta{
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* ボタン */
+    .buttons{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+      color: #1f2a44;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .btn.primary{
+	 background: #4fa8db;
+	 border-color: #3a93c7;
+	 color: #fff;
+    }
+	
+    .btn.outline{
+      background: #fff;
+      border-color: #cdd6e4;
+      color: #1f2a44;
+    }
+    .btn.pink{
+      background: #fce7f3;
+      border-color: #f9a8d4;
+      color: #9d174d;
+    }
+    .btn.small{
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+	
+	.btn:hover{ filter: brightness(0.97); text-decoration: underline }
+
+
+    /* 詳細テーブル */
+    .detail table{
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .detail th,
+    .detail td{
+      border: 1px solid rgb(192, 192, 192);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .detail th{
+      width: 140px;
+      background: rgb(231, 239, 243);
+      color: #334155;
+      font-weight: 800;
+    }
+
+    /* マップ */
+    .map iframe{
+      width: 100%;
+      height: 360px;
+      border: 0;
+      display: block;
+    }
+
+    /* おすすめ */
+    .rec-title{
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .rec-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .rec-item{
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .rec-photo{
+      display: block;
+      background: #f1f5f9;
+    }
+    .rec-photo img{
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+    .rec-body{ padding: 10px; }
+    .rec-price{
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .rec-meta{
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    .rec-actions{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* SNS共有 */
+    .share{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .share-title{
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .share-row{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+
+
+    /* レスポンシブ */
+    @media (max-width: 860px){
+      .top2{ grid-template-columns: 1fr; }
+      .rec-grid{ grid-template-columns: 1fr; }
+      .rec-photo img{ height: 180px; }
+    }
+
+    /* 背景の囲い（目に優しい版） */
+    .section-card{
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+    .section-card .card{
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .section-card .photo img{ border-radius: 12px; }
+    .section-gap{ margin-top: 16px; }
+    @media (max-width: 767px){
+      .section-card{ padding: 14px; }
+    }
+  

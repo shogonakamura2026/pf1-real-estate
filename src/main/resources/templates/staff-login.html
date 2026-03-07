@@ -3,144 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>スタッフログイン | チームBe不動産産</title>
+  <title>スタッフログイン | チームBe不動産</title>
 
   <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/staff-login.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-
-  <!-- ===============================
-       ログインページ専用スタイル（最小）
-  ================================== -->
-  <style>
-    .login-wrap{
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .login-card{
-      background: rgb(241, 242, 248);
-      border: 1px solid #ddd;
-      padding: 16px;
-    }
-    .form-row{
-      margin-bottom: 12px;
-    }
-    .form-row label{
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    .form-row input[type="text"],
-    .form-row input[type="password"]{
-      width: 90%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    .form-actions{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .msg-error{
-      padding: 10px 12px;
-      border: 1px solid #f2b8b5;
-      background: #fff2f2;
-      color: #b00020;
-      margin: 12px 0;
-    }
-    .hint{
-      font-size: 0.95em;
-      color: #666;
-      margin-top: 6px;
-    }
-  </style>
 </head>
 
-<body>
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
+<body id="staff">
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
+  <main id="contents" class="login-wrap">
+    <h2>スタッフログイン</h2>
 
+    <p class="hint">
+      ※学習用の簡易ログインです（固定ID/固定PWでログインします）。
+    </p>
 
+    <div class="msg-error" th:if="${error}" th:text="${error}"></div>
 
-<!-- ===============================
-     メイン
-================================ -->
-<main id="contents" class="login-wrap">
-  <h2>スタッフログイン</h2>
+    <div class="login-card">
+      <form th:action="@{/staff/login}" method="post">
+        <div class="form-row">
+          <label for="id">ID：「staff」</label>
+          <input id="id" name="id" type="text" autocomplete="username" required>
+        </div>
 
-  <p class="hint">
-    ※学習用の簡易ログインです（固定ID/固定PWでログインします）。
-  </p>
+        <div class="form-row">
+          <label for="pw">パスワード：「pass1234」</label>
+          <input id="pw" name="pw" type="password" autocomplete="current-password" required>
+        </div>
 
-  <!-- エラーメッセージ -->
-  <div class="msg-error" th:if="${error}" th:text="${error}"></div>
+        <div class="form-actions">
+          <a th:href="@{/staff/blog(page=1)}">← ブログ一覧へ</a>
+          <button type="submit">ログイン</button>
+        </div>
+      </form>
+    </div>
 
-  <!-- ===============================
-       ログインフォーム
-       ※ /staff/login (POST) に送信
-  ================================== -->
-  <div class="login-card">
-    <form th:action="@{/staff/login}" method="post">
-      <div class="form-row">
-        <label for="id">ID：「staff」</label>
-        <input id="id" name="id" type="text" autocomplete="username" required>
-      </div>
+    <p class="hint login-note-secondary">
+      ※本番運用では Spring Security などの認証機構を利用するのが一般的です。
+    </p>
+  </main>
 
-      <div class="form-row">
-        <label for="pw">パスワード：「pass1234」</label>
-        <input id="pw" name="pw" type="password" autocomplete="current-password" required>
-      </div>
-
-      <div class="form-actions">
-        <a th:href="@{/staff/blog(page=1)}">← ブログ一覧へ</a>
-        <button type="submit">ログイン</button>
-      </div>
-    </form>
-  </div>
-
-  <p class="hint" style="margin-top:12px;">
-    ※本番運用では Spring Security などの認証機構を利用するのが一般的です。
-  </p>
-</main>
-
-<!-- ===============================
-     フッター：fragments
-================================ -->
-
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
-
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
-
-
-
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 </body>
 </html>

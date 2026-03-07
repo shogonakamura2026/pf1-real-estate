@@ -5,55 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>プライバシーポリシー | チームBe不動産</title>
 
-  <!-- 共通CSS（あなたの既存構成に合わせて） -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+
+  <!-- docsページ専用CSS -->
+  <link rel="stylesheet" th:href="@{/css/page/docs.css}">
+
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+  
 
-  <style>
-    .doc-wrap{ max-width: 860px; margin: 0 auto; padding: 24px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
-    .doc-wrap h1{ margin: 0 0 16px; font-size: 22px; }
-    .doc-wrap h2{ margin: 24px 0 8px; font-size: 18px; }
-    .doc-wrap p, .doc-wrap li{ line-height: 1.8; }
-    .doc-meta{ color:#666; font-size: 13px; }
-    .doc-wrap a{ text-decoration: underline; }
-  </style>
 </head>
-<body>
-
+<body id="docs">
 	<!-- ===============================
-	     ヘッダー
-	================================ -->
-	<header id="top">
-	  <h1>
-	    不動産のチームBe
-	    <a th:href="@{/}">
-	      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-	    </a>
-	  </h1>
-	</header>
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>  <!-- 共通グローバルナビ -->
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>  <!-- 共通クイックナビ -->
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-	<!-- ===============================
-	     グローバルナビ
-	================================ -->
-	<nav>
-	  <ul>
-	    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-	    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-	    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-	    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-	  </ul>
-	</nav>
-
-	<!-- ===============================
-	     右上ポップ追従ナビ
-	================================ -->
-	<nav class="floating-nav" aria-label="クイックナビ">
-	  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-	  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-	  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-	</nav>
-
-  <main class="doc-wrap" role="main">
+  <!-- =====================================================
+       パンくず（layout.css管理）
+       ===================================================== -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li>会社概要</li>
+    </ol>
+  </div>
+  
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== -->  
+ 
+<main class="doc-wrap" role="main">
     <h1>プライバシーポリシー</h1>
     <p class="doc-meta">
       <span th:text="${siteName}">チームBe不動産</span>（以下「当サイト」）は、個人情報の保護に関する法令等を遵守し、
@@ -117,16 +105,20 @@
     <p>本ポリシーは必要に応じて改定します。改定後は当ページで周知します。</p>
   </main>
 
-  <!-- ===============================
-       フッター：fragments
-  ================================ -->
-
+  <!-- Contactフロート -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+  
+    <!-- 共通フッター -->
   <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-  <!-- ===============================
-       cookie同意：fragments
-  ================================ -->
+    <!-- 共通Cookie同意 -->
   <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
+  <!-- ===============================
+       js呼び出し
+  ================================== -->
+  <!-- Contactフロートjs -->
+  <script th:src="@{/js/contact-float.js}"></script>
+  
 </body>
 </html>

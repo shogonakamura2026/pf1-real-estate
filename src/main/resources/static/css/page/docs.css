@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+/* =========================================================
+   docs.css
+   役割：会社概要・規約・ポリシー系ページの共通スタイル
+   対象：about / privacy / terms / external-transmission / listing-apply / sitemap
+   ========================================================= */
+
+@import url(../components.css);
+
+.company-table th,
+.company-table td{
+  text-align:left;
+  vertical-align:top;
+}
+
+.company-table ul{
+  margin:0;
+  padding-left:1.2em;
+}
+
+#map iframe{
+  width:95%;
+  max-width:800px;
+  height:400px;
+  border:0;
+  display:block;
+  margin:0 auto;
+}
+
+.note{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  padding:12px;
+  border-radius:10px;
+}
+
+.card{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:14px;
+  margin:12px 0;
+}
+
+.site-links a{
+  display:inline-block;
+  margin:6px 0;
+}
+
+
+.apply-section-title{
+  margin:0 0 6px;
+  font-size:18px;
+}
+
+.apply-list{
+  margin:0;
+  padding-left:18px;
+  line-height:1.8;
+}
+
+.apply-text{
+  margin:0;
+}
+
+.apply-note{
+  color:#666;
+  font-size:13px;
+}

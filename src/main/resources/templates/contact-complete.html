@@ -4,49 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>送信完了 | チームBe不動産</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+
+  <!-- =====================================================
+       共通CSS
+       ===================================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/contact-complete.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-  <style>
-    #main article{
-      background:#fff;border:1px solid #e5e7eb;border-radius:12px;
-      padding:22px 18px;max-width:900px;margin:0 auto;text-align:center;
-    }
-    .btn{display:inline-block;margin-top:14px;border:1px solid #111;background:#111;color:#fff;
-      padding:10px 14px;border-radius:10px;text-decoration:none;}
-  </style>
 </head>
-<body id="contact-complete">
-<header id="top">
-  <h1>不動産のチームBe <a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="チームb不動産について"></a></h1>
-</header>
 
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
+<body id="contact">
 
-<div id="main">
-  <article>
-    <h1>送信が完了しました</h1>
-    <p>お問い合わせありがとうございます。<br>3営業日以内にご返信いたします。</p>
-    <a class="btn" th:href="@{/}">トップへ戻る</a>
-  </article>
-</div>
+  <!-- =====================================================
+       共通ヘッダー / 共通ナビ
+       ===================================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
+  
+  <!-- =====================================================
+       パンくず（layout.css管理）
+       ===================================================== -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li>お問い合わせ（送信完了）</li>
+    </ol>
+  </div>
 
-<!-- ===============================
-     フッター：fragments
-================================ -->
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== -->
+  <div id="main">
+    <article>
+      <h1>送信が完了しました</h1>
+      <p>
+        お問い合わせありがとうございます。<br>
+        3営業日以内にご返信いたします。
+      </p>
+      <a class="btn" th:href="@{/}">トップへ戻る</a>
+    </article>
+  </div>
 
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
-
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+  <!-- =====================================================
+       共通フッター / Cookie
+       ===================================================== -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 </body>
 </html>

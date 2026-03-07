@@ -1,0 +1,437 @@
+@charset "utf-8";
+
+/* =========================================================
+   layout.css
+   役割：サイト全体の骨組み
+   - 共通ヘッダー
+   - グローバルナビ
+   - クイックナビ
+   - フッター
+   - Cookie同意バナー
+   ========================================================= */
+
+@import url(common.css);
+
+/* =========================================================
+   1) Shared Width
+   共通幅を持たせたい要素だけに限定する
+   ========================================================= */
+.site-header,
+.site-global-nav,
+#contents,
+.site-footer {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   2) Site Header
+   ========================================================= */
+.site-header {
+  margin: 0 auto 24px;
+  padding-top: 18px;
+}
+
+.site-header__title {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 2.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #334155;
+}
+
+.site-header__logo-link{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:inherit;
+}
+
+.site-header__logo {
+  width: 244px;
+  max-width: 60vw;
+}
+
+/*タイトル位置調整、PC版では1列、スマホ版は2列（responsive.css参照）*/
+.site-header__text{
+  position: relative;
+  white-space: nowrap;
+  top: 30px;
+}
+
+.site-header__break{
+  display:none;
+}
+
+/* =========================================================
+   3) Global Navigation
+   ========================================================= */
+/* ナビ本体
+   - スクロール時に上部へ追従
+   - 背景は半透明にして下の背景を少し見せる
+   - 白い帯にならないよう、リンク以外は透明を基本にする */
+   
+   /* 白帯でるのを透過で対策 */
+ .site-global-nav {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+ }
+
+/* ナビ全体の白帯防止 */
+.site-global-nav,
+.site-global-nav__list,
+.site-global-nav__item {
+  box-shadow: none;
+  border: none;
+}
+
+/* リスト */
+.site-global-nav__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+/* 各項目 */
+.site-global-nav__item {
+  width: auto;
+}
+
+/* リンク（ボタン見た目） */
+.site-global-nav__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: rgb(192, 192, 192);
+  color: #333;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.site-global-nav__link:hover {
+  transform: translateY(-1px);
+  background: #f8fafc;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.10);
+}
+
+/* 現在地表示
+   body id / class と nav item id の組み合わせで active を表現 */
+#properties #nav_properties .site-global-nav__link,
+#property-detail #nav_properties .site-global-nav__link,
+.section-properties #nav_properties .site-global-nav__link,
+#docs #nav_about .site-global-nav__link,
+.page-about #nav_about .site-global-nav__link,
+#contact #nav_contact .site-global-nav__link,
+#staff #nav_staff .site-global-nav__link {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* =========================================================
+   Breadcrumb
+   ========================================================= */
+
+#path{
+  max-width:860px;
+  margin:12px auto 20px;
+  padding:0 16px;
+  font-size:0.9rem;
+  color:#64748b;
+}
+
+#path ol{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+#path li{
+  display:flex;
+  align-items:center;
+}
+
+
+
+#path li:last-child{
+  color:#1f2937;
+  font-weight:600;
+}
+
+
+#path a{
+  color:#0f766e;
+  text-decoration:none;
+}
+
+#path a:hover{
+  text-decoration:underline;
+}
+
+
+
+/* =========================================================
+   4) Quick Navigation
+   ========================================================= */
+.floating-nav {
+  position: fixed;
+  z-index: 1500;
+  display: flex;
+  gap: 10px;
+}
+
+.floating-nav .nav-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.floating-nav .nav-chip:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+}
+
+.floating-nav .nav-chip.prop {
+  background: #e0f2fe;
+  color: #075985;
+  border-color: #7dd3fc;
+}
+
+.floating-nav .nav-chip.fav {
+  background: #fce7f3;
+  color: #9d174d;
+  border-color: #f9a8d4;
+}
+
+.floating-nav .nav-chip.hist {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+@media (min-width: 768px) {
+  .floating-nav {
+    top: 14px;
+    right: 14px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* =========================================================
+   5) Site Footer
+   ========================================================= */
+.site-footer {
+  max-width: 860px;
+  margin: 24px auto 80px;
+  padding: 0 16px;
+  color: #666;
+}
+
+.site-footer__card {
+  padding: 14px 14px 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+
+.site-footer__pagetop-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.site-footer__pagetop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+}
+
+.site-footer__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.site-footer__info {
+  flex: 1 1 320px;
+  min-width: 260px;
+}
+
+.site-footer__site-name,
+.site-footer__links-title {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.site-footer__info-list {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 6px 10px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.site-footer__term {
+  color: #6b7280;
+}
+
+.site-footer__desc {
+  margin: 0;
+  color: #111827;
+}
+
+.site-footer__tel,
+.site-footer__link {
+  color: #111827;
+  text-decoration: none;
+}
+
+.site-footer__tel:hover,
+.site-footer__link:hover {
+  text-decoration: underline;
+}
+
+
+.site-footer__copyright {
+  margin-top: 10px;
+  border-top:1px solid rgb(232, 233, 236) ;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.site-footer__links-block {
+  flex: 1 1 240px;
+  min-width: 240px;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  font-size: 13px;
+}
+
+.site-footer__note {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* =========================================================
+   6) Cookie Banner
+   ========================================================= */
+.cookie-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1700;
+}
+
+.cookie-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.96);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+}
+
+.cookie-banner__text {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.cookie-banner__link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.cookie-banner__tech {
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-btn {
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+
+.cookie-btn--primary {
+  background: #fff;
+  color: #111827;
+}
+
+.cookie-btn--ghost {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+
+
+

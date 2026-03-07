@@ -5,165 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>社員のブログ | チームBe不動産</title>
 
-  <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/staff-blog.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- ===============================
-       ブログページ専用スタイル
-       ※共通CSSを壊さない範囲で最小限に追加
-  ================================== -->
-  <style>
-    /* 見出し＋右側操作（ログイン状態など） */
-    .blog-header{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .blog-header h2{
-      margin: 0;
-    }
-    .blog-header__actions{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .blog-header__status{
-      color: #444;
-      font-size: 0.95em;
-    }
-
-    /* 投稿カード */
-    .post-card{
-      border: 1px solid #ddd;
-      padding: 14px;
-      margin: 0 0 14px 0;
-      background: rgb(241, 242, 248);
-    }
-    .post-card__title{
-      margin: 0 0 8px 0;
-    }
-    .post-card__meta{
-      font-size: 0.95em;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    /* サムネイル */
-    .blog-thumb{
-      width: 220px;
-      max-width: 100%;
-      height: auto;
-      cursor: zoom-in;
-      border: 1px solid #eee;
-      border-radius: 6px;
-    }
-
-    /* 削除ボタンエリア */
-    .post-card__actions{
-      margin-top: 10px;
-      text-align: right;
-    }
-
-    /* ページネーション */
-    .pager{
-      margin: 20px 0;
-      text-align: center;
-    }
-    .pager a{
-      margin: 0 6px;
-      text-decoration: none;
-    }
-    .pager .current{
-      margin: 0 6px;
-      font-weight: bold;
-      color: #1976d2;
-    }
-
-    /* 画像モーダル */
-    .img-modal{
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 9999;
-    }
-    .img-modal.is-open{
-      display: block;
-    }
-    .img-modal__backdrop{
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-    }
-    .img-modal__content{
-      position: relative;
-      max-width: min(92vw, 980px);
-      max-height: 86vh;
-      margin: 7vh auto 0;
-      background: #fff;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .img-modal__content img{
-      display: block;
-      width: 100%;
-      height: auto;
-      max-height: 80vh;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    .img-modal__close{
-      position: absolute;
-      top: 6px;
-      right: 10px;
-      font-size: 22px;
-      line-height: 1;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-    }
-  </style>
+ 
 </head>
 
 <body id="staff">
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
-
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
+	<!-- ===============================
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div> 
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
 
 <!-- ===============================
      クイックナビ（右上ポップ追従）
      ※既存CSS（floating-nav / nav-chip）前提
 ================================ -->
-<nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-</nav>
+  <!-- 共通クイックナビ -->
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
+  
+  <!-- =====================================================
+       パンくず（layout.css管理）
+       ===================================================== -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li>社員ブログ</li>
+    </ol>
+  </div>
+
+  
 <!-- ===============================
      メイン
 ================================ -->
@@ -183,7 +62,7 @@
       </a>
 
       <!-- ログイン中のみ：ログアウト -->
-      <form th:if="${staffName != null}" th:action="@{/staff/logout}" method="post" style="display:inline;">
+      <form th:if="${staffName != null}" th:action="@{/staff/logout}" method="post" class="inline-form">
         <button type="submit">ログアウト</button>
       </form>
 
@@ -194,7 +73,7 @@
     </div>
   </div>
 
-  <hr style="margin:16px 0;">
+  <hr class="blog-divider">
 
   <!-- 投稿なし -->
   <section th:if="${#lists.isEmpty(posts)}">
@@ -210,26 +89,26 @@
 
       <div class="post-card__meta">
         <span>投稿者：</span><span th:text="${p.author}"></span>
-        <span style="margin:0 8px;">|</span>
+        <span class="post-meta-sep">|</span>
         <span th:text="${#temporals.format(p.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
       </div>
 
       <!-- 画像（サムネ→モーダル） -->
-      <div th:if="${p.imageUrl != null}" style="margin:10px 0;">
+      <div th:if="${p.imageUrl != null}" class="post-image-wrap">
         <img class="blog-thumb"
              th:src="${p.imageUrl}"
              th:attr="data-full=${p.imageUrl}"
              alt="ブログ画像（クリックで拡大）">
       </div>
 
-      <p th:text="${p.body}" style="white-space:pre-wrap; margin:0;"></p>
+      <p th:text="${p.body}" class="post-body"></p>
 
       <!-- 削除（ログイン時のみ表示） -->
       <div class="post-card__actions" th:if="${staffName != null}">
         <form th:action="@{/staff/blog/delete}"
               method="post"
               onsubmit="return confirm('この記事を削除しますか？');"
-              style="display:inline;">
+              class="inline-form">
           <input type="hidden" name="id" th:value="${p.id}">
           <input type="hidden" name="page" th:value="${page}">
           <button type="submit">削除</button>
@@ -253,15 +132,14 @@
   </nav>
 </main>
 
-<!-- ===============================
-     フッター：fragments
-================================ -->
 
+<!-- Contactフロート -->
+<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+
+  <!-- 共通フッター -->
 <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
+  <!-- 共通Cookie同意 -->
 <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 <!-- ===============================
@@ -317,5 +195,13 @@
     });
   })();
 </script>
+
+<!-- ===============================
+     js呼び出し
+================================== -->
+<!-- Contactフロートjs -->
+<script th:src="@{/js/contact-float.js}"></script>
+
+
 </body>
 </html>

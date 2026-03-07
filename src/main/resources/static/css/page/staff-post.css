@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/* =========================================================
+   staff-post.css
+   役割：staff-post.html 専用スタイル
+   ========================================================= */
+
+@import url(staff.css);
+
+.form-card{
+  background:rgb(241, 242, 248);
+  border:1px solid #ddd;
+  padding:16px;
+}
+
+.form-row input[type="text"],
+.form-row textarea{
+  width:100%;
+  max-width:680px;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:1em;
+  box-sizing:border-box;
+}
+
+.form-row textarea{
+  min-height:160px;
+  resize:vertical;
+}

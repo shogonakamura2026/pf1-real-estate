@@ -1,0 +1,41 @@
+<div th:fragment="contactFloat">
+  <!-- 開いている状態 -->
+  <aside class="contact-float" id="contactFloat" aria-label="お問い合わせ案内">
+    <button
+      class="contact-float__handle"
+      id="contactFloatClose"
+      type="button"
+      aria-label="お問い合わせ案内をしまう">
+      ≫ しまう
+    </button>
+
+    <div class="contact-float__body">
+      <p class="contact-float__lead">
+        希望の物件が見つかりませんか？<br>
+        まずはご相談を
+      </p>
+
+      <a class="contact-float__tel" href="tel:0980000000">
+        098-XXX-XXXX
+      </a>
+
+      <p class="contact-float__hours">
+        受付時間 9:00〜17:00（月曜定休）
+      </p>
+
+      <a class="contact-float__link" th:href="@{/contact}">
+        フォームからお問い合わせ
+      </a>
+    </div>
+  </aside>
+
+  <!-- 閉じている状態 -->
+  <button
+    class="contact-float-peek is-hidden"
+    id="contactFloatOpen"
+    type="button"
+    aria-label="お問い合わせ案内を開く">
+	希望の物件が見つかりませんか？<br>
+	<span>まずはご相談</span>から
+  </button>
+</div>

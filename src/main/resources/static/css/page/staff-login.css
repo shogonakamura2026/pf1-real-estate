@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+/* =========================================================
+   staff-login.css
+   役割：staff-login.html 専用スタイル
+   ========================================================= */
+
+@import url(staff.css);
+
+.login-card{
+  background:rgb(241, 242, 248);
+  border:1px solid #ddd;
+  padding:16px;
+}
+
+.form-row input[type="text"],
+.form-row input[type="password"]{
+  width:100%;
+  max-width:560px;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:1em;
+  box-sizing:border-box;
+}

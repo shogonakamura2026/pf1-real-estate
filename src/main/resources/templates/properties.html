@@ -5,280 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>物件一覧 | チームBe不動産</title>
 
-  <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/properties.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- 物件一覧ページ専用スタイル -->
-  <style>
-    * { box-sizing: border-box; }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
 
-    /* sticky header（絞り込み） */
-    .site-header{
-      background: rgb(241, 242, 248);
-      border-bottom: 1px solid #e6e9ee;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-    .site-title{
-      margin: 0 0 20px;
-      font-size: 26px;
-      letter-spacing: .02em;
-    }
-
-    /* search form */
-    .search-bar{
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr auto;
-      gap: 12px;
-      align-items: end;
-      background: #f8fafc;
-      border: 1px solid #e6e9ee;
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .field label{
-      display: block;
-      font-weight: 700;
-      font-size: 13px;
-      color: #1f2a44;
-      margin-bottom: 6px;
-    }
-    .field select{
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-    }
-    .range{
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 8px;
-      align-items: center;
-    }
-    .tilde{ color: #6b7280; }
-
-    .actions{
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-    .btn{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #1f2a44;
-      font-weight: 700;
-      cursor: pointer;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .btn.primary{
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #075985;
-    }
-    .btn.outline{
-      background: #fff;
-      border-color: #cdd6e4;
-      color: #1f2a44;
-    }
-    .btn.pink{
-      background: #fce7f3;
-      border-color: #f9a8d4;
-      color: #9d174d;
-    }
-    .btn.ghost{
-      background: transparent;
-      border-color: #cdd6e4;
-      color: #1f2a44;
-    }
-    .btn:hover{ filter: brightness(0.97); }
-
-    .result-meta{
-      margin: 12px 0 18px;
-      color: #334155;
-      font-weight: 700;
-    }
-
-    .cards{
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-    .card{
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 14px;
-      border: 1px solid #e6e9ee;
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .thumb{
-      position: relative;
-      display: block;
-      height: 100%;
-      background: #f1f5f9;
-    }
-    .thumb img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .badge{
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.65);
-      color: #fff;
-      font-size: 12px;
-      padding: 4px 8px;
-      border-radius: 999px;
-    }
-
-    .card-body{ padding: 14px 14px 16px; }
-    .top-row{
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-    .title{
-      font-size: 18px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    .sub{
-      margin-top: 6px;
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .price{
-      min-width: 140px;
-      text-align: right;
-      background: #f8fafc;
-      border: 1px solid #e6e9ee;
-      border-radius: 12px;
-      padding: 10px 12px;
-    }
-    .price-label{
-      font-size: 12px;
-      color: #64748b;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .price-value{
-      font-size: 20px;
-      font-weight: 900;
-      color: #0f172a;
-    }
-    .yen{ font-size: 14px; font-weight: 700; margin-left: 2px; }
-
-    .spec-grid{
-      margin: 12px 0 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 14px;
-    }
-    .kv{
-      display: grid;
-      grid-template-columns: 70px 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-    .kv dt{
-      color: #64748b;
-      font-weight: 800;
-      font-size: 13px;
-    }
-    .kv dd{
-      margin: 0;
-      color: #0f172a;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .kv.wide{
-      grid-column: 1 / -1;
-      grid-template-columns: 70px 1fr;
-    }
-    .desc{
-      color: #334155;
-      font-weight: 600;
-      line-height: 1.55;
-    }
-
-    .btn-row{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      margin-top: 12px;
-    }
-
-    @media (max-width: 860px){
-      .card{ grid-template-columns: 1fr; }
-      .thumb{ height: 180px; }
-      .search-bar{
-        grid-template-columns: 1fr;
-        align-items: stretch;
-      }
-      .actions{ justify-content: flex-start; }
-      .price{ text-align: left; min-width: auto; }
-      .top-row{ flex-direction: column; }
-    }
-  </style>
 </head>
 
 <body id="properties">
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
+	<!-- ===============================
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>  
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
+  
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
 
-<!-- ===============================
-     右上ポップ追従ナビ
-================================ -->
-<nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-</nav>
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== --> 
 
-<div class="site-header">
+<div class="property-filter-bar">
   <div class="container">
-    <h2 class="site-title">物件一覧</h2>
+    <h2 class="property-filter-bar__title">物件一覧</h2>
 
     <form class="search-bar" th:action="@{/properties}" method="get">
       <div class="field">
@@ -332,14 +87,14 @@
       </div>
 
       <div class="actions">
-        <button type="submit" class="btn primary">この条件で検索</button>
+        <button type="submit" class="btn search-submit">この条件で検索</button>
         <a class="btn ghost" th:href="@{/properties}">条件クリア</a>
       </div>
     </form>
   </div>
 </div>
 
-<main class="container">
+<main class="container property-list-main">
   <div class="result-meta">
     検索結果：
     <span th:style="'color:' + (${resultCountColor} ?: 'red')"
@@ -408,15 +163,13 @@
   </section>
 </main>
 
-<!-- ===============================
-     フッター：fragments
-================================ -->
+<!-- Contactフロート -->
+<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
 
+  <!-- 共通フッター -->
 <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
+  <!-- 共通Cookie同意 -->
 <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 
@@ -480,5 +233,12 @@
     document.querySelectorAll(".fav-btn").forEach(btn => bindFavButton(btn, list));
   });
 </script>
+
+<!-- ===============================
+     js呼び出し
+================================== -->
+<!-- Contactフロートjs -->
+<script th:src="@{/js/contact-float.js}"></script>
+
 </body>
 </html>

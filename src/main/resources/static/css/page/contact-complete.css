@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/* =========================================================
+   contact-complete.css
+   役割：contact-complete.html 専用スタイル
+   ※ 既存HTML内の style を外出しした版
+   ========================================================= */
+
+@import url(../components.css);
+
+    #main article{
+      background:#fff;border:1px solid #e5e7eb;border-radius:12px;
+      padding:22px 18px;max-width:900px;margin:0 auto;text-align:center;
+    }
+    .btn{display:inline-block;margin-top:14px;border:1px solid #111;background:#111;color:#fff;
+      padding:10px 14px;border-radius:10px;text-decoration:none;}
+  

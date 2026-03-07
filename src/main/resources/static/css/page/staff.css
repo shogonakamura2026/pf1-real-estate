@@ -1,0 +1,72 @@
+@charset "utf-8";
+
+/* =========================================================
+   staff.css
+   役割：staff系ページの共通スタイル
+   - ログイン / 投稿 / ブログ一覧で共通化できる要素
+   ========================================================= */
+
+@import url(../components.css);
+
+body#staff #contents{
+  max-width:860px;
+  margin:0 auto;
+}
+
+body#staff .form-row{
+  margin-bottom:12px;
+}
+
+body#staff .form-row label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+body#staff .form-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+body#staff .msg-error{
+  padding:10px 12px;
+  border:1px solid #f2b8b5;
+  background:#fff2f2;
+  color:#b00020;
+  margin:12px 0;
+}
+
+body#staff .hint{
+  font-size:0.95em;
+  color:#666;
+  margin-top:6px;
+}
+
+.inline-form{
+  display:inline;
+}
+
+.blog-divider{
+  margin:16px 0;
+}
+
+.post-meta-sep{
+  margin:0 8px;
+}
+
+.post-image-wrap{
+  margin:10px 0;
+}
+
+.post-body{
+  margin:0;
+  white-space:pre-wrap;
+}
+
+.login-note-secondary{
+  margin-top:12px;
+}

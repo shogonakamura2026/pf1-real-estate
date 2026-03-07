@@ -19,7 +19,11 @@ public class ContactController {
         this.contactRepository = contactRepository;
     }
 
-    // ① 入力画面（GET）
+    // =========================================================
+    // 1) 入力画面表示
+    // =========================================================
+    // 初回アクセス時は空の ContactForm を作る
+    // ただし、リダイレクト後などで既に contactForm がある場合は上書きしない
     @GetMapping("/contact")
     public String contact(Model model) {
         if (!model.containsAttribute("contactForm")) {
@@ -28,14 +32,19 @@ public class ContactController {
         return "contact";
     }
 
-    // ★戻って修正（POST）
-    // confirm画面から hidden で値を持ったまま戻るための受け口
+    // =========================================================
+    // 2) 確認画面から「修正する」で戻る用
+    // =========================================================
+    // confirm 画面から hidden で値を持ち帰って、そのまま入力画面へ戻す
     @PostMapping("/contact")
     public String backToContact(@ModelAttribute("contactForm") ContactForm form) {
         return "contact";
     }
 
-    // ② 確認画面（POST）
+    // =========================================================
+    // 3) 入力内容チェック → 確認画面へ
+    // =========================================================
+    // @Valid により ContactForm のアノテーションバリデーションが動く
     @PostMapping("/contact/confirm")
     public String confirm(
             @Valid @ModelAttribute("contactForm") ContactForm form,
@@ -44,38 +53,55 @@ public class ContactController {
         if (bindingResult.hasErrors()) {
             return "contact";
         }
+
         return "contact-confirm";
     }
 
-    // ③ 送信確定（POST）→ DB保存 → 完了画面
+    // =========================================================
+    // 4) 送信確定 → DB保存 → 完了画面
+    // =========================================================
     @PostMapping("/contact/complete")
     public String complete(
             @Valid @ModelAttribute("contactForm") ContactForm form,
             BindingResult bindingResult,
             RedirectAttributes ra
     ) {
+        // 学習ポイント：
+        // complete でも再度 @Valid を付けておくことで、
+        // 確認画面を飛ばして直接送信された場合にも守れる
         if (bindingResult.hasErrors()) {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.contactForm", bindingResult);
             ra.addFlashAttribute("contactForm", form);
             return "redirect:/contact";
         }
 
-        // -----------------------------
-        // ★修正②：電話番号を「数字だけ」に正規化して保存（ハイフン/スペース等を除去）
-        // 例）090-1234-5678 → 09012345678
-        // -----------------------------
-        if (form.getTel() != null) {
-            form.setTel(form.getTel().replaceAll("[^0-9]", ""));
+        // =====================================================
+        // 5) DB保存用に値を整える
+        // =====================================================
+        // メールアドレスは ContactForm の setter ですでに
+        // 半角化・trim・小文字化が済んでいるのでそのまま使ってよい
+        String normalizedMail = form.getMail();
+
+        // 電話番号は入力時はハイフン付きOKだが、
+        // DBには数字だけで保存する
+        String normalizedTel = form.getTel();
+        if (normalizedTel != null && !normalizedTel.isBlank()) {
+            normalizedTel = normalizedTel.replace("-", "");
         }
 
+        // =====================================================
+        // 6) Entity に詰め替えて保存
+        // =====================================================
         Contact c = new Contact();
 
         c.setName(form.getName());
-        c.setMail(form.getMail());
-        c.setTel(form.getTel()); // 正規化後の値が入る
+        c.setMail(normalizedMail);
+        c.setTel(normalizedTel);
+
         c.setContactMethod(form.getContactMethod());
         c.setInquiryType(form.getInquiryType());
         c.setPropertyId(form.getPropertyId());
+
         c.setArea(form.getArea());
         c.setBudget(form.getBudget());
         c.setLayout(form.getLayout());

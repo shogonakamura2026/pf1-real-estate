@@ -1,0 +1,127 @@
+@charset "utf-8";
+
+/* =========================================================
+   about.css
+   役割：会社概要ページ専用
+   ========================================================= */
+
+body.page-about #main {
+  max-width: 860px;
+  margin: 0 auto 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+body.page-about .about-page {
+  display: block;
+}
+
+body.page-about .about-section {
+  margin-bottom: 32px;
+}
+
+body.page-about .about-page__title {
+  margin: 0 0 18px;
+  font-size: 2rem;
+  line-height: 1.35;
+  color: #1f2937;
+}
+
+body.page-about .about-heading {
+  margin: 0 0 14px;
+  font-size: 1.35rem;
+  color: #334155;
+}
+
+body.page-about .about-subheading {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+body.page-about .about-lead {
+  margin: 0;
+  line-height: 1.9;
+  color: #4b5563;
+}
+
+body.page-about .about-table-wrap,
+body.page-about .about-access {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.about-block{
+  background: rgb(232, 249, 248);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+body.page-about .company-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+body.page-about .company-table th,
+body.page-about .company-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+  text-align: left;
+}
+
+body.page-about .company-table th {
+  width: 180px;
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+}
+
+body.page-about .company-table td {
+  color: #374151;
+  line-height: 1.8;
+}
+
+body.page-about .company-table tr:last-child th,
+body.page-about .company-table tr:last-child td {
+  border-bottom: none;
+}
+
+body.page-about .about-list,
+body.page-about .about-access-list {
+  margin: 0;
+  padding-left: 1.2em;
+  line-height: 1.8;
+  color: #374151;
+}
+
+body.page-about .about-map {
+  margin-bottom: 18px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+body.page-about .about-map iframe {
+  display: block;
+  width: 100%;
+  height: 360px;
+  border: 0;
+}
+
+body.page-about .about-parking {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+body.page-about .about-parking p {
+  margin: 0;
+  line-height: 1.8;
+  color: #4b5563;
+}

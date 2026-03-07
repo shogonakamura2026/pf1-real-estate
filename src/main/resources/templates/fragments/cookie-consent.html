@@ -1,43 +1,36 @@
-<!-- templates/fragments/cookie-consent.html -->
-<div th:fragment="cookieConsent">
+<div th:fragment="cookieConsent" xmlns:th="http://www.thymeleaf.org">
   <div id="cookieBanner" class="cookie-banner" aria-live="polite" hidden>
     <div class="cookie-banner__inner">
       <p class="cookie-banner__text">
         当サイトは利便性向上のためCookieを使用します。
-        詳細は<a th:href="@{/privacy}" class="cookie-banner__link">プライバシーポリシー</a>をご確認ください。
-		<br>
-		  <span class="cookie-banner__tech">
-		    （localStorageを用いた同意状態の保存を実装）
-		  </span>
+        詳細は
+        <a th:href="@{/privacy}" class="cookie-banner__link">プライバシーポリシー</a>
+        をご確認ください。
+        <br>
+        <span class="cookie-banner__tech">（localStorageを用いた同意状態の保存を実装）</span>
       </p>
-
       <div class="cookie-banner__actions">
         <button type="button" class="cookie-btn cookie-btn--ghost" id="cookieReject">拒否</button>
         <button type="button" class="cookie-btn cookie-btn--primary" id="cookieAccept">同意する</button>
       </div>
     </div>
   </div>
-
   <script>
     (function () {
-      const KEY = "cookie_consent_v1";
+      const STORAGE_KEY = "cookie_consent_v1";
       const banner = document.getElementById("cookieBanner");
       const acceptBtn = document.getElementById("cookieAccept");
       const rejectBtn = document.getElementById("cookieReject");
       if (!banner || !acceptBtn || !rejectBtn) return;
-
-      const saved = localStorage.getItem(KEY);
+      const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === "accepted" || saved === "rejected") return;
-
       banner.hidden = false;
-
       acceptBtn.addEventListener("click", function () {
-        localStorage.setItem(KEY, "accepted");
+        localStorage.setItem(STORAGE_KEY, "accepted");
         banner.hidden = true;
       });
-
       rejectBtn.addEventListener("click", function () {
-        localStorage.setItem(KEY, "rejected");
+        localStorage.setItem(STORAGE_KEY, "rejected");
         banner.hidden = true;
       });
     })();

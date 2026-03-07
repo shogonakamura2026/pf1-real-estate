@@ -1,0 +1,167 @@
+@charset "utf-8";
+
+/* =========================================================
+   contact.css
+   役割：contact.html 専用スタイル
+   ※ 既存HTML内の style を外出しした版
+   ========================================================= */
+
+@import url(../components.css);
+
+    /* ===============================
+       Contact page - minimal styling
+       =============================== */
+
+    #main .form-card{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:16px;
+      max-width:860px;
+    }
+
+    #contactForm .row{
+      display:grid;
+      grid-template-columns:220px 1fr;
+      gap:12px;
+      align-items:start;
+      padding:10px 0;
+      border-bottom:1px dashed #e5e7eb;
+    }
+    #contactForm .row:last-child{ border-bottom:none; }
+
+    #contactForm .label{
+      font-weight:700;
+      color:#333;
+    }
+
+    #contactForm .req{
+      display:inline-block;
+      margin-left:8px;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#fee2e2;
+      color:#991b1b;
+      vertical-align:middle;
+    }
+
+    #contactForm input[type="text"],
+    #contactForm input[type="email"],
+    #contactForm input[type="tel"],
+    #contactForm input[type="number"],
+    #contactForm input[type="date"],
+    #contactForm select,
+    #contactForm textarea{
+      width:100%;
+      max-width:560px;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      background:#fff;
+      box-sizing:border-box;
+    }
+
+    #contactForm textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    #contactForm .hint{
+      font-size:12px;
+      color:#6b7280;
+      margin-top:6px;
+    }
+
+    #contactForm .radio-row,
+    #contactForm .check-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      padding-top:6px;
+    }
+
+    /* date + time(select) row */
+    #contactForm .triple{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    #contactForm .triple .date-field{ max-width:200px; }
+    #contactForm .triple .time-field{ max-width:200px; }
+
+    #contactForm .actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-start;
+      padding-top:14px;
+    }
+
+    #contactForm .btn{
+      appearance:none;
+      border:none;
+      border-radius:10px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    #contactForm .btn-primary{
+      background:#111827;
+      color:#fff;
+    }
+    #contactForm .btn-ghost{
+      background:#f3f4f6;
+      color:#111827;
+    }
+
+    .notice{
+      background:#ecfeff;
+      border:1px solid #a5f3fc;
+      color:#155e75;
+      border-radius:10px;
+      padding:10px 12px;
+      margin:12px 0 0;
+      max-width:860px;
+    }
+
+    .error{
+      color:#b91c1c;
+      font-size:12px;
+      margin-top:6px;
+    }
+
+    /* 休業日メッセージ表示（JSで使う） */
+    #closedNotice{
+      margin-top:8px;
+      font-size:12px;
+      color:#b91c1c;
+      display:none;
+    }
+	
+	/*chckの見栄え*/
+	#contactForm .check-row a{
+	  text-decoration: underline;
+	  color: inherit;
+	}
+	#contactForm .check-row a:focus{
+	  outline: 2px solid #111827;
+	  outline-offset: 2px;
+	  border-radius: 6px;
+	}
+
+    @media (max-width: 767px){
+      #contactForm .row{ grid-template-columns:1fr; }
+      #main .form-card{ padding:14px; }
+      #contactForm input[type="text"],
+      #contactForm input[type="email"],
+      #contactForm input[type="tel"],
+      #contactForm input[type="number"],
+      #contactForm input[type="date"],
+      #contactForm select,
+      #contactForm textarea{
+        max-width:100%;
+      }
+    }
+  

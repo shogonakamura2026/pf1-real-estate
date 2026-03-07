@@ -1,94 +1,42 @@
-<!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<body>
-  <footer th:fragment="footer"
-          style="max-width:860px;margin:24px auto 30px;padding:0 16px;color:#666;">
-
-    <!-- フッター本体をカードっぽくして本文と分離 -->
-    <section style="
-      background:#ffffff;
-      border:1px solid #e5e7eb;
-      border-radius:12px;
-      padding:14px 14px 12px;
-      box-shadow:0 1px 0 rgba(0,0,0,0.02);
-    ">
-
-      <!-- 上へ戻る（右寄せでスッキリ） -->
-      <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
-        <a id="pagetop" href="#top"
-           style="
-             display:inline-flex;align-items:center;gap:6px;
-             font-size:12px;text-decoration:none;
-             padding:6px 10px;border-radius:999px;
-             background:#f3f4f6;color:#111827;border:1px solid #e5e7eb;
-           ">
-          ▲ ページの先頭へ戻る
-        </a>
-      </div>
-
-      <!-- 情報ブロック：左(店舗情報) / 右(リンク) -->
-      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;">
-
-        <!-- 店舗情報 -->
-        <div style="flex:1 1 320px;min-width:260px;">
-          <div style="font-weight:700;color:#111827;margin-bottom:8px;">
-            <span th:text="${siteName}">チームb不動産</span>
-          </div>
-
-          <dl style="
-            margin:0;
-            display:grid;
-            grid-template-columns:72px 1fr;
-            gap:6px 10px;
-            font-size:13px;
-          ">
-            <dt style="color:#6b7280;">住所</dt>
-            <dd style="margin:0;color:#111827;">沖縄県那覇市X-X-X</dd>
-
-            <dt style="color:#6b7280;">電話</dt>
-            <dd style="margin:0;">
-              <a href="tel:098-XXX-XXX"
-                 style="color:#111827;text-decoration:underline;text-decoration-thickness:1px;">
-                098-XXX-XXX
-              </a>
-            </dd>
-
-            <dt style="color:#6b7280;">営業時間</dt>
-            <dd style="margin:0;color:#111827;">9:00～17:00</dd>
-
-            <dt style="color:#6b7280;">休業日</dt>
-            <dd style="margin:0;color:#111827;">月曜日、年末年始、旧盆</dd>
-          </dl>
-
-          <div style="margin-top:10px;font-size:12px;color:#6b7280;">
-            © <span th:text="${thisYear}">2026</span>
-            <span th:text="${siteName}">チームb不動産</span>
-          </div>
+<footer th:fragment="footer" class="site-footer" xmlns:th="http://www.thymeleaf.org">
+  <section class="site-footer__card">
+    <div class="site-footer__pagetop-wrap">
+      <a id="pagetop" href="#top" class="site-footer__pagetop">▲ ページの先頭へ戻る</a>
+    </div>
+    <div class="site-footer__body">
+      <div class="site-footer__info">
+        <div class="site-footer__site-name">
+          <span th:text="${siteName}">チームb不動産</span>
         </div>
-
-        <!-- リンク -->
-        <div style="flex:1 1 240px;min-width:240px;">
-          <div style="font-weight:700;color:#111827;margin-bottom:8px;">リンク</div>
-
-          <nav aria-label="フッター" style="
-            display:flex;flex-wrap:wrap;gap:10px 12px;
-            font-size:13px;
-          ">
-            <a th:href="@{/privacy}" style="color:#111827;text-decoration:underline;">プライバシーポリシー</a>
-            <a th:href="@{/external-transmission}" style="color:#111827;text-decoration:underline;">外部送信ポリシー</a>
-            <a th:href="@{/terms}" style="color:#111827;text-decoration:underline;">利用規約</a>
-            <a th:href="@{/sitemap}" style="color:#111827;text-decoration:underline;">サイトマップ</a>
-            <a th:href="@{/listing-apply}" style="color:#111827;text-decoration:underline;">掲載申し込みはこちら</a>
-          </nav>
-
-          <div style="margin-top:10px;font-size:12px;color:#6b7280;line-height:1.6;">
-            ※ お問い合わせの返信は営業時間内に順次対応いたします。
-          </div>
-        </div>
-
+        <dl class="site-footer__info-list">
+          <dt class="site-footer__term">住所</dt>
+          <dd class="site-footer__desc">沖縄県那覇市X-X-X</dd>
+          <dt class="site-footer__term">電話</dt>
+          <dd class="site-footer__desc"><a href="tel:098-XXX-XXX" class="site-footer__tel">098-XXX-XXX</a></dd>
+          <dt class="site-footer__term">営業時間</dt>
+          <dd class="site-footer__desc">9:00～17:00</dd>
+          <dt class="site-footer__term">休業日</dt>
+          <dd class="site-footer__desc">月曜日、年末年始、旧盆</dd>
+        </dl>
+	
       </div>
-    </section>
-
-  </footer>
-</body>
-</html>
+      <div class="site-footer__links-block">
+        <div class="site-footer__links-title">リンク</div>
+        <nav class="site-footer__links" aria-label="フッターリンク">
+          <a th:href="@{/privacy}" class="site-footer__link">プライバシーポリシー</a>
+          <a th:href="@{/external-transmission}" class="site-footer__link">外部送信ポリシー</a>
+          <a th:href="@{/terms}" class="site-footer__link">利用規約</a>
+          <a th:href="@{/sitemap}" class="site-footer__link">サイトマップ</a>
+		  <a th:href="@{/legal}" class="site-footer__link">特定商取引法に基づく表記</a>
+          <a th:href="@{/listing-apply}" class="site-footer__link">掲載申し込みはこちら</a>
+        </nav>
+        <div class="site-footer__note">※ お問い合わせの返信は営業時間内に順次対応いたします。</div>
+      </div>
+    </div>
+	<div class="site-footer__copyright">
+		  © <span th:text="${thisYear} ?: 2026">2026</span>
+		  <span th:text="${siteName} ?: 'チームBe不動産'">チームBe不動産</span>
+		  All Rights Reserved.
+		</div>
+  </section>
+</footer>

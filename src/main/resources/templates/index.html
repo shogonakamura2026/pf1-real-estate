@@ -5,345 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>チームb不動産</title>
 
-  <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  
+  <!-- ===============================
+	  共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/index.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- ===============================
-       トップページ専用（最小）
-       ※共通CSSを壊さず、トップ特有の見た目だけ補助
-  ================================== -->
-  <style>
-    .container{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-
-    /* -------------------------------
-       Hero（スライドショー）
-    -------------------------------- */
-    .hero{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .hero-slider{
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 5;
-      background:#f1f5f9;
-    }
-    .hero-slider img{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity .6s ease;
-    }
-    .hero-slider img.is-active{ opacity: 1; }
-
-    /* キャッチ（クリックで物件一覧へ） */
-    .hero-caption{
-      position: absolute;
-      left: 14px;
-      bottom: 12px;
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(0,0,0,0.06);
-      border-radius: 12px;
-      padding: 10px 12px;
-      max-width: min(92%, 520px);
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .hero-caption h2{
-      margin: 0 0 4px;
-      font-size: 18px;
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .hero-caption p{
-      margin: 0;
-      color:#334155;
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    /* CTA */
-    .cta-row{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      padding: 12px 14px;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    /* ボタン（トップ専用の小さなUI） */
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #1f2a44;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .btn.primary{
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #075985;
-    }
-    .btn.pink{
-      background: #fce7f3;
-      border-color: #f9a8d4;
-      color: #9d174d;
-    }
-    .btn.outline{
-      background: #fff;
-      border-color: #cdd6e4;
-      color: #1f2a44;
-    }
-
-	/* -------------------------------
-	   ポートフォリオ注記（主旨明記）
-	   ※全体デザインを崩さない控えめなカード
-	-------------------------------- */
-	.portfolio-note{
-	  margin-top: 16px;
-	  background:rgb(237, 241, 245);
-	  border:1px solid #e5e7eb;
-	  border-radius: 12px;
-	  padding: 14px;
-	}
-	.portfolio-note h3{
-	  margin: 0 0 8px;
-	  font-size: 15px;
-	  font-weight: 900;
-	  color:#0f172a;
-	}
-	.portfolio-note p{
-	  margin: 0;
-	  color:#334155;
-	  font-weight: 600;
-	  line-height: 1.7;
-	  font-size: 14px;
-	}
-	.portfolio-note .small{
-	  margin-top: 8px;
-	  color:#64748b;
-	  font-weight: 700;
-	  font-size: 13px;
-	}
-	
-    /* -------------------------------
-       3カラム案内カード
-    -------------------------------- */
-    .cards{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-    }
-    .card-link{
-      display:block;
-      text-decoration:none;
-      color:inherit;
-    }
-    .card h3{
-      margin: 0 0 8px;
-      font-size: 16px;
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .card p{
-      margin: 0;
-      color:#334155;
-      font-weight: 600;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    /* 案内カード背景色（イメージカラー） */
-    .card-search { background:#e0f2fe; border-color:#7dd3fc; }
-    .card-favorite{ background:#fce7f3; border-color:#f9a8d4; }
-    .card-blog{ background:#ecfdf5; border-color:#6ee7b7; }
-
-    /* hover */
-    .card-search:hover { background:#bae6fd; }
-    .card-favorite:hover { background:#fbcfe8; }
-    .card-blog:hover { background:#bbf7d0; }
-
-    /* -------------------------------
-       Topic（追加トピック：お知らせ / スタッフ）
-       ※既存デザインと馴染むよう統一
-    -------------------------------- */
-    .topics{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .topic-card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-    }
-    .topic-title{
-      margin: 0 0 10px;
-      font-size: 16px;
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .news-list{
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .news-list li{
-      padding: 10px 0;
-      border-bottom: 1px dashed #e5e7eb;
-      color:#334155;
-      font-weight: 600;
-      line-height: 1.5;
-    }
-    .news-list li:last-child{ border-bottom: none; }
-    .news-list time{
-      display:inline-block;
-      min-width: 110px;
-      color:#64748b;
-      font-weight: 800;
-      font-size: 13px;
-      margin-right: 8px;
-    }
-
-    .staff-wrap{
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-    .staff-wrap img{
-      width: 150px;
-      height: auto;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      display:block;
-      background:#f1f5f9;
-    }
-    .staff-wrap h4{
-      margin: 0 0 8px;
-      font-size: 15px;
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .staff-wrap p{
-      margin: 0;
-      color:#334155;
-      font-weight: 600;
-      line-height: 1.65;
-      font-size: 14px;
-    }
-    .highlight{
-      margin-top: 10px;
-      font-weight: 900;
-      color: #b91c1c; /* fudousanBの代替（より自然） */
-    }
-
-    /* 追加バナー */
-    .bnr-row{
-      margin-top: 12px;
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .bnr-row a{
-      text-decoration:none;
-      color:inherit;
-    }
-    .bnr-box{
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow:hidden;
-      background:#f8fafc;
-      padding: 10px;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-    }
-    .bnr-box img{
-      display:block;
-      height: 44px;
-      width: auto;
-    }
-    .bnr-box .bnr-text{
-      font-weight: 800;
-      color:#0f172a;
-    }
-
-    /* レスポンシブ */
-    @media (max-width: 860px){
-      .cards{ grid-template-columns: 1fr; }
-      .hero-slider{ aspect-ratio: 16 / 8; }
-      .topics{ grid-template-columns: 1fr; }
-      .staff-wrap{ grid-template-columns: 1fr; }
-      .staff-wrap img{ width: 100%; max-width: 280px; }
-    }
-  </style>
+ 
 </head>
 
-<body>
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
-
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
-
-<!-- ===============================
-     右上ポップ追従ナビ
-================================ -->
-<nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-</nav>
+<body id="home">
+  <!-- ===============================
+       共通ヘッダー
+  ================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>  
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
 <main class="container">
 
@@ -371,7 +52,7 @@
   
   <!-- ===============================
        ポートフォリオの主旨（学習目的の明記）
-       ※3つの案内が「学習した主機能」であることを明確化
+       ※下記の案内が「学習した主機能」であることを明確化
   ================================== -->
   <section class="portfolio-note" aria-label="ポートフォリオの主旨">
     <h3>このサイトについて（学習ポートフォリオ）</h3>
@@ -380,13 +61,19 @@
       下記の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」など</strong> の項目は、
       学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
     </p>
-    <p class="small">
-      ※クリックで各実装ページへ移動できます。実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
-    </p>
+	<p class="small">
+	  ※クリックで各実装ページへ移動できます。実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
+	</p>
+	<p class="portfolio-links">
+	  <a href="https://github.com/shogonakamura2026/pf1-real-estate"
+	     target="_blank" rel="noopener noreferrer">
+	    GitHubでソースコードを見る
+	  </a>
+	</p>
   </section>
 
   <!-- ===============================
-       3つの案内（イメージカラー）
+       学習内容の案内（イメージカラー）
   ================================== -->
   <section class="cards" aria-label="サイト案内">
     <div class="card card-search">
@@ -422,20 +109,46 @@
 
 	 <div class="card card-favorite">
 	   <a class="card-link" th:href="@{/contact}">
-	     <h3>お問い合わせフォーム</h3>
+	     <h3>お問い合わせフォーム（1）</h3>
 	     <p>電話、メールの選択肢により「必須」切り替え。電話番号は「-」を取り除きDB保存。現時点より前の日付、時間、定休日等を選択時アラート実装。（DBを構築）</p>
 	   </a>
 	 </div>
+	 
 
 	 <div class="card card-blog">
 	   <a class="card-link" th:href="@{/#footer-anchor}">
-	     <h3>フッターを共通パーツ化</h3>
+	     <h3>フッター等を共通パーツ化</h3>
 	     <p>
-	       サイト全体で共通のフッターをThymeleafのフラグメント機能を利用。
-	       サイト名や著作権年などの共通データはSpringの@ControllerAdviceを利用。（保守性の向上）
+	       サイト全体で共通要素をThymeleafのフラグメント機能にて共通パーツ化。
+	       footer要素の一部にSpringの@ControllerAdviceを利用。（保守性の向上）
 	     </p>
 	   </a>
 	 </div>
+
+
+	 <div class="card card-search"> 
+		<a class="card-link" href="https://github.com/shogonakamura2026/pf1-real-estate"> 
+	     <h3>レスポンシブ時の調整</h3>
+	       <p>レスポンシブ時にストレスが無い閲覧環境になるよう調整。
+	       お気に入り、履歴にアクセスできるフロートボタンを下部に配置しUX、UIを意識しました。（レイアウト調整）<br>※GitHubを参照願います。
+	     </p>
+	   </a>
+	 </div>
+
+	  <div class="card card-favorite">
+	    <a class="card-link" th:href="@{/contact}">
+	      <h3>お問い合わせフォーム（2）</h3>
+	      <p>全角入力を許可、DB追加時には半角へ変換するよう調整しました。電話番号、メールアドレスの不正な入力、テキストエリアに不正なScriptを弾く設計を導入（バリデーション実装）</p>
+	    </a>
+	  </div>
+
+	 <div class="card card-blog">
+		<a class="card-link" href="https://github.com/shogonakamura2026/pf1-real-estate">
+	      <h3>保守性を意識した階層管理。</h3>
+	      <p>実業務でサイトのレイアウトや実装機能追加時、修正を考慮した階層構造にてファイル管理。共通CSS、ページ固有のCSSファイルを作成しています。（保守性の向上）<br>※GitHubを参照願います。</p>
+		</a>
+	  </div>
+	 
 	
   </section>
   
@@ -455,7 +168,7 @@
         <li><time datetime="2026-03-03">2026/03/03</time>【予約制】夢のマイホーム相談会　in 宜野湾市嘉数 のご紹介</li>
       </ul>
 
-      <div style="margin-top:12px; text-align:right;">
+      <div class="topic-actions">
         <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
       </div>
     </article>
@@ -501,19 +214,26 @@
 
 </main>
 <div id="footer-anchor"></div>
-<!-- ===============================
-     フッター：fragments
-================================ -->
+  
 
+<!-- Contactフロート -->
+<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+
+  <!-- 共通フッター -->
 <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
+  <!-- 共通Cookie同意 -->
 <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 
+<!-- ===============================
+     js呼び出し
+================================== -->
+<!-- Contactフロートjs -->
+<script th:src="@{/js/contact-float.js}"></script>
 <!-- スライドショー制御 -->
 <script th:src="@{/js/slideshow.js}"></script>
+
+
 </body>
 </html>

@@ -5,276 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>物件詳細 | チームBe不動産</title>
 
-  <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/property-detail.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- 詳細ページ専用スタイル（UI部分） -->
-  <style>
-    html { scroll-behavior: smooth; }
 
-    .container{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-
-    /* 上段：画像＋右側情報 */
-    .top2{
-      display: grid;
-      grid-template-columns: 1.25fr 0.95fr;
-      gap: 16px;
-      align-items: start;
-      margin-bottom: 16px;
-    }
-
-    .card{
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .card.pad{ padding: 14px; }
-
-    .photo img{
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .title{
-      margin: 0 0 10px;
-      font-size: 22px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    .price{
-      margin: 0 0 10px;
-      font-size: 18px;
-      font-weight: 900;
-      color: #0f172a;
-    }
-    .meta{
-      color: #6b7280;
-      font-size: 14px;
-      line-height: 1.65;
-    }
-
-    /* ボタン */
-    .buttons{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-    .btn{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #1f2a44;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .btn.primary{
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #075985;
-    }
-    .btn.outline{
-      background: #fff;
-      border-color: #cdd6e4;
-      color: #1f2a44;
-    }
-    .btn.pink{
-      background: #fce7f3;
-      border-color: #f9a8d4;
-      color: #9d174d;
-    }
-    .btn.small{
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 13px;
-    }
-
-    /* 詳細テーブル */
-    .detail table{
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .detail th,
-    .detail td{
-      border: 1px solid rgb(192, 192, 192);
-      padding: 10px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .detail th{
-      width: 140px;
-      background: rgb(231, 239, 243);
-      color: #334155;
-      font-weight: 800;
-    }
-
-    /* マップ */
-    .map iframe{
-      width: 100%;
-      height: 360px;
-      border: 0;
-      display: block;
-    }
-
-    /* おすすめ */
-    .rec-title{
-      margin: 0 0 12px;
-      font-size: 18px;
-      font-weight: 900;
-      color: #0f172a;
-    }
-    .rec-grid{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .rec-item{
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .rec-photo{
-      display: block;
-      background: #f1f5f9;
-    }
-    .rec-photo img{
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      display: block;
-    }
-    .rec-body{ padding: 10px; }
-    .rec-price{
-      font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 4px;
-    }
-    .rec-meta{
-      color: #6b7280;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-    .rec-actions{
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* SNS共有 */
-    .share{
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid #e5e7eb;
-    }
-    .share-title{
-      font-size: 14px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-    .share-row{
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* トップへ戻る（右下固定） */
-    .back-to-top{
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #0f172a;
-      display: grid;
-      place-items: center;
-      text-decoration: none;
-      font-weight: 900;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      z-index: 20;
-    }
-
-    /* レスポンシブ */
-    @media (max-width: 860px){
-      .top2{ grid-template-columns: 1fr; }
-      .rec-grid{ grid-template-columns: 1fr; }
-      .rec-photo img{ height: 180px; }
-    }
-
-    /* 背景の囲い（目に優しい版） */
-    .section-card{
-      background: rgba(255,255,255,0.88);
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-      box-sizing: border-box;
-    }
-    .section-card .card{
-      background: transparent;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-    }
-    .section-card .photo img{ border-radius: 12px; }
-    .section-gap{ margin-top: 16px; }
-    @media (max-width: 767px){
-      .section-card{ padding: 14px; }
-    }
-  </style>
 </head>
 
-<body>
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
+<body id="property-detail" class="section-properties">
+	<!-- ===============================
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div> 
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
 
-<!-- ===============================
-     右上ポップ追従ナビ
-================================ -->
-<nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-</nav>
-
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== -->
+  
 <main class="container">
 
   <!-- 上：画像＋右側情報/ボタン -->
@@ -384,17 +139,15 @@
 
 </main>
 
-<a href="#top" class="back-to-top" aria-label="ページ上部へ戻る">↑</a>
 
-<!-- ===============================
-     フッター：fragments
-================================ -->
 
+<!-- Contactフロート -->
+<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+
+  <!-- 共通フッター -->
 <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
+  <!-- 共通Cookie同意 -->
 <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 <!-- =======================================================
@@ -537,5 +290,14 @@
 
 /*]]>*/
 </script>
+
+
+<!-- ===============================
+     js呼び出し
+================================== -->
+<!-- Contactフロートjs -->
+<script th:src="@{/js/contact-float.js}"></script>
+
+
 </body>
 </html>

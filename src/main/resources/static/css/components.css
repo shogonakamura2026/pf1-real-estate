@@ -1,0 +1,377 @@
+@charset "utf-8";
+
+/* =========================================================
+   components.css
+   役割：複数ページで再利用する部品
+   - カード
+   - ボタン
+   - empty state
+   - ドキュメントページ共通
+   ========================================================= */
+
+@import url(common.css);
+
+/* =========================================================
+   1) Card
+   ========================================================= */
+.card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.card.pad{
+  padding:14px;
+}
+
+.card-thumb img{
+  width:100%;
+  display:block;
+}
+
+/* =========================================================
+   2) Buttons
+   ========================================================= */
+.btn,
+.btn-sub,
+.btn-ghost{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:42px;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.btn{
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+}
+
+.btn-sub{
+  border:1px solid #d1d5db;
+  background:#fff;
+  color:#111;
+}
+
+.btn-ghost{
+  border:1px solid #cbd5e1;
+  background:rgb(218, 216, 217);
+  color:#0f172a;
+}
+
+/* =========================================================
+   3) Empty State / Panels
+   ========================================================= */
+.empty-state{
+  padding:28px 20px;
+  text-align:center;
+  background:#fff;
+  border:1px dashed #cbd5e1;
+  border-radius:12px;
+}
+
+.panel,
+.form-card,
+.doc-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:16px;
+}
+
+/* =========================================================
+   4) Document Pages
+   ========================================================= */
+.doc-wrap h1{
+  margin:0 0 16px;
+  font-size:22px;
+  color:#0f172a;
+}
+
+.doc-wrap h2{
+  margin:24px 0 8px;
+  font-size:18px;
+  color:#0f172a;
+}
+
+.doc-wrap p,
+.doc-wrap li{
+  line-height:1.8;
+}
+
+.doc-meta{
+  color:#666;
+  font-size:13px;
+}
+
+.doc-wrap a{
+  text-decoration:underline;
+}
+
+/* =========================================================
+   Floating Contact CTA
+   役割：
+   - 右下固定の相談導線
+   - 「しまう」で収納
+   - 閉じた後は取っ手だけ少し見せる
+   - たまに少しだけスライドして存在を伝える
+   ========================================================= */
+
+/* -------------------------------
+   開いている本体
+-------------------------------- */
+.contact-float{
+  position: fixed;
+  right: 18px;
+  bottom: 96px;
+  z-index: 1600;
+  width: min(340px, calc(100vw - 32px));
+  background: rgba(255, 255, 255, 0.97);
+  border: 3px solid rgb(64, 0, 64);
+  border-radius: 18px;
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.16),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.contact-float.is-hidden{
+  display: none;
+}
+
+/* -------------------------------
+   しまうボタン
+-------------------------------- */
+.contact-float__handle{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+  color: #475569;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.contact-float__handle:hover{
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+  color: #334155;
+}
+
+/* -------------------------------
+   本文
+-------------------------------- */
+.contact-float__body{
+  padding: 18px 16px 16px;
+}
+
+.contact-float__lead{
+  margin: 0 0 14px;
+  color: #1f2937;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  font-weight: 700;
+}
+
+/* -------------------------------
+   電話番号
+   一番目立たせる
+-------------------------------- */
+.contact-float__tel{
+  display: block;
+  margin-bottom: 6px;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.contact-float__tel:hover{
+  opacity: 0.86;
+}
+
+/* 補助文 */
+.contact-float__hours{
+  margin: 0 0 14px;
+  color: #64748b;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+/* -------------------------------
+   フォームボタン
+-------------------------------- */
+.contact-float__link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  width: 100%;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #0f766e, #0d9488);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 18px rgba(13, 148, 136, 0.22);
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.contact-float__link:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: 0 12px 24px rgba(13, 148, 136, 0.28);
+}
+
+
+/* =========================================================
+   閉じた状態の取っ手
+   - 少しだけ見せる
+   - たまに少しだけスライド
+   ========================================================= */
+.contact-float-peek{
+  position: fixed;
+  right: -6px;
+  bottom: 36px;
+  z-index: 1600;
+  width: 164px;
+  min-height: 58px;
+  padding: 10px 14px;
+  border: 1px solid #0f766e;
+  border-right: 0;
+  border-radius: 14px 0 0 14px;
+  background: linear-gradient(to right, #0f766e, #0d9488);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+  transition: right 0.25s ease;
+  animation: contactPeekSlide 5.2s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.contact-float-peek span{
+  color: #facc15;
+  font-weight: 900;
+}
+
+
+@keyframes clickPulse{
+  0%,100%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(1.08);
+  }
+}
+
+.contact-float-peek:hover{
+  right: 0;
+  animation-play-state: paused;
+}
+
+.contact-float-peek.is-hidden{
+  display: none;
+}
+
+/* 少しだけ出る */
+@keyframes contactPeekSlide{
+  0%, 82%, 100%{
+    right: -6px;
+  }
+  88%{
+    right: -74px;
+  }
+  94%{
+    right: -86px;
+  }
+}
+
+/* =========================================================
+   quick-nav があるページでは少し上へ
+   body に has-quick-nav を付けたページ用
+   ========================================================= */
+body.has-quick-nav .contact-float,
+body.has-quick-nav .contact-float-peek{
+  bottom: 150px;
+}
+
+/* =========================================================
+   スマホ
+   ========================================================= */
+@media (max-width: 767px){
+  .contact-float{
+    right: 12px;
+	left: 5px;
+    bottom: 54px;
+    width: calc(100vw - 24px);
+  }
+
+  .contact-float__body{
+    padding: 16px 14px 14px;
+  }
+
+  .contact-float__lead{
+    font-size: 0.94rem;
+  }
+
+  .contact-float__tel{
+    font-size: 1.34rem;
+  }
+
+  .contact-float-peek{
+    right: -6px;
+    bottom: 54px;
+    width: 150px;
+    min-height: 54px;
+    padding: 9px 12px;
+    font-size: 0.88rem;
+    animation: contactPeekSlideMobile 6s ease-in-out infinite;
+    animation-delay: 2.5s;
+  }
+
+  .contact-float-peek:hover{
+    right: 0;
+  }
+
+  @keyframes contactPeekSlideMobile{
+	0%, 82%, 100%{
+	  right: -6px;
+	}
+	88%{
+	  right: -74px;
+	}
+	94%{
+	  right: -86px;
+	}
+  }
+
+  body.has-quick-nav .contact-float,
+  body.has-quick-nav .contact-float-peek{
+    bottom: 132px;
+  }
+}

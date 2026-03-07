@@ -6,155 +6,63 @@
   <title>ブログ投稿 | チームBe不動産</title>
 
   <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/staff-post.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-
-  <!-- ===============================
-       投稿ページ専用スタイル（最小）
-  ================================== -->
-  <style>
-    .post-wrap{
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .form-card{
-      background: rgb(241, 242, 248);
-      border: 1px solid #ddd;
-      padding: 16px;
-    }
-    .form-row{
-      margin-bottom: 12px;
-    }
-    .form-row label{
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    .form-row input[type="text"],
-    .form-row textarea{
-      width: 90%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    .form-row textarea{
-      min-height: 160px;
-      resize: vertical;
-    }
-    .form-actions{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .msg-error{
-      padding: 10px 12px;
-      border: 1px solid #f2b8b5;
-      background: #fff2f2;
-      color: #b00020;
-      margin-bottom: 12px;
-    }
-    .hint{
-      font-size: 0.95em;
-      color: #666;
-      margin-top: 6px;
-    }
-  </style>
 </head>
 
-<body>
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
+<body id="staff">
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
+  <main id="contents" class="post-wrap">
+    <h2>ブログ投稿</h2>
 
+    <p class="hint">
+      タイトルと本文は必須です。画像はURL指定（任意）です。
+    </p>
 
+    <div class="msg-error" th:if="${error}" th:text="${error}"></div>
 
-<!-- ===============================
-     メイン
-================================ -->
-<main id="contents" class="post-wrap">
-  <h2>ブログ投稿</h2>
+    <div class="form-card">
+      <form th:action="@{/staff/blog}" method="post">
+        <div class="form-row">
+          <label for="title">タイトル</label>
+          <input id="title" name="title" type="text" maxlength="80"
+                 th:value="${title}">
+        </div>
 
-  <p class="hint">
-    タイトルと本文は必須です。画像はURL指定（任意）です。
-  </p>
+        <div class="form-row">
+          <label for="body">本文</label>
+          <textarea id="body" name="body" maxlength="2000"
+                    th:text="${body}"></textarea>
+        </div>
 
-  <!-- エラーメッセージ -->
-  <div class="msg-error" th:if="${error}" th:text="${error}"></div>
+        <div class="form-row">
+          <label for="imageUrl">画像URL（任意）</label>
+          <input id="imageUrl" name="imageUrl" type="text" maxlength="300"
+                 placeholder="例：https://example.com/photo.jpg"
+                 th:value="${imageUrl}">
+          <div class="hint">※空欄なら画像なしで投稿されます。<br>
+            ※↓お試し用URLです↓<br>
+            「https://kunnren202511.com/images/staff.jpg」<br>
+            「https://kunnren202511.com/images/blogtest01.png」<br>
+            「https://kunnren202511.com/images/graphic2.png」
+          </div>
+        </div>
 
-  <!-- ===============================
-       投稿フォーム
-       ※ /staff/blog (POST) に送信
-  ================================== -->
-  <div class="form-card">
-    <form th:action="@{/staff/blog}" method="post">
-      <div class="form-row">
-        <label for="title">タイトル</label>
-        <input id="title" name="title" type="text" maxlength="80"
-               th:value="${title}">
-      </div>
+        <div class="form-actions">
+          <a th:href="@{/staff/blog(page=1)}">← 一覧に戻る</a>
+          <button type="submit">投稿する</button>
+        </div>
+      </form>
+    </div>
+  </main>
 
-      <div class="form-row">
-        <label for="body">本文</label>
-        <textarea id="body" name="body" maxlength="2000"
-                  th:text="${body}"></textarea>
-      </div>
-
-      <div class="form-row">
-        <label for="imageUrl">画像URL（任意）</label>
-        <input id="imageUrl" name="imageUrl" type="text" maxlength="300"
-               placeholder="例：https://example.com/photo.jpg"
-               th:value="${imageUrl}">
-        <div class="hint">※空欄なら画像なしで投稿されます。<br>
-			※↓お試し用URLです↓<br>
-			「https://kunnren202511.com/images/staff.jpg」<br>
-			「https://kunnren202511.com/images/blogtest01.png」<br>
-			「https://kunnren202511.com/images/graphic2.png」
-		</div>
-      </div>
-
-      <div class="form-actions">
-        <a th:href="@{/staff/blog(page=1)}">← 一覧に戻る</a>
-        <button type="submit">投稿する</button>
-      </div>
-    </form>
-  </div>
-</main>
-
-<!-- ===============================
-     フッター：fragments
-================================ -->
-
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
-
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
-
-
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 </body>
 </html>

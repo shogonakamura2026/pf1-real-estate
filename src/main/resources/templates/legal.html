@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>特定商取引法に基づく表記 | チームBe不動産</title>
+
+  <!-- =====================================================
+       共通CSS
+       ===================================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+
+  <!-- ページ専用CSS -->
+  <link rel="stylesheet" th:href="@{/css/page/legal.css}">
+
+  <!-- レスポンシブ -->
+  <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
+</head>
+
+<body id="legal" class="page-legal">
+  <!-- =====================================================
+       共通ヘッダー / ナビ
+       ===================================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
+
+  <!-- =====================================================
+       パンくず（layout.css管理）
+       ===================================================== -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li>特定商取引法に基づく表記</li>
+    </ol>
+  </div>
+
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== -->
+  <main id="main">
+    <article class="legal-page">
+
+      <!-- ページ導入 -->
+      <section class="legal-section" id="legal-introduction">
+        <h1 class="legal-page__title">特定商取引法に基づく表記</h1>
+
+        <div class="legal-block">
+          <h2 class="legal-heading">ご案内</h2>
+          <p class="legal-lead">
+            当サイトにおけるサービス提供に関し、特定商取引法に基づき以下の通り表示いたします。
+          </p>
+        </div>
+      </section>
+
+      <!-- 表記内容 -->
+      <section class="legal-section">
+        <h2 class="legal-heading">表記内容</h2>
+
+        <div class="legal-table-wrap">
+          <table class="legal-table">
+            <tbody>
+              <tr>
+                <th>事業者名</th>
+                <td>チームBe不動産</td>
+              </tr>
+              <tr>
+                <th>運営責任者</th>
+                <td>比嘉 悠斗</td>
+              </tr>
+              <tr>
+                <th>所在地</th>
+                <td>〒901-1303<br>沖縄県那覇市X-X-X</td>
+              </tr>
+              <tr>
+                <th>電話番号</th>
+                <td>098-xxx-xxxx</td>
+              </tr>
+              <tr>
+                <th>メールアドレス</th>
+                <td>info@kunnren202511.com</td>
+              </tr>
+              <tr>
+                <th>販売価格・掲載料</th>
+                <td>
+                  各サービス・掲載プランごとに、申込ページまたは案内ページに表示された金額によります。
+                </td>
+              </tr>
+              <tr>
+                <th>商品代金以外の必要料金</th>
+                <td>
+                  インターネット接続料金、通信料金、銀行振込手数料などはお客様のご負担となります。
+                </td>
+              </tr>
+              <tr>
+                <th>支払方法</th>
+                <td>銀行振込、その他当社が別途定める方法</td>
+              </tr>
+              <tr>
+                <th>支払時期</th>
+                <td>
+                  お申し込み確定後、当社が定める期限までにお支払いいただきます。
+                </td>
+              </tr>
+              <tr>
+                <th>サービス提供時期</th>
+                <td>
+                  お申し込み内容確認後、当社所定の手続き完了次第、順次提供いたします。
+                </td>
+              </tr>
+              <tr>
+                <th>キャンセル・返品について</th>
+                <td>
+                  サービスの性質上、提供開始後のキャンセル・返金には応じられない場合があります。<br>
+                  詳細はお申し込み時の案内をご確認ください。
+                </td>
+              </tr>
+              <tr>
+                <th>申込有効期限</th>
+                <td>
+                  各申込ページに表示する期限、または当社が別途ご案内する期限まで有効とします。
+                </td>
+              </tr>
+              <tr>
+                <th>表現および商品に関する注意書き</th>
+                <td>
+                  当サイトに掲載する情報・表現には個人差があり、必ずしも成果・条件等を保証するものではありません。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 補足 -->
+      <section class="legal-section">
+        <div class="legal-note-box">
+          <h2 class="legal-heading">ご注意</h2>
+          <p class="legal-note">
+            ※ 上記内容はポートフォリオ用のサンプル表記です。実在の事業者情報・契約条件は架空のものです。
+          </p>
+        </div>
+      </section>
+
+      <!-- 関連ページ -->
+      <section class="legal-section">
+        <h2 class="legal-heading">関連ページ</h2>
+
+        <div class="legal-links">
+          <a th:href="@{/privacy}">プライバシーポリシー</a>
+          <a th:href="@{/terms}">利用規約</a>
+          <a th:href="@{/external-transmission}">外部送信ポリシー</a>
+          <a th:href="@{/sitemap}">サイトマップ</a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- =====================================================
+       Contactフロート
+       ===================================================== -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+
+  <!-- =====================================================
+       共通フッター
+       ===================================================== -->
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+  <!-- =====================================================
+       Cookie同意
+       ===================================================== -->
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
+  <!-- JS -->
+  <script th:src="@{/js/contact-float.js}"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<nav th:fragment="globalNav" class="site-global-nav" aria-label="グローバルナビゲーション" xmlns:th="http://www.thymeleaf.org">
+  <ul class="site-global-nav__list">
+    <li id="nav_properties" class="site-global-nav__item">
+      <a th:href="@{/properties}" class="site-global-nav__link">物件一覧</a>
+    </li>
+    <li id="nav_staff" class="site-global-nav__item">
+      <a th:href="@{/staff/blog(page=1)}" class="site-global-nav__link">社員のブログ</a>
+    </li>
+    <li id="nav_about" class="site-global-nav__item">
+      <a th:href="@{/about}" class="site-global-nav__link">会社概要</a>
+    </li>
+    <li id="nav_contact" class="site-global-nav__item">
+      <a th:href="@{/contact}" class="site-global-nav__link">お問い合わせ</a>
+    </li>
+  </ul>
+</nav>

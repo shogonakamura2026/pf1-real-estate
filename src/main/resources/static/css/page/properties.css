@@ -1,0 +1,487 @@
+@charset "utf-8";
+
+/* =========================================================
+   properties.css
+   役割：properties.html 専用スタイル
+   ※ 既存HTML内の style を外出しした版
+   sticky headerにbackdrop-filter使用。
+   ========================================================= */
+
+@import url(../components.css);
+
+    * { box-sizing: border-box; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+    /* sticky header（絞り込み） */
+	.property-filter-bar{
+	  position: sticky;
+	  top: var(--property-filter-top, 0px);
+	  z-index: 1100;
+	  width: 100%;
+	  margin: 0;
+	  padding: 16px 0 12px;
+
+	  background: rgba(241,242,248,0.5);
+	  backdrop-filter: blur(6px);
+	  -webkit-backdrop-filter: blur(6px);
+
+	  border-bottom: 1px solid #e6e9ee;
+	}
+
+    .property-filter-bar .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .property-filter-bar__title{
+      margin: 0 0 20px;
+      font-size: 26px;
+      letter-spacing: .02em;
+    }
+
+    /* search form */
+    .search-bar{
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      background: rgb(218, 216, 217);
+      border: 1px solid #e6e9ee;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .field label{
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      color: #1f2a44;
+      margin-bottom: 6px;
+    }
+    .field select{
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+    }
+    .range{
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+    .tilde{ color: #6b7280; }
+
+    .actions{
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #cdd6e4;
+      background: #fff;
+      color: #1f2a44;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1.1;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+    .btn.primary{
+      background: #ff2f78;
+      border-color: #ff2f78;
+      color: #fff;
+    }
+    .btn.outline{
+      background: #4fa8db;
+      border-color: #3a93c7;
+      color: #fff;
+    }
+    .btn.pink{
+      background: #f58cc0;
+      border-color: #e16eab;
+      color: #fff;
+    }
+    .btn.ghost{
+      background: rgb(255, 255, 255);
+      border-color: rgb(255, 255, 255);
+      color: #1f2a44;
+    }
+	
+	.btn.search-submit{
+	  background:#e0f2fe;
+	  border-color:#7dd3fc;
+	  color:#075985;
+	}
+	
+    .btn:hover{ filter: brightness(0.97); text-decoration: underline }
+
+    .result-meta{
+      margin: 12px 0 18px;
+      color: #334155;
+      font-weight: 700;
+    }
+	
+	.result-meta span{
+	  font-size: 1.6rem;
+	  font-weight: bold;
+	}
+
+    /* ===============================
+       物件一覧カード
+       画像のような「横長の一覧型」に寄せる
+    =============================== */
+	.cards{
+	  display: grid;
+	  grid-template-columns: 1fr;
+	  gap: 14px;
+	}
+
+	.card{
+	  display: grid;
+	  grid-template-columns: 260px 1fr;
+	  gap: 14px;
+	  border: 1px solid #e6e9ee;
+	  background: #fff;
+	  border-radius: 14px;
+	  overflow: hidden;
+	}
+
+	.thumb{
+	  position: relative;
+	  display: block;
+	  height: 100%;
+	  min-height: 210px;
+	  background: #f1f5f9;
+	}
+
+	.thumb img{
+	  width: 100%;
+	  height: 100%;
+	  object-fit: cover;
+	  display: block;
+	}
+
+	.badge{
+	  position: absolute;
+	  top: 10px;
+	  left: 10px;
+	  background: rgba(0,0,0,0.65);
+	  color: #fff;
+	  font-size: 12px;
+	  padding: 4px 8px;
+	  border-radius: 999px;
+	}
+
+	.card-body{
+	  padding: 14px 14px 16px;
+	  min-width: 0;
+	}
+
+	.top-row{
+	  display: flex;
+	  justify-content: space-between;
+	  align-items: flex-start;
+	  gap: 12px;
+	}
+
+	.title-area{
+	  min-width: 0;
+	  flex: 1;
+	}
+
+	.title{
+	  display: block;
+	  font-size: 18px;
+	  font-weight: 800;
+	  color: #0f172a;
+	  line-height: 1.45;
+	  word-break: break-word;
+	}
+
+	.sub{
+	  margin-top: 6px;
+	  color: #64748b;
+	  font-size: 14px;
+	  line-height: 1.5;
+	  word-break: break-word;
+	}
+
+	.price{
+	  min-width: 140px;
+	  text-align: right;
+	  background: #f8fafc;
+	  border: 1px solid #e6e9ee;
+	  border-radius: 12px;
+	  padding: 10px 12px;
+	  flex-shrink: 0;
+	}
+
+	.price-label{
+	  font-size: 12px;
+	  color: #64748b;
+	  font-weight: 700;
+	  margin-bottom: 4px;
+	}
+
+	.price-value{
+	  font-size: 22px;
+	  font-weight: 900;
+	  color: #0f172a;
+	  line-height: 1.2;
+	}
+
+	.yen{
+	  font-size: 14px;
+	  font-weight: 700;
+	  margin-left: 2px;
+	}
+
+	.spec-grid{
+	  margin: 12px 0 0;
+	  display: grid;
+	  grid-template-columns: 1fr 1fr;
+	  gap: 10px 14px;
+	}
+
+	.kv{
+	  display: grid;
+	  grid-template-columns: 70px 1fr;
+	  gap: 10px;
+	  align-items: start;
+	  min-width: 0;
+	}
+
+	.kv dt{
+	  color: #64748b;
+	  font-weight: 800;
+	  font-size: 13px;
+	}
+
+	.kv dd{
+	  margin: 0;
+	  color: #0f172a;
+	  font-weight: 700;
+	  font-size: 14px;
+	  min-width: 0;
+	  word-break: break-word;
+	}
+
+	.kv.wide{
+	  grid-column: 1 / -1;
+	  grid-template-columns: 70px 1fr;
+	}
+
+	.desc{
+	  color: #334155;
+	  font-weight: 600;
+	  line-height: 1.55;
+	}
+
+	.btn-row{
+	  display: flex;
+	  gap: 10px;
+	  flex-wrap: wrap;
+	  justify-content: flex-end;
+	  margin-top: 14px;
+	}
+
+	.btn-row .btn{
+	  min-width: 140px;
+	}
+
+	/* タブレット */
+	@media (max-width: 860px){
+	  .card{
+	    grid-template-columns: 220px 1fr;
+	  }
+
+	  .thumb{
+	    min-height: 180px;
+	  }
+
+	  .search-bar{
+	    grid-template-columns: 1fr;
+	    align-items: stretch;
+	  }
+
+	  .actions{
+	    justify-content: flex-start;
+	  }
+
+	  .price{
+	    text-align: left;
+	    min-width: auto;
+	  }
+
+	  .top-row{
+	    flex-direction: column;
+	  }
+
+	  .btn-row{
+	    justify-content: flex-start;
+	  }
+	}
+
+	/* スマホ */
+	@media (max-width: 767px){
+	  .card{
+	    grid-template-columns: 1fr;
+	  }
+
+	  .thumb{
+	    height: 200px;
+	    min-height: 0;
+	  }
+
+	  .card-body{
+	    padding: 12px;
+	  }
+
+	  .title{
+	    font-size: 17px;
+	  }
+
+	  .price{
+	    width: 100%;
+	  }
+
+	  .price-value{
+	    font-size: 20px;
+	  }
+
+	  .spec-grid{
+	    grid-template-columns: 1fr;
+	    gap: 8px 12px;
+	  }
+
+	  .kv,
+	  .kv.wide{
+	    grid-template-columns: 64px 1fr;
+	  }
+
+	  .btn-row{
+	    flex-direction: column;
+	    align-items: stretch;
+	  }
+
+	  .btn-row .btn{
+	    width: 100%;
+	    min-width: 0;
+	  }
+	}
+
+    /* =========================================
+       タブレット以下
+    ========================================= */
+    @media (max-width: 860px){
+      .search-bar{
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      .actions{
+        justify-content: flex-start;
+      }
+
+      .card{
+        grid-template-columns: 140px 1fr;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .top-row{
+        grid-template-columns: 1fr;
+      }
+
+      .price{
+        text-align: left;
+        width: fit-content;
+        min-width: 120px;
+      }
+
+      .btn-row{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================================
+       スマホ
+       崩れず、縦並びでも見やすく
+    ========================================= */
+    @media (max-width: 767px){
+      .container{
+        padding: 16px 12px;
+      }
+
+      .site-title{
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
+
+      .card{
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+
+      .thumb{
+        aspect-ratio: 16 / 10;
+      }
+
+      .card-body{
+        gap: 10px;
+      }
+
+      .top-row{
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .title{
+        font-size: 18px;
+      }
+
+      .price{
+        width: 100%;
+        text-align: left;
+      }
+
+      .price-value{
+        font-size: 26px;
+      }
+
+      .spec-grid{
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .kv,
+      .kv.wide{
+        grid-template-columns: 60px 1fr;
+      }
+
+      .btn-row{
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .btn-row .btn{
+        min-height: 42px;
+        font-size: 14px;
+      }
+    }
+  
+
+
+.property-list-main{
+  padding-top: 16px;
+}

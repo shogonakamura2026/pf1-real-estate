@@ -1,35 +1,56 @@
 package com.example.tb2025.contact;
 
+import java.text.Normalizer;
+import java.util.Locale;
+
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class ContactForm {
 
-    // 必須
+    // =========================================================
+    // 1) 基本入力項目
+    // =========================================================
+
+    // お名前は必須
     @NotBlank(message = "お名前を入力してください")
     private String name;
 
+    // メールアドレスは必須
+    // さらに @Email でメール形式をチェックする
     @NotBlank(message = "メールアドレスを入力してください")
     @Email(message = "メールアドレスの形式が正しくありません")
     private String mail;
 
-    // 任意（ただし電話選択時は必須＆桁チェック）
+    // 電話番号は任意
+    // ただし、希望連絡方法で「電話」を選んだ場合は
+    // 条件付きで必須＆形式チェックを行う
     private String tel;
 
+    // 希望連絡方法（email / phone）は必須
     @NotBlank(message = "希望連絡方法を選択してください")
-    private String contactMethod; // email / phone
+    private String contactMethod;
 
+    // お問い合わせ種別は必須
     @NotBlank(message = "お問い合わせ種別を選択してください")
     private String inquiryType;
 
+    // =========================================================
+    // 2) 任意項目
+    // =========================================================
+
+    // 物件詳細から遷移してきた場合に保持する物件ID
     private String propertyId;
 
+    // 希望条件
     private String area;
     private String budget;
     private String layout;
     private String moveIn;
 
+    // 内見希望日時（今回は String で保持）
     private String date1;
     private String time1;
     private String date2;
@@ -37,79 +58,301 @@ public class ContactForm {
     private String date3;
     private String time3;
 
+    // =========================================================
+    // 3) 相談内容・自由入力欄
+    // =========================================================
+    // 学習ポイント：
+    // 自由入力欄は何でも入れられるため、
+    // 必須チェックだけでなく「長すぎる入力」や
+    // 「危険そうな文字列」にも注意する必要がある
+    //
+    // 今回は最大1000文字までに制限
+    @Size(max = 1000, message = "お問い合わせ内容は1000文字以内で入力してください")
     private String message;
 
-    // 同意は必須（checkbox未チェックだと null/false）
+    // =========================================================
+    // 4) 同意チェック
+    // =========================================================
+    // checkbox は未チェック時に false / null になるため、
+    // 「必須でチェックしてほしい」場合は @AssertTrue が向いている
     @AssertTrue(message = "個人情報の取り扱いに同意してください")
     private Boolean consent;
 
-    // -----------------------------
-    // ★修正③：電話を選んだら、電話番号は必須＆桁チェック
-    // - 入力は「090-1234-5678」「09012345678」どちらでもOK
-    // - ここでは数字だけにして、10〜11桁を許可（日本の一般的な想定）
-    // -----------------------------
-    @AssertTrue(message = "希望連絡方法で「電話」を選択した場合、電話番号を正しく入力してください")
-    public boolean isTelRequiredWhenPhone() {
-        if (!"phone".equals(contactMethod)) return true;
-
-        if (tel == null) return false;
-
-        String digits = tel.replaceAll("[^0-9]", "");
-        return digits.length() >= 10 && digits.length() <= 11;
+    // =========================================================
+    // 5) 共通の正規化メソッド
+    // =========================================================
+    // 学習ポイント：
+    // 入力値はそのまま使わず、
+    // 先に「全角→半角」「前後空白除去」をしておくと、
+    // バリデーションの精度や保存データの統一性が上がる
+    private String normalizeToHalfWidth(String value) {
+        if (value == null) {
+            return null;
+        }
+        return Normalizer.normalize(value, Normalizer.Form.NFKC).trim();
     }
 
-    // getter / setter
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    // =========================================================
+    // 6) 条件付きバリデーション（電話番号）
+    // =========================================================
+    // 学習ポイント：
+    // 「電話」を選んだときだけ電話番号を必須にしたいので、
+    // 単純な @NotBlank ではなく @AssertTrue で条件付き判定を行う
+    //
+    // ルール：
+    // - 希望連絡方法が phone のときだけチェック
+    // - 数字とハイフンのみ許可
+    // - ハイフンを除いた数字が10〜11桁ならOK
+    @AssertTrue(message = "希望連絡方法で「電話」を選択した場合、電話番号を正しく入力してください")
+    public boolean isTelRequiredWhenPhone() {
+        if (!"phone".equals(contactMethod)) {
+            return true;
+        }
 
-    public String getMail() { return mail; }
-    public void setMail(String mail) { this.mail = mail; }
+        if (tel == null || tel.isBlank()) {
+            return false;
+        }
 
-    public String getTel() { return tel; }
-    public void setTel(String tel) { this.tel = tel; }
+        // 数字とハイフン以外が入っていたらNG
+        if (!tel.matches("[0-9-]+")) {
+            return false;
+        }
 
-    public String getContactMethod() { return contactMethod; }
-    public void setContactMethod(String contactMethod) { this.contactMethod = contactMethod; }
+        // ハイフンを除去した純粋な数字で桁数確認
+        String digits = tel.replace("-", "");
+        return digits.matches("\\d{10,11}");
+    }
 
-    public String getInquiryType() { return inquiryType; }
-    public void setInquiryType(String inquiryType) { this.inquiryType = inquiryType; }
+    // =========================================================
+    // 7) 条件付きバリデーション（相談内容の危険文字列）
+    // =========================================================
+    // 学習ポイント：
+    // これは XSS 対策の「補助」。
+    //
+    // 完全な防御は
+    // 1. 表示時のHTMLエスケープ
+    // 2. 必要に応じた危険タグ除去
+    // が本筋。
+    //
+    // 今回はポートフォリオ向けとして、
+    // 明らかに危険な script 系文字列を簡易的に拒否する。
+    //
+    // 例：
+    // <script>alert(1)</script>
+    // javascript:alert(1)
+    @AssertTrue(message = "お問い合わせ内容に使用できない文字列が含まれています")
+    public boolean isMessageSafe() {
+        if (message == null || message.isBlank()) {
+            return true;
+        }
 
-    public String getPropertyId() { return propertyId; }
-    public void setPropertyId(String propertyId) { this.propertyId = propertyId; }
+        // 小文字化して判定すると、大文字小文字の揺れに強くなる
+        String lower = message.toLowerCase(Locale.ROOT);
 
-    public String getArea() { return area; }
-    public void setArea(String area) { this.area = area; }
+        return !lower.contains("<script")
+                && !lower.contains("</script>")
+                && !lower.contains("javascript:");
+    }
 
-    public String getBudget() { return budget; }
-    public void setBudget(String budget) { this.budget = budget; }
+    // =========================================================
+    // 8) getter / setter
+    // =========================================================
 
-    public String getLayout() { return layout; }
-    public void setLayout(String layout) { this.layout = layout; }
+    public String getName() {
+        return name;
+    }
 
-    public String getMoveIn() { return moveIn; }
-    public void setMoveIn(String moveIn) { this.moveIn = moveIn; }
+    // お名前も軽く正規化しておく
+    public void setName(String name) {
+        this.name = normalizeToHalfWidth(name);
+    }
 
-    public String getDate1() { return date1; }
-    public void setDate1(String date1) { this.date1 = date1; }
+    public String getMail() {
+        return mail;
+    }
 
-    public String getTime1() { return time1; }
-    public void setTime1(String time1) { this.time1 = time1; }
+    // 学習ポイント：
+    // メールアドレスは setter の時点で整えておくと、
+    // @Email の判定時にも整った値が使われる
+    //
+    // やっていること
+    // 1. 全角→半角
+    // 2. 前後空白除去
+    // 3. 小文字化
+    public void setMail(String mail) {
+        String normalized = normalizeToHalfWidth(mail);
 
-    public String getDate2() { return date2; }
-    public void setDate2(String date2) { this.date2 = date2; }
+        if (normalized == null || normalized.isBlank()) {
+            this.mail = normalized;
+            return;
+        }
 
-    public String getTime2() { return time2; }
-    public void setTime2(String time2) { this.time2 = time2; }
+        this.mail = normalized.toLowerCase(Locale.ROOT);
+    }
 
-    public String getDate3() { return date3; }
-    public void setDate3(String date3) { this.date3 = date3; }
+    public String getTel() {
+        return tel;
+    }
 
-    public String getTime3() { return time3; }
-    public void setTime3(String time3) { this.time3 = time3; }
+    // 学習ポイント：
+    // 電話番号は入力ゆれが起きやすいので、
+    // setter の時点である程度形をそろえておく
+    //
+    // 例：
+    // ０９０ー１２３４ー５６７８
+    // 090―1234―5678
+    // 090-1234-5678
+    //
+    // これらを半角ハイフン中心の形に寄せる
+    public void setTel(String tel) {
+        String normalized = normalizeToHalfWidth(tel);
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+        if (normalized == null) {
+            this.tel = null;
+            return;
+        }
 
-    public Boolean getConsent() { return consent; }
-    public void setConsent(Boolean consent) { this.consent = consent; }
+        // ハイフンに見える文字を半角ハイフンへ統一
+        normalized = normalized
+                .replace('ー', '-')
+                .replace('―', '-')
+                .replace('‐', '-')
+                .replace('−', '-');
+
+        this.tel = normalized;
+    }
+
+    public String getContactMethod() {
+        return contactMethod;
+    }
+
+    public void setContactMethod(String contactMethod) {
+        this.contactMethod = contactMethod;
+    }
+
+    public String getInquiryType() {
+        return inquiryType;
+    }
+
+    public void setInquiryType(String inquiryType) {
+        this.inquiryType = inquiryType;
+    }
+
+    public String getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getBudget() {
+        return budget;
+    }
+
+    public void setBudget(String budget) {
+        this.budget = budget;
+    }
+
+    public String getLayout() {
+        return layout;
+    }
+
+    public void setLayout(String layout) {
+        this.layout = layout;
+    }
+
+    public String getMoveIn() {
+        return moveIn;
+    }
+
+    public void setMoveIn(String moveIn) {
+        this.moveIn = moveIn;
+    }
+
+    public String getDate1() {
+        return date1;
+    }
+
+    public void setDate1(String date1) {
+        this.date1 = date1;
+    }
+
+    public String getTime1() {
+        return time1;
+    }
+
+    public void setTime1(String time1) {
+        this.time1 = time1;
+    }
+
+    public String getDate2() {
+        return date2;
+    }
+
+    public void setDate2(String date2) {
+        this.date2 = date2;
+    }
+
+    public String getTime2() {
+        return time2;
+    }
+
+    public void setTime2(String time2) {
+        this.time2 = time2;
+    }
+
+    public String getDate3() {
+        return date3;
+    }
+
+    public void setDate3(String date3) {
+        this.date3 = date3;
+    }
+
+    public String getTime3() {
+        return time3;
+    }
+
+    public void setTime3(String time3) {
+        this.time3 = time3;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    // message も軽く正規化しておく
+    // ※ 中身そのものは消しすぎず、前後空白整理だけ寄せるイメージ
+    public void setMessage(String message) {
+        this.message = normalizeToHalfWidth(message);
+    }
+
+    public Boolean getConsent() {
+        return consent;
+    }
+
+    public void setConsent(Boolean consent) {
+        this.consent = consent;
+    }
+
+    // =========================================================
+    // 9) Thymeleaf のエラー表示補助
+    // =========================================================
+    // @AssertTrue のメソッド名に対応したエラー表示用
+    public boolean getTelRequiredWhenPhone() {
+        return isTelRequiredWhenPhone();
+    }
+
+    public boolean getMessageSafe() {
+        return isMessageSafe();
+    }
 }

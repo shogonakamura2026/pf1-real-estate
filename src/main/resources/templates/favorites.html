@@ -5,264 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>お気に入り | チームBe不動産</title>
 
-  <!-- 共通CSS -->
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/favorites.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <!-- ===============================
-       お気に入りページ専用スタイル（最小）
-       ※機能とは独立：UIのみ
-       ------------------------------------------------
-       ★ history.html と対比しやすいように：
-       - history: .thumb（a）+ img を採用して「画像クリックで詳細へ」
-  ================================== -->
-  <style>
-    .container{ max-width: 1100px; margin: 24px auto; padding: 0 16px; }
 
-    .page-head{
-      display:flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .page-head h2{ margin: 0; }
-
-    .actions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid #cdd6e4;
-      background: #fff;
-      color: #1f2a44;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      line-height: 1;
-      white-space: nowrap;
-    }
-    .btn.primary{
-      background: #e0f2fe;
-      border-color: #7dd3fc;
-      color: #075985;
-    }
-    .btn.danger{
-      background: #fee2e2;
-      border-color: #fecaca;
-      color: #991b1b;
-    }
-
-    .empty{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-      color:#334155;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow:hidden;
-      display:flex;
-      flex-direction: column;
-      min-height: 100%;
-    }
-
-    /* =========================================================
-       ★ history.html との整合ポイント
-       ---------------------------------------------------------
-       history: <a class="thumb" href="/properties/{id}"><img ...></a>
-       favorites: ここも同じく .thumb を採用して「画像クリック=詳細」
-       ========================================================= */
-    .thumb{
-      display:block;
-      background:#f1f5f9;
-    }
-    .thumb img{
-      width:100%;
-      height: 150px;
-      object-fit: cover;
-      display:block;
-      background:#f1f5f9;
-    }
-
-    .card-body{
-      padding: 12px;
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-    .title{
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .meta{
-      color:#64748b;
-      font-size: 14px;
-    }
-    .card-actions{
-      margin-top:auto;
-      display:flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
-      .thumb img{ height: 180px; } /* history と揃える */
-    }
-  </style>
 </head>
 
-<body>
-<!-- ===============================
-     ヘッダー
-================================ -->
-<header id="top">
-  <h1>
-    不動産のチームBe
-    <a th:href="@{/}">
-      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-    </a>
-  </h1>
-</header>
-
-<!-- ===============================
-     グローバルナビ
-================================ -->
-<nav>
-  <ul>
-    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-  </ul>
-</nav>
-
-<!-- ===============================
-     右上ポップ追従ナビ
-================================ -->
-<nav class="floating-nav" aria-label="クイックナビ">
-  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-</nav>
+<body id="favorites">
+	<!-- ===============================
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>  
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
+  
 
 <!-- ===============================
      メイン
 ================================ -->
 <main class="container">
-  <div class="page-head">
-    <h2>お気に入り</h2>
+  <div class="header-row">
+    <h2 class="page-title">お気に入り</h2>
 
-    <div class="actions">
-      <a class="btn primary" th:href="@{/properties}">物件一覧へ</a>
-      <button class="btn danger" type="button" onclick="clearAll()">全削除</button>
+    <div class="actions-top">
+      <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
+      <button class="btn danger" type="button" onclick="clearFavorites()">全削除</button>
     </div>
   </div>
 
-  <div id="emptyBox" class="empty" style="display:none;">
+  <div id="emptyBox" class="empty empty-box">
     お気に入りはまだありません。物件一覧から追加してみましょう。
   </div>
 
-  <section id="grid" class="grid" aria-label="お気に入り一覧"></section>
+  <section id="favoritesGrid" class="grid" aria-label="お気に入り一覧"></section>
 </main>
 
-<!-- ===============================
-     フッター：fragments
-================================ -->
+<!-- Contactフロート -->
+<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
 
+  <!-- 共通フッター -->
 <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-<!-- ===============================
-     cookie同意：fragments
-================================ -->
+  <!-- 共通Cookie同意 -->
 <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
 <!-- ===============================
      お気に入り（localStorage）制御
      ------------------------------------------------
-     ★ history.html と対比ポイント：
-     - favorites: 「お気に入り一覧を描画」するだけ（削除/全削除）
-     - history: 「履歴一覧 + favトグル」も同一ページで完結（data-* を多用）
-     - 共通: localStorageに JSON配列として保存し、描画時に読み込む
+     ★ history.html 寄りの命名に寄せる
+     - KEY → FAV_KEY
+     - getList/setList → loadJsonArray/saveJsonArray
 ================================ -->
 <script>
-  // ==========================================
-  // localStorage key（favorites と同じ）
-  // ==========================================
-  const KEY = "favorites";
+  // =========================================================
+  // localStorage key
+  // =========================================================
+  const FAV_KEY = "favorites";
 
-  // ==========================================
-  // ページ初期表示
-  // ==========================================
+  // =========================================================
+  // 共通：JSON配列を安全に読み書き
+  // ---------------------------------------------------------
+  // history.html の loadJsonArray / saveJsonArray と命名統一
+  // =========================================================
+  function loadJsonArray(key){
+    try { return JSON.parse(localStorage.getItem(key) || "[]"); }
+    catch(e){ return []; }
+  }
+
+  function saveJsonArray(key, list){
+    localStorage.setItem(key, JSON.stringify(list));
+  }
+
+  // =========================================================
+  // 初回描画
+  // =========================================================
   document.addEventListener("DOMContentLoaded", render);
 
-  // ==========================================
-  // 共通：安全に読み込む（壊れてても落ちない）
-  // ※ history.html の loadJsonArray と思想は同じ
-  // ==========================================
-  function getList() {
-    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-    catch (e) { return []; }
-  }
-
-  function setList(list) {
-    localStorage.setItem(KEY, JSON.stringify(list));
-  }
-
-  // ==========================================
-  // 画面描画：お気に入りカードを作る
-  // ==========================================
-  function render() {
-    const list = getList();
-    const grid = document.getElementById("grid");
+  // =========================================================
+  // 描画：お気に入りカード一覧
+  // =========================================================
+  function render(){
+    const list = loadJsonArray(FAV_KEY);
+    const grid = document.getElementById("favoritesGrid");
     const emptyBox = document.getElementById("emptyBox");
 
     grid.innerHTML = "";
 
-    if (!list.length) {
+    if (!list.length){
       emptyBox.style.display = "block";
       return;
     }
     emptyBox.style.display = "none";
 
-    for (const item of list) {
+    list.forEach(item => {
       grid.appendChild(createCard(item));
-    }
+    });
   }
 
-  function createCard(item) {
+  // =========================================================
+  // カード生成
+  // =========================================================
+  function createCard(item){
     const card = document.createElement("article");
     card.className = "card";
 
-    // =========================================================
-    // ✅ ここが今回の修正ポイント（history.html と同じ構造に寄せる）
-    // ---------------------------------------------------------
-    // history: <a class="thumb" href="/properties/{id}"><img></a>
-    // favorites: 元は img 単体だったので、a.thumb で包んでクリック遷移を付与
-    // =========================================================
     const id = Number(item.id);
 
     const thumb = document.createElement("a");
@@ -271,14 +123,13 @@
 
     const img = document.createElement("img");
     img.alt = "物件画像";
-    // 保存しているのはファイル名（例 house1.jpg） → /images/ + filename
     img.src = `/images/${item.imageUrl || ""}`;
 
     thumb.appendChild(img);
     card.appendChild(thumb);
 
     const body = document.createElement("div");
-    body.className = "card-body";
+    body.className = "body";
 
     const title = document.createElement("div");
     title.className = "title";
@@ -289,21 +140,18 @@
     meta.textContent = `家賃：${Number(item.price || 0).toLocaleString()}円 / 間取り：${item.layout || "-"}`;
 
     const actions = document.createElement("div");
-    actions.className = "card-actions";
+    actions.className = "actions";
 
-    // 詳細へ（サーバールート /properties/{id}）
-    // ※ 画像クリックでも行けるが、ボタンでも行けるように残す（historyと同じ）
     const detail = document.createElement("a");
-    detail.className = "btn primary";
+    detail.className = "btn outline";
     detail.textContent = "物件詳細";
     detail.href = `/properties/${id}`;
 
-    // 削除（favorites は「一覧から外す」だけ）
     const del = document.createElement("button");
     del.className = "btn danger";
     del.type = "button";
     del.textContent = "削除";
-    del.addEventListener("click", () => removeOne(id));
+    del.addEventListener("click", () => removeFavorite(id));
 
     actions.appendChild(detail);
     actions.appendChild(del);
@@ -316,23 +164,31 @@
     return card;
   }
 
-  // ==========================================
+  // =========================================================
   // 個別削除
-  // ==========================================
-  function removeOne(id) {
-    const list = getList().filter(x => Number(x.id) !== Number(id));
-    setList(list);
+  // =========================================================
+  function removeFavorite(id){
+    const next = loadJsonArray(FAV_KEY).filter(x => Number(x.id) !== Number(id));
+    saveJsonArray(FAV_KEY, next);
     render();
   }
 
-  // ==========================================
+  // =========================================================
   // 全削除
-  // ==========================================
-  function clearAll() {
+  // =========================================================
+  function clearFavorites(){
     if (!confirm("お気に入りをすべて削除しますか？")) return;
-    localStorage.removeItem(KEY);
+    localStorage.removeItem(FAV_KEY);
     render();
   }
 </script>
+
+<!-- ===============================
+     js呼び出し
+================================== -->
+<!-- Contactフロートjs -->
+<script th:src="@{/js/contact-float.js}"></script>
+
+
 </body>
 </html>

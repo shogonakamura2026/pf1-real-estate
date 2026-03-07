@@ -5,52 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>掲載申し込みはこちら | チームBe不動産</title>
 
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <!-- ===============================
+    共通CSS
+  ================================== -->
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+
+  <!-- docsページ専用CSS -->
+  <link rel="stylesheet" th:href="@{/css/page/docs.css}">
+
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 
-  <style>
-    .doc-wrap{ max-width: 860px; margin: 0 auto; padding: 24px 16px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; }
-    .doc-wrap h1{ margin: 0 0 12px; font-size: 22px; }
-    .card{ background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:14px; margin: 12px 0; }
-    .btn{ display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid #111; text-decoration:none; }
-  </style>
+
 </head>
-<body>
-	
+<body id="docs">
 	<!-- ===============================
-	     ヘッダー
-	================================ -->
-	<header id="top">
-	  <h1>
-	    不動産のチームBe
-	    <a th:href="@{/}">
-	      <img th:src="@{/images/logo.png}" alt="チームb不動産">
-	    </a>
-	  </h1>
-	</header>
+	     共通ヘッダー
+	================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>  
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
+  
+  <!-- =====================================================
+       パンくず（layout.css管理）
+       ===================================================== -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li>掲載申し込みはこちら</li>
+    </ol>
+  </div>
 
-	<!-- ===============================
-	     グローバルナビ
-	================================ -->
-	<nav>
-	  <ul>
-	    <li id="nav_properties"><a th:href="@{/properties}">物件一覧</a></li>
-	    <li id="nav_staff"><a th:href="@{/staff/blog(page=1)}">社員のブログ</a></li>
-	    <li id="nav_about"><a th:href="@{/about}">会社概要</a></li>
-	    <li id="nav_contact"><a th:href="@{/contact}">お問い合わせ</a></li>
-	  </ul>
-	</nav>
-
-	<!-- ===============================
-	     右上ポップ追従ナビ
-	================================ -->
-	<nav class="floating-nav" aria-label="クイックナビ">
-	  <a class="nav-chip prop" th:href="@{/properties}">物件一覧</a>
-	  <a class="nav-chip fav" th:href="@{/favorites}">お気に入り</a>
-	  <a class="nav-chip hist" th:href="@{/history}">履歴</a>
-	</nav>
-	
-  <main class="doc-wrap" role="main">
+  <!-- =====================================================
+       メインコンテンツ
+       ===================================================== -->
+  
+<main class="doc-wrap" role="main">
     <h1>掲載申し込みはこちら</h1>
     <p>
       当サイトへの物件掲載をご希望の事業者様・オーナー様は、下記の方法でご連絡ください。
@@ -58,8 +49,8 @@
     </p>
 
     <div class="card">
-      <h2 style="font-size:18px;margin:0 0 6px;">ご用意いただく情報（例）</h2>
-      <ul style="line-height:1.8;margin:0;padding-left:18px;">
+      <h2 class="apply-section-title">ご用意いただく情報（例）</h2>
+      <ul class="apply-list">
         <li>会社名 / ご担当者名</li>
         <li>電話番号 / メールアドレス</li>
         <li>掲載したい物件の概要（所在地、種別、賃料帯、戸数など）</li>
@@ -68,29 +59,32 @@
     </div>
 
     <div class="card">
-      <h2 style="font-size:18px;margin:0 0 6px;">申し込み方法</h2>
-      <p style="margin:0;">
+      <h2 class="apply-section-title">申し込み方法</h2>
+      <p class="apply-text">
         お問い合わせフォームから「掲載申し込み」と記載の上ご連絡ください。<br>
         <a class="btn" th:href="@{/contact}">お問い合わせへ進む</a>
       </p>
     </div>
 
-    <p style="color:#666;font-size:13px;">
+    <p class="apply-note">
       ※ 反社会的勢力に関与する、または法令・公序良俗に反する内容の掲載はお断りする場合があります。
     </p>
   </main>
   
-  <!-- ===============================
-       フッター：fragments
-  ================================ -->
-
+  <!-- Contactフロート -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+  
+    <!-- 共通フッター -->
   <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
-  <!-- ===============================
-       cookie同意：fragments
-  ================================ -->
+    <!-- 共通Cookie同意 -->
   <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
   
+  <!-- ===============================
+       js呼び出し
+  ================================== -->
+  <!-- Contactフロートjs -->
+  <script th:src="@{/js/contact-float.js}"></script>
   
 </body>
 </html>

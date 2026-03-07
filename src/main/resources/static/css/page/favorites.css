@@ -1,0 +1,145 @@
+@charset "utf-8";
+
+/* =========================================================
+   favorites.css
+   役割：favorites.html 専用スタイル
+   ※ 既存HTML内の style を外出しした版
+   ========================================================= */
+
+@import url(../components.css);
+
+    .container{ max-width:1100px; margin:24px auto; padding:0 16px; }
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .page-title{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      color:#0f172a;
+      line-height:1.2;
+    }
+
+    .actions-top{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid #cdd6e4;
+      background:#fff;
+      color:#1f2a44;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    /* history寄りの命名だが、色は favorites の現状維持 */
+    .btn.outline{
+      background:#e0f2fe;
+      border-color:#7dd3fc;
+      color:#075985;
+    }
+
+    .btn.danger{
+      background:#fee2e2;
+      border-color:#fecaca;
+      color:#991b1b;
+    }
+
+    .empty{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:14px;
+      color:#334155;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
+
+    .thumb{
+      display:block;
+      background:#f1f5f9;
+    }
+
+    .thumb img{
+      width:100%;
+      height:150px;
+      object-fit:cover;
+      display:block;
+      background:#f1f5f9;
+    }
+
+    .body{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      flex:1;
+    }
+
+    .title{
+      font-weight:900;
+      color:#0f172a;
+      line-height:1.3;
+    }
+
+    .meta{
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .actions{
+      margin-top:auto;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    @media (max-width: 860px){
+      .grid{ grid-template-columns:1fr; }
+      .thumb img{ height:180px; }
+
+      .actions-top{
+        width:100%;
+      }
+    }
+  
+
+
+.empty-box{
+  display:none;
+}
