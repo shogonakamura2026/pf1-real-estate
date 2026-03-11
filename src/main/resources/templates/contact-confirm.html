@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>お問い合わせ確認 | チームBe不動産</title>
+  <title>お問い合わせ内容の確認 | チームBe不動産</title>
 
-  <!-- =====================================================
-       共通CSS
-       ===================================================== -->
+  <!-- ===============================
+    共通CSS
+  ================================== -->
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/layout.css}">
   <link rel="stylesheet" th:href="@{/css/components.css}">
@@ -15,28 +15,28 @@
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 </head>
 
-<body id="contact">
-
-  <!-- =====================================================
-       共通ヘッダー / 共通ナビ
-       ===================================================== -->
+<body id="contact-confirm">
+  <!-- ===============================
+       共通ヘッダー
+  ================================== -->
   <div th:replace="~{fragments/header :: siteHeader}"></div>
   <div th:replace="~{fragments/global-nav :: globalNav}"></div>
   <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-  <!-- =====================================================
+  <!-- ===============================
        パンくず
-       ===================================================== -->
+  ================================== -->
   <div id="path">
     <ol>
       <li><a th:href="@{/}">ホーム</a></li>
-      <li>お問い合わせ（確認）</li>
+      <li><a th:href="@{/contact}">お問い合わせ</a></li>
+      <li>確認</li>
     </ol>
   </div>
 
-  <!-- =====================================================
-       メインコンテンツ
-       ===================================================== -->
+  <!-- ===============================
+       メイン
+  ================================== -->
   <div id="main">
     <article>
       <h1>お問い合わせ内容の確認</h1>
@@ -44,47 +44,53 @@
 
       <div class="row">
         <div class="k">お名前</div>
-        <div class="v" th:text="${contactForm.name}"></div>
+        <div class="v" th:text="${contactForm.name}">山田 太郎</div>
       </div>
 
       <div class="row">
         <div class="k">メール</div>
-        <div class="v" th:text="${contactForm.mail}"></div>
+        <div class="v" th:text="${contactForm.mail}">example@email.com</div>
       </div>
 
       <div class="row">
         <div class="k">電話</div>
-        <div class="v" th:text="${contactForm.tel}"></div>
+        <div class="v" th:text="${#strings.isEmpty(contactForm.tel) ? '' : contactForm.tel}">090-1234-5678</div>
       </div>
 
       <div class="row">
         <div class="k">希望連絡方法</div>
-        <div class="v" th:text="${contactForm.contactMethod}"></div>
+        <div class="v" th:text="${contactForm.contactMethod}">email</div>
       </div>
 
       <div class="row">
         <div class="k">お問い合わせ種別</div>
-        <div class="v" th:text="${contactForm.inquiryType}"></div>
+        <div class="v" th:text="${contactForm.inquiryType}">document</div>
       </div>
 
-      <div class="row">
+      <div class="row" th:if="${contactForm.propertyId != null and !#strings.isEmpty(contactForm.propertyId)}">
         <div class="k">物件ID / 物件名</div>
-        <div class="v" th:text="${contactForm.propertyId}"></div>
+        <div class="v">
+          <span th:text="${contactForm.propertyId}">1</span>
+          <span th:if="${contactForm.propertyName != null and !#strings.isEmpty(contactForm.propertyName)}"
+                th:text="' / ' + ${contactForm.propertyName}">
+            / サンプル物件
+          </span>
+        </div>
       </div>
 
       <div class="row">
         <div class="k">希望エリア</div>
-        <div class="v" th:text="${contactForm.area}"></div>
+        <div class="v" th:text="${contactForm.area}">那覇市</div>
       </div>
 
       <div class="row">
         <div class="k">ご予算</div>
-        <div class="v" th:text="${contactForm.budget}"></div>
+        <div class="v" th:text="${contactForm.budget}">3万</div>
       </div>
 
       <div class="row">
         <div class="k">間取り</div>
-        <div class="v" th:text="${contactForm.layout}"></div>
+        <div class="v" th:text="${contactForm.layout}">1K</div>
       </div>
 
       <div class="row">
@@ -96,7 +102,8 @@
         <div class="k">内見希望（第1）</div>
         <div class="v">
           <span th:text="${contactForm.date1}"></span>
-          <span th:text="${contactForm.time1}"></span>
+          <span th:if="${contactForm.time1 != null and !#strings.isEmpty(contactForm.time1)}"
+                th:text="' ' + ${contactForm.time1}"></span>
         </div>
       </div>
 
@@ -104,7 +111,8 @@
         <div class="k">内見希望（第2）</div>
         <div class="v">
           <span th:text="${contactForm.date2}"></span>
-          <span th:text="${contactForm.time2}"></span>
+          <span th:if="${contactForm.time2 != null and !#strings.isEmpty(contactForm.time2)}"
+                th:text="' ' + ${contactForm.time2}"></span>
         </div>
       </div>
 
@@ -112,25 +120,26 @@
         <div class="k">内見希望（第3）</div>
         <div class="v">
           <span th:text="${contactForm.date3}"></span>
-          <span th:text="${contactForm.time3}"></span>
+          <span th:if="${contactForm.time3 != null and !#strings.isEmpty(contactForm.time3)}"
+                th:text="' ' + ${contactForm.time3}"></span>
         </div>
       </div>
 
       <div class="row">
         <div class="k">お問い合わせ詳細</div>
-        <div class="v" th:text="${contactForm.message}"></div>
+        <div class="v multiline" th:text="${contactForm.message}">お問い合わせ内容</div>
       </div>
 
       <div class="actions">
-
         <!-- 戻って修正 -->
-        <form th:action="@{/contact}" th:object="${contactForm}" method="post">
+        <form th:action="@{/contact}" method="post" th:object="${contactForm}">
+          <input type="hidden" th:field="*{propertyId}">
+          <input type="hidden" th:field="*{propertyName}">
+          <input type="hidden" th:field="*{inquiryType}">
           <input type="hidden" th:field="*{name}">
           <input type="hidden" th:field="*{mail}">
           <input type="hidden" th:field="*{tel}">
           <input type="hidden" th:field="*{contactMethod}">
-          <input type="hidden" th:field="*{inquiryType}">
-          <input type="hidden" th:field="*{propertyId}">
           <input type="hidden" th:field="*{area}">
           <input type="hidden" th:field="*{budget}">
           <input type="hidden" th:field="*{layout}">
@@ -143,17 +152,18 @@
           <input type="hidden" th:field="*{time3}">
           <input type="hidden" th:field="*{message}">
           <input type="hidden" th:field="*{consent}">
-          <button class="btn-sub" type="submit">戻って修正</button>
+          <button type="submit" class="btn-sub">戻って修正</button>
         </form>
 
         <!-- 送信確定 -->
-        <form th:action="@{/contact/complete}" th:object="${contactForm}" method="post">
+        <form th:action="@{/contact/complete}" method="post" th:object="${contactForm}">
+          <input type="hidden" th:field="*{propertyId}">
+          <input type="hidden" th:field="*{propertyName}">
+          <input type="hidden" th:field="*{inquiryType}">
           <input type="hidden" th:field="*{name}">
           <input type="hidden" th:field="*{mail}">
           <input type="hidden" th:field="*{tel}">
           <input type="hidden" th:field="*{contactMethod}">
-          <input type="hidden" th:field="*{inquiryType}">
-          <input type="hidden" th:field="*{propertyId}">
           <input type="hidden" th:field="*{area}">
           <input type="hidden" th:field="*{budget}">
           <input type="hidden" th:field="*{layout}">
@@ -166,18 +176,22 @@
           <input type="hidden" th:field="*{time3}">
           <input type="hidden" th:field="*{message}">
           <input type="hidden" th:field="*{consent}">
-          <button class="btn" type="submit">送信確定</button>
+          <button type="submit" class="btn">送信確定</button>
         </form>
-
       </div>
     </article>
   </div>
 
-  <!-- =====================================================
-       共通フッター / Cookie
-       ===================================================== -->
-  <div th:replace="~{fragments/footer :: footer}"></div>
+  <!-- Contactフロート -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+
+  <!-- 共通フッター -->
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+
+  <!-- 共通Cookie同意 -->
   <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
+  <!-- Contactフロートjs -->
+  <script th:src="@{/js/contact-float.js}"></script>
 </body>
 </html>

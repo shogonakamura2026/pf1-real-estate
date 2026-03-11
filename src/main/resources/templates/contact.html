@@ -82,19 +82,24 @@
           </div>
 
           <!-- お名前 -->
-          <div class="row">
-            <div class="label">お名前<span class="req">必須</span></div>
-            <div>
-              <input type="text"
-                     th:field="*{name}"
-                     autocomplete="name"
-					 placeholder="不動産　太郎 / Taro Yamada "
-                     required>
-              <div class="error"
-                   th:if="${#fields.hasErrors('name')}"
-                   th:errors="*{name}">エラー</div>
-            </div>
-          </div>
+		  <div class="row">
+		    <div class="label">お名前<span class="req">必須</span></div>
+		    <div>
+		      <input type="text"
+		             th:field="*{name}"
+		             autocomplete="name"
+		             placeholder="不動産 太郎 / Taro Yamada"
+		             required>
+
+		      <div class="error"
+		           th:if="${#fields.hasErrors('name')}"
+		           th:errors="*{name}">エラー</div>
+
+		      <div class="error"
+		           th:if="${#fields.hasErrors('nameSafe')}"
+		           th:errors="*{nameSafe}">エラー</div>
+		    </div>
+		  </div>
 
           <!-- メール -->
           <div class="row">
@@ -216,31 +221,31 @@
 
               <div id="closedNotice"></div>
 
-              <div class="hint">第1希望</div>
-              <div class="triple">
-                <input type="date" class="date-field" th:field="*{date1}">
-                <select class="time-field" name="time1" th:field="*{time1}">
-                  <option value="">選択してください</option>
-                </select>
-              </div>
+			  <div class="hint">第1希望</div>
+			  <div class="triple">
+			    <input type="date" class="date-field" th:field="*{date1}" id="date1">
+				<select class="time-field" th:field="*{time1}">
+				  <option value="">選択してください</option>
+				</select>
+			  </div>
 
-              <div class="hint">第2希望</div>
-              <div class="triple">
-                <input type="date" class="date-field" th:field="*{date2}">
-                <select class="time-field" name="time2" th:field="*{time2}">
-                  <option value="">選択してください</option>
-                </select>
-              </div>
+			  <div class="hint">第2希望</div>
+			  <div class="triple">
+			    <input type="date" class="date-field" th:field="*{date2}" id="date2">
+				<select class="time-field" th:field="*{time2}">
+				  <option value="">選択してください</option>
+				</select>
+			  </div>
 
-              <div class="hint">第3希望</div>
-              <div class="triple">
-                <input type="date" class="date-field" th:field="*{date3}">
-                <select class="time-field" name="time3" th:field="*{time3}">
-                  <option value="">選択してください</option>
-                </select>
-              </div>
+			  <div class="hint">第3希望</div>
+			  <div class="triple">
+			    <input type="date" class="date-field" th:field="*{date3}" id="date3">
+				<select class="time-field" th:field="*{time3}">
+				  <option value="">選択してください</option>
+				</select>
+			  </div>
             </div>
-          </div>
+		  </div>
 
           <!-- お問い合わせ内容 -->
           <div class="row">
@@ -300,9 +305,141 @@
   <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
   <!-- ===============================
-       js呼び出し
+       js呼び出し:右下のフロート
        ================================== -->
   <script th:src="@{/js/contact-float.js}"></script>
 
+  <!-- ===============================
+       js呼び出し:以前の日付は指定できないように設定
+       ================================== -->
+  
+	   <script>
+	     document.addEventListener("DOMContentLoaded", function () {
+	       const dateFields = document.querySelectorAll(".date-field");
+	       const timeFields = document.querySelectorAll(".time-field");
+	       const closedNotice = document.getElementById("closedNotice");
+
+	       // ===============================
+	       // 今日の日付を YYYY-MM-DD 形式で作る
+	       // ===============================
+	       function formatDate(date) {
+	         const yyyy = date.getFullYear();
+	         const mm = String(date.getMonth() + 1).padStart(2, "0");
+	         const dd = String(date.getDate()).padStart(2, "0");
+	         return `${yyyy}-${mm}-${dd}`;
+	       }
+
+	       const today = new Date();
+	       const todayStr = formatDate(today);
+
+	       // ===============================
+	       // 選択不可日判定
+	       // ===============================
+	       function isClosedDate(dateStr) {
+	         if (!dateStr) return false;
+
+	         const d = new Date(dateStr + "T00:00:00");
+	         const month = d.getMonth() + 1;
+	         const day = d.getDate();
+	         const dayOfWeek = d.getDay(); // 0:日 1:月 ...
+
+	         // 毎週月曜
+	         if (dayOfWeek === 1) return true;
+
+	         // 年末年始 12/29〜1/3
+	         if ((month === 12 && day >= 29) || (month === 1 && day <= 3)) return true;
+
+	         // 休業日
+	         if (dateStr === "2026-06-23") return true;
+	         if (dateStr >= "2026-09-03" && dateStr <= "2026-09-05") return true;
+
+	         return false;
+	       }
+
+	       // ===============================
+	       // 時間選択肢を作る
+	       // 11:00〜16:00、30分刻み
+	       // 今日を選んだときだけ現在時刻より前を除外
+	       // ===============================	   
+	       function buildTimeOptions(select, selectedDate) {
+	         const currentValue = select.dataset.current || select.value || "";
+
+	         select.innerHTML = '<option value="">選択してください</option>';
+
+	         const now = new Date();
+	         const isToday = selectedDate === todayStr;
+
+	         for (let hour = 11; hour <= 16; hour++) {
+	           for (let minute of [0, 30]) {
+	             // 16:30 は作らない
+	             if (hour === 16 && minute === 30) continue;
+
+	             const hh = String(hour).padStart(2, "0");
+	             const mm = String(minute).padStart(2, "0");
+	             const timeValue = `${hh}:${mm}`;
+
+	             // 今日なら、現在時刻より前は出さない
+	             if (isToday) {
+	               const optionDateTime = new Date();
+	               optionDateTime.setHours(hour, minute, 0, 0);
+
+	               if (optionDateTime <= now) {
+	                 continue;
+	               }
+	             }
+
+	             const option = document.createElement("option");
+	             option.value = timeValue;
+	             option.textContent = timeValue;
+
+	             if (timeValue === currentValue) {
+	               option.selected = true;
+	             }
+
+	             select.appendChild(option);
+	           }
+	         }
+	       }
+
+	       // ===============================
+	       // 日付入力ごとの初期設定
+	       // ===============================
+	       dateFields.forEach(function (dateField, index) {
+	         dateField.min = todayStr;
+
+	         const timeField = timeFields[index];
+	         if (!timeField) return;
+
+	         // 初期表示時にも時間一覧を作る
+			 if (dateField.value) {
+			   buildTimeOptions(timeField, dateField.value);
+			 } else {
+			   timeField.innerHTML = '<option value="">選択してください</option>';
+			 }
+
+			 dateField.addEventListener("change", function () {
+			   const selectedDate = dateField.value;
+
+			   if (!selectedDate) {
+			     closedNotice.textContent = "";
+			     timeField.innerHTML = '<option value="">選択してください</option>';
+			     return;
+			   }
+
+			   if (isClosedDate(selectedDate)) {
+			     closedNotice.textContent = "選択した日は定休日または休業日のため指定できません。";
+			     dateField.value = "";
+			     timeField.innerHTML = '<option value="">選択してください</option>';
+			     return;
+			   }
+
+			   closedNotice.textContent = "";
+			   buildTimeOptions(timeField, selectedDate);
+			 });
+	       });
+	     });
+	   </script>
+  
+  
 </body>
 </html>

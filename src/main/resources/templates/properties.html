@@ -143,8 +143,11 @@
           </div>
         </dl>
 
-        <div class="btn-row">
-          <a class="btn outline" th:href="@{/contact}">お問い合わせ</a>
+		<div class="btn-row">
+		  <a class="btn outline"
+		     th:href="@{/contact(propertyId=${spec.id})}">
+		    お問い合わせ
+		  </a>
 
           <!-- ✅ 一覧も fav-btn に統一（ここがトグル対象） -->
           <button class="btn pink fav-btn" type="button"

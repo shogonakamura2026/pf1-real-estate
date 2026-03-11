@@ -1,5 +1,7 @@
 package com.example.tb2025.contact;
 
+import java.util.Optional;
+
 import jakarta.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -8,34 +10,83 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.tb2025.Property;
+import com.example.tb2025.PropertyRepository;
 
 @Controller
 public class ContactController {
 
     private final ContactRepository contactRepository;
+    private final PropertyRepository propertyRepository;
 
-    public ContactController(ContactRepository contactRepository) {
+    public ContactController(
+            ContactRepository contactRepository,
+            PropertyRepository propertyRepository
+    ) {
         this.contactRepository = contactRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     // =========================================================
     // 1) 入力画面表示
     // =========================================================
-    // 初回アクセス時は空の ContactForm を作る
-    // ただし、リダイレクト後などで既に contactForm がある場合は上書きしない
+    // 学習ポイント：
+    // 物件詳細ページから
+    // /contact?propertyId=xx
+    // の形で来た場合、その propertyId をフォームに引き継ぐ。
+    //
+    // さらに PropertyRepository を使って物件名を取得し、
+    // message の先頭へ
+    // 「物件『○○』について」
+    // という初期文を入れる。
+    //
+    // ただし、バリデーションエラー後の再表示などで
+    // すでに contactForm がある場合は上書きしない。
     @GetMapping("/contact")
-    public String contact(Model model) {
+    public String contact(
+            @RequestParam(required = false) String propertyId,
+            Model model
+    ) {
         if (!model.containsAttribute("contactForm")) {
-            model.addAttribute("contactForm", new ContactForm());
+            ContactForm form = new ContactForm();
+
+            if (propertyId != null && !propertyId.isBlank()) {
+                form.setPropertyId(propertyId);
+
+                try {
+                    Long id = Long.valueOf(propertyId);
+                    Optional<Property> propertyOpt = propertyRepository.findById(id);
+
+                    if (propertyOpt.isPresent()) {
+                        Property property = propertyOpt.get();
+
+                        // ここは Property クラスの物件名フィールド名に合わせて変更
+                        // 例：getTitle(), getName(), getPropertyName() など
+                        form.setPropertyName(property.getTitle());
+
+                        // message が空のときだけ初期文を入れる
+                        form.applyPropertyContextMessage();
+
+                        // 画面側でも必要なら使えるように渡す
+                        model.addAttribute("propertyName", property.getTitle());
+                    }
+                } catch (NumberFormatException e) {
+                    // propertyId が数値でない場合は通常のお問い合わせフォームとして表示
+                }
+            }
+
+            model.addAttribute("contactForm", form);
         }
+
         return "contact";
     }
 
     // =========================================================
     // 2) 確認画面から「修正する」で戻る用
     // =========================================================
-    // confirm 画面から hidden で値を持ち帰って、そのまま入力画面へ戻す
     @PostMapping("/contact")
     public String backToContact(@ModelAttribute("contactForm") ContactForm form) {
         return "contact";
@@ -44,7 +95,6 @@ public class ContactController {
     // =========================================================
     // 3) 入力内容チェック → 確認画面へ
     // =========================================================
-    // @Valid により ContactForm のアノテーションバリデーションが動く
     @PostMapping("/contact/confirm")
     public String confirm(
             @Valid @ModelAttribute("contactForm") ContactForm form,

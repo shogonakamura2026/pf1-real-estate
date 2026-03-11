@@ -39,3 +39,8 @@ src/main/resources/application-local.properties
 src/main/resources/application-prod.properties
 /tb2025/start-tunnel.bat
 
+# accidental files
+26.0.1
+cd
+git
+pip

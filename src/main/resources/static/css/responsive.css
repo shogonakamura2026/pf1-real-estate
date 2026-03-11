@@ -45,19 +45,29 @@ footer{
      headert.html
      ========================================================= */
   
-  .site-header{
-    margin-bottom:16px;
-  }
-
-  .site-header__logo{
-    width:244px;
-    max-width:72vw;
-  }
-  
   @media (max-width: 767px){
 
+    .site-header__title{
+      margin-top: 20px;
+      font-size: 1.8rem;
+    }
+
+    .site-header__logo-link{
+      gap: 6px;
+    }
+
+    .site-header__text{
+      top: 0;
+      white-space: normal;
+    }
+
     .site-header__break{
-      display:block;
+      display: block;
+    }
+
+    .site-header__logo{
+      width: 140px;
+      max-width: 42vw;
     }
 
   }

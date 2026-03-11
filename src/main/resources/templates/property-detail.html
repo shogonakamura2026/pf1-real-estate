@@ -53,8 +53,11 @@
           <div>間取り：<span th:text="${property.layout}">1LDK</span></div>
         </div>
 
-        <div class="buttons">
-          <a class="btn primary" th:href="@{/contact}">お問い合わせ</a>
+		<div class="buttons">
+		  <a class="btn primary"
+		     th:href="@{/contact(propertyId=${property.id})}">
+		    お問い合わせ
+		  </a>
 
           <!-- ✅ ここが重要：お気に入りトグル用ボタン（class fav-btn に統一） -->
           <button class="btn pink fav-btn" type="button"

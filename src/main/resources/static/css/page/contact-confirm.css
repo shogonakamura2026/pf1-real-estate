@@ -20,4 +20,4 @@
     .btn{border:1px solid #111;background:#111;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;}
     .btn-sub{border:1px solid #d1d5db;background:#fff;color:#111;padding:10px 14px;border-radius:10px;cursor:pointer;}
     .actions form{display:inline;}
-  
+	.multiline{white-space: pre-wrap;}

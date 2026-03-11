@@ -16,6 +16,7 @@ public class ContactForm {
 
     // お名前は必須
     @NotBlank(message = "お名前を入力してください")
+    @Size(max = 50, message = "お名前は50文字以内で入力してください")
     private String name;
 
     // メールアドレスは必須
@@ -43,6 +44,17 @@ public class ContactForm {
 
     // 物件詳細から遷移してきた場合に保持する物件ID
     private String propertyId;
+
+    // 学習ポイント：
+    // propertyId は DB保存や連携用の識別子。
+    // 一方 propertyName は画面表示用・入力補助用として使う。
+    //
+    // 今回は textarea に
+    // 「物件『○○』について」
+    // という初期文を入れたいので、表示用として持っておくと便利。
+    //
+    // ※ DB保存必須ではないため、Contact テーブルへの追加は不要。
+    private String propertyName;
 
     // 希望条件
     private String area;
@@ -93,7 +105,57 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 6) 条件付きバリデーション（電話番号）
+    // 6) 物件情報からメッセージ初期文を作る補助メソッド
+    // =========================================================
+    // 学習ポイント：
+    // 物件詳細ページからお問い合わせ画面へ来たとき、
+    // ユーザーに「何についての問い合わせか」を分かりやすくするため、
+    // message の先頭に物件名を入れる。
+    //
+    // ただし、すでに入力済みの message を上書きしないよう、
+    // 空の場合だけ初期文をセットする設計にしている。
+    //
+    // このメソッドは Controller から呼ぶ想定。
+    public void applyPropertyContextMessage() {
+        if (propertyName == null || propertyName.isBlank()) {
+            return;
+        }
+
+        if (message == null || message.isBlank()) {
+            this.message = "物件「" + propertyName + "」について\n";
+        }
+    }
+
+    // =========================================================
+    // 7) 条件付きバリデーション（名前の危険文字列）
+    // =========================================================
+    // 学習ポイント：
+    // 名前は文字種を厳しく制限しすぎると、
+    // 海外名・ハイフン付き・スペース入りの名前などを
+    // 不必要に弾いてしまう。
+    //
+    // そのため今回は、
+    // 「漢字だけ」「ひらがなだけ」のような制限はせず、
+    // 文字数制限 + 明らかに危険な文字列の簡易チェック
+    // という実務寄りのバランスにしている。
+    //
+    // ※ これは XSS 対策の補助であり、
+    // 本筋は表示時に th:text でエスケープすること。
+    @AssertTrue(message = "お名前に使用できない文字列が含まれています")
+    public boolean isNameSafe() {
+        if (name == null || name.isBlank()) {
+            return true;
+        }
+
+        String lower = name.toLowerCase(Locale.ROOT);
+
+        return !lower.contains("<script")
+                && !lower.contains("</script>")
+                && !lower.contains("javascript:");
+    }
+
+    // =========================================================
+    // 8) 条件付きバリデーション（電話番号）
     // =========================================================
     // 学習ポイント：
     // 「電話」を選んだときだけ電話番号を必須にしたいので、
@@ -124,7 +186,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 7) 条件付きバリデーション（相談内容の危険文字列）
+    // 9) 条件付きバリデーション（相談内容の危険文字列）
     // =========================================================
     // 学習ポイント：
     // これは XSS 対策の「補助」。
@@ -155,7 +217,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 8) getter / setter
+    // 10) getter / setter
     // =========================================================
 
     public String getName() {
@@ -163,6 +225,7 @@ public class ContactForm {
     }
 
     // お名前も軽く正規化しておく
+    // ※ 文字種制限はせず、全角英数字の揺れや前後空白を整える
     public void setName(String name) {
         this.name = normalizeToHalfWidth(name);
     }
@@ -244,6 +307,15 @@ public class ContactForm {
 
     public void setPropertyId(String propertyId) {
         this.propertyId = propertyId;
+    }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    // propertyName は表示補助用なので軽く正規化して保持
+    public void setPropertyName(String propertyName) {
+        this.propertyName = normalizeToHalfWidth(propertyName);
     }
 
     public String getArea() {
@@ -345,9 +417,13 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 9) Thymeleaf のエラー表示補助
+    // 11) Thymeleaf のエラー表示補助
     // =========================================================
     // @AssertTrue のメソッド名に対応したエラー表示用
+    public boolean getNameSafe() {
+        return isNameSafe();
+    }
+
     public boolean getTelRequiredWhenPhone() {
         return isTelRequiredWhenPhone();
     }
