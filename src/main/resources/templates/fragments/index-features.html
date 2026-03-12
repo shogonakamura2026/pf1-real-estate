@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- =========================================================
+     index-features.html
+     役割：
+     - index の「機能紹介」セクションを分離した fragment
+     - Featureカード一覧と、詳細モーダルをまとめて管理する
+     - 学習用コメントを残し、あとから見返しやすくする
+     ========================================================= -->
+<th:block th:fragment="indexFeatures">
+
+  <!-- ===============================
+       ポートフォリオの主旨（学習目的の明記）
+       ================================== -->
+  <section class="portfolio-note" aria-label="ポートフォリオの主旨">
+    <h3>このサイトについて（学習ポートフォリオ）</h3>
+    <p>
+      本サイトは <strong>Nakamura</strong> の学習継続・習熟を目的として制作したポートフォリオです。
+      下記の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」など</strong> の項目は、
+      学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
+    </p>
+
+    <p class="small">
+      ※クリックで各実装ページへ移動できます。実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
+    </p>
+
+    <p class="portfolio-links">
+      <a href="https://github.com/shogonakamura2026/pf1-real-estate"
+         target="_blank" rel="noopener noreferrer">
+        GitHubでソースコードを見る
+      </a>
+    </p>
+  </section>
+
+
+  <!-- =========================================================
+       Feature Section（機能紹介）
+       学習用メモ：
+       - 1〜9 すべて flipカード
+       - 表面：背景画像 + 番号 + 項目名
+       - 裏面：説明文 + Clickで詳細
+       - モーダル内容は button の data-xxx から読み取る
+       -
+       - 表面画像の見せ方クラス
+       - feature-card__face--clear   : 画像くっきり
+       - feature-card__face--soft    : 少し被せる
+       - feature-card__face--covered : しっかり被せる
+       ========================================================= -->
+  <section class="features" aria-labelledby="portfolioFeaturesHeading">
+    <h2 id="portfolioFeaturesHeading" class="sr-only">実装した項目一覧</h2>
+	<p>下記の実装項目をクリックで、実装画面のスクリーンショットと説明詳細が確認できます。<br>
+	モーダル内下記に実装ページへ飛べるリンクも設置しています。</p>
+    <div class="feature-grid">
+
+      <!-- =====================================================
+           1. 物件詳細
+           学習用メモ：
+           - flipカードは必ず .feature-card__flip-inner の中に
+             表面(front)と裏面(back)を入れる
+           - 表面画像だけ後で差し替えるなら bg のURLを変更
+           - モーダル画像だけ後で差し替えるなら data-modal-image を変更
+           ===================================================== -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="物件詳細ページ"
+              data-modal-image="/images/screenshots/feature-01.png"
+              data-modal-desc="物件写真・価格・所在地・間取りなど、必要な情報を整理して確認できる詳細画面です。"
+              data-modal-points="一覧画面から詳細画面へ自然につながる導線を意識しました。|主要情報を上部にまとめ、閲覧しやすい構成にしました。|見た目だけでなく、ユーザーが迷わず確認できることを意識しました。"
+              data-modal-link="/properties/40">
+
+        <span class="feature-card__flip-inner">
+
+          <!-- 表面 -->
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-01.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">1</span>
+                <h3>物件詳細</h3>
+              </span>
+            </span>
+          </span>
+
+          <!-- 裏面 -->
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-01.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">1</span>
+                <h3>物件詳細</h3>
+              </span>
+              <p>
+                物件情報を見やすく整理し、写真・価格・所在地などを
+                確認しやすい詳細画面にしました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+
+        </span>
+      </button>
+
+
+      <!-- 2. お気に入り・履歴 -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="お気に入り・閲覧履歴"
+              data-modal-image="/images/screenshots/feature-02.png"
+              data-modal-desc="localStorage を利用して、お気に入りや閲覧履歴をブラウザに保存できるようにした機能です。"
+              data-modal-points="画面遷移後も情報が残る動作を確認できるようにしました。|ユーザーがあとで見返しやすい導線を意識しました。|フロント側の状態管理の学習として実装しました。"
+              data-modal-link="/favorites">
+
+        <span class="feature-card__flip-inner">
+
+          <!-- 学習用メモ：
+               ここを clear / soft / covered に変えると
+               表面画像の見え方だけ切り替えできる -->
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-02.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">2</span>
+                <h3>お気に入り・履歴</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-02.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">2</span>
+                <h3>お気に入り・履歴</h3>
+              </span>
+              <p>
+                localStorage を使い、ブラウザ上でお気に入りや閲覧履歴を
+                保存・再表示できるようにしました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+
+        </span>
+      </button>
+
+	  <!-- 3. 検索・絞り込み -->
+	  <button type="button"
+	          class="feature-card feature-card--modal feature-card--flip"
+	          data-modal-title="検索・絞り込み"
+	          data-modal-image="/images/screenshots/feature-03.png"
+	          data-modal-desc="条件を指定して、目的の物件を探しやすいように絞り込みUIを実装しました。"
+	          data-modal-points="検索条件を整理しやすいUIを意識しました。|目的の物件へたどり着きやすい導線を考えました。|一覧画面との連携を意識して構成しました。"
+	          data-modal-link="/properties">
+
+	    <span class="feature-card__flip-inner">
+	      <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+	        <span class="feature-card__bg"
+	              style="background-image:url('/images/screenshots/feature-card-03.png');"></span>
+	        <span class="feature-card__overlay"></span>
+
+	        <span class="feature-card__body feature-card__body--front">
+	          <span class="feature-card__head feature-card__head--front">
+	            <span class="feature-num">3</span>
+	            <h3>検索・絞り込み</h3>
+	          </span>
+	        </span>
+	      </span>
+
+	      <span class="feature-card__face feature-card__face--back">
+	        <span class="feature-card__bg feature-card__bg--back"
+	              style="background-image:url('/images/screenshots/feature-card-03.png');"></span>
+	        <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+	        <span class="feature-card__body feature-card__body--back">
+	          <span class="feature-card__head">
+	            <span class="feature-num">3</span>
+	            <h3>検索・絞り込み</h3>
+	          </span>
+	          <p>
+	            条件を指定して、目的の物件を探しやすいように
+	            絞り込みUIを実装しました。
+	          </p>
+	          <span class="feature-card__cta">Clickで詳細</span>
+	        </span>
+	      </span>
+	    </span>
+	  </button>
+
+
+	  
+      <!-- 4. JSONブログ -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="JSONブログ機能"
+              data-modal-image="/images/screenshots/feature-04.png"
+              data-modal-desc="JSON データをもとにブログ一覧を表示する機能です。DBを使わないアプローチを模索し学習目的で実装しています。"
+              data-modal-points="JSON を使ってデータ管理と表示を分離しました。|ページネーションにて1ページ内のデータを分割表示しています。"
+              data-modal-link="/staff/blog">
+
+        <span class="feature-card__flip-inner">
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-04.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">4</span>
+                <h3>JSONブログ</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-04.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">4</span>
+                <h3>JSONブログ</h3>
+              </span>
+              <p>
+                JSONデータを用いた一覧表示で、
+                データと見た目を分けて管理しました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+	  <!-- 5. 管理機能 -->
+	  <button type="button"
+	          class="feature-card feature-card--modal feature-card--flip"
+	          data-modal-title="ログインセッション管理機能"
+	          data-modal-image="/images/screenshots/feature-05.png"
+	          data-modal-desc="ブログ機能と連動し、ログインをHttpSessionにて管理。投稿と削除ができるようになります。簡易的なログインセッション機能を学ぶため実装しています。。"
+	          data-modal-points="利用者だけでなく管理側の操作も意識しました。|運用しやすい導線を考えました。|今後DBにてアカウント情報管理を予定。|現時点ではJSONブログ管理目的でのみ存在しています。"
+	          data-modal-link="/staff/login">
+
+	    <span class="feature-card__flip-inner">
+	      <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+	        <span class="feature-card__bg"
+	              style="background-image:url('/images/screenshots/feature-card-05.png');"></span>
+	        <span class="feature-card__overlay"></span>
+
+	        <span class="feature-card__body feature-card__body--front">
+	          <span class="feature-card__head feature-card__head--front">
+	            <span class="feature-num">5</span>
+	            <h3>ログイン管理機能</h3>
+	          </span>
+	        </span>
+	      </span>
+
+	      <span class="feature-card__face feature-card__face--back">
+	        <span class="feature-card__bg feature-card__bg--back"
+	              style="background-image:url('/images/screenshots/feature-card-05.png');"></span>
+	        <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+	        <span class="feature-card__body feature-card__body--back">
+	          <span class="feature-card__head">
+	            <span class="feature-num">5</span>
+	            <h3>ログイン管理機能</h3>
+	          </span>
+	          <p>
+	            ブログ投稿、削除の権限をログインすることで可能にしました。
+	            簡易的なセッション管理機能学習のため実装しています。
+	          </p>
+	          <span class="feature-card__cta">Clickで詳細</span>
+	        </span>
+	      </span>
+	    </span>
+	  </button>
+
+      <!-- 6. お問い合わせ -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="お問い合わせフォーム"
+              data-modal-image="/images/screenshots/feature-06.png"
+              data-modal-desc="入力チェックを行いながら送信まで進めるフォーム画面です。確認画面や完了画面も含めて流れを意識して作成しました。"
+              data-modal-points="バリデーションで入力ミスを早めに気づけるようにしました。|確認画面を挟むことで送信前に見直せるようにしました。|フォームの使いやすさと学習成果の両方を意識しました。|電話番号は「-」入力を許可し、DB保存時には-無しのフォーマットで保存されます。|希望日時：営業時間外、現在の日付や時間の選択ができないよう制限をつけています。|"
+              data-modal-link="/contact">
+
+        <span class="feature-card__flip-inner">
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-06.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">5</span>
+                <h3>お問い合わせ</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-06.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">6</span>
+                <h3>お問い合わせ</h3>
+              </span>
+              <p>
+                入力チェックや確認画面を通して、
+                送信しやすいフォームを実装しました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+
+      <!-- 7. 確認画面 -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="確認画面"
+              data-modal-image="/images/screenshots/feature-07.png"
+              data-modal-desc="送信前に入力内容を見直せるようにし、誤送信を防ぎやすい流れにしました。"
+              data-modal-points="入力内容の最終確認ができるようにしました。|送信前の安心感を高める構成を意識しました。|フォーム全体の流れの一部として実装しました。"
+              data-modal-link="/contact">
+
+        <span class="feature-card__flip-inner">
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-07.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">7</span>
+                <h3>確認画面</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-07.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">7</span>
+                <h3>確認画面</h3>
+              </span>
+              <p>
+                送信前に入力内容を見直せるようにし、
+                誤送信を防ぎやすい流れにしました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+
+      <!-- 8. フォーム用バリデーション -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="バリデーションの実装"
+              data-modal-image="/images/screenshots/feature-08.png"
+              data-modal-desc="送信前に不正な入力を弾き、Script攻撃からの保護を目的として実装。"
+              data-modal-points="基本的に現実的な文字数管理が主となります。|DB上のデータ活用を円滑にする目的も兼ねてます。|ユーザー体験への影響を最小限に抑えています。"
+              data-modal-link="/contact">
+
+        <span class="feature-card__flip-inner">
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-08.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">8</span>
+                <h3>フォーム用バリデーション</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-08.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">8</span>
+                <h3>フォーム用バリデーション</h3>
+              </span>
+              <p>
+                不正な入力やScript攻撃から保護するため
+				フォームの各項目にバリデーションを実装しました。
+              </p>
+              <span class="feature-card__cta">Clickで詳細</span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+
+
+      <!-- 9. 共通部品化 -->
+      <button type="button"
+              class="feature-card feature-card--modal feature-card--flip"
+              data-modal-title="共通部品化"
+              data-modal-image="/images/screenshots/feature-09.png"
+              data-modal-desc="Thymeleaf フラグメントなどを使い、保守しやすい構成を意識して実装しました。"
+              data-modal-points="共通パーツ化で修正しやすさを意識しました。|重複を減らして保守性向上を目指しました。|画面追加時の拡張もしやすい構成にしました。"
+              data-modal-link="https://github.com/shogonakamura2026/pf1-real-estate">
+
+        <span class="feature-card__flip-inner">
+          <span class="feature-card__face feature-card__face--front feature-card__face--soft">
+            <span class="feature-card__bg"
+                  style="background-image:url('/images/screenshots/feature-card-09.png');"></span>
+            <span class="feature-card__overlay"></span>
+
+            <span class="feature-card__body feature-card__body--front">
+              <span class="feature-card__head feature-card__head--front">
+                <span class="feature-num">9</span>
+                <h3>共通部品化</h3>
+              </span>
+            </span>
+          </span>
+
+          <span class="feature-card__face feature-card__face--back">
+            <span class="feature-card__bg feature-card__bg--back"
+                  style="background-image:url('/images/screenshots/feature-card-09.png');"></span>
+            <span class="feature-card__overlay feature-card__overlay--back"></span>
+
+            <span class="feature-card__body feature-card__body--back">
+              <span class="feature-card__head">
+                <span class="feature-num">9</span>
+                <h3>共通部品化</h3>
+              </span>
+              <p>
+                Thymeleaf フラグメントなどを使い、
+                保守しやすい構成を意識して実装しました。
+              </p>
+              <span class="feature-card__cta">GitHubにて確認</span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       Feature Modal（機能詳細モーダル）
+       学習用メモ：
+       - クリックされたカードの data-xxx を読み取って表示する
+       - 背景クリック / × / 閉じるボタン / Esc キーで閉じる
+       - 今後カルーセル化する場合は feature-modal__media の中だけ拡張するとよい
+       -
+       - 今は img 1枚構成
+       - 将来は「メイン画像 + サムネイル列 + 左右ボタン」を
+         この media ブロック内に追加予定
+       ========================================================= -->
+  <div class="feature-modal" id="featureModal" aria-hidden="true">
+    <div class="feature-modal__backdrop" data-modal-close></div>
+
+    <div class="feature-modal__dialog"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="featureModalTitle">
+
+      <button type="button"
+              class="feature-modal__close"
+              aria-label="閉じる"
+              data-modal-close>×</button>
+
+      <!-- 学習用メモ：
+           ここが将来カルーセル化する画像エリア
+           いまは img 1枚で表示 -->
+      <div class="feature-modal__media">
+        <img id="featureModalImage" src="" alt="">
+      </div>
+
+      <div class="feature-modal__content">
+        <p class="feature-modal__kicker">Feature Detail</p>
+        <h3 id="featureModalTitle">機能詳細</h3>
+        <p id="featureModalDesc"></p>
+        <ul class="feature-modal__points" id="featureModalPoints"></ul>
+
+        <div class="feature-modal__actions">
+          <a id="featureModalLink" class="btn" href="#">実装を見る</a>
+          <button type="button" class="btn btn--ghost" data-modal-close>閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</th:block>
+</body>
+</html>

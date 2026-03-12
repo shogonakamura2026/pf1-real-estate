@@ -5,235 +5,154 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>チームb不動産</title>
 
-  
   <!-- ===============================
-	  共通CSS
+       共通CSS
+       - common.css       : 基本設定
+       - layout.css       : 全体レイアウト
+       - components.css   : 共通UI部品
+       - index.css        : index本体（Hero / Topics など）
+       - index-features.css : 機能紹介（Feature）専用
+       - responsive.css   : 全体のSP補助
   ================================== -->
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/layout.css}">
   <link rel="stylesheet" th:href="@{/css/components.css}">
   <link rel="stylesheet" th:href="@{/css/page/index.css}">
+  <link rel="stylesheet" th:href="@{/css/page/index-features.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-
- 
 </head>
 
 <body id="home">
   <!-- ===============================
        共通ヘッダー
   ================================== -->
-  <div th:replace="~{fragments/header :: siteHeader}"></div>  
-  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
   <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-<main class="container">
+  <main class="container">
 
-  <!-- ===============================
-       Hero（スライドショー）
-  ================================== -->
-  <section class="hero" aria-label="トップスライドショー">
-    <div class="hero-slider" id="heroSlider">
-      <img class="is-active" th:src="@{/images/house1.jpg}" alt="物件イメージ1">
-      <img th:src="@{/images/house2.jpg}" alt="物件イメージ2">
-      <img th:src="@{/images/house3.jpg}" alt="物件イメージ3">
+    <!-- ===============================
+         Hero（スライドショー）
+         - slideshow.js で画像を切り替える
+         - キャッチ部分は物件一覧への導線
+    ================================== -->
+    <section class="hero" aria-label="トップスライドショー">
+      <div class="hero-slider" id="heroSlider">
+        <img class="is-active" th:src="@{/images/house1.jpg}" alt="物件イメージ1">
+        <img th:src="@{/images/house2.jpg}" alt="物件イメージ2">
+        <img th:src="@{/images/house3.jpg}" alt="物件イメージ3">
 
-      <!-- キャッチ：クリックで物件一覧へ -->
-      <a class="hero-caption" th:href="@{/properties}" aria-label="物件一覧へ">
-        <h2>理想のマイホーム探し</h2>
-        <p>まずはこちら。素敵な物件がきっと見つかる！</p>
-      </a>
-    </div>
-
-    <div class="cta-row">
-      <a class="btn primary" th:href="@{/properties}">物件一覧を見る</a>
-      <a class="btn pink" th:href="@{/contact}">相談・お問い合わせ</a>
-    </div>
-  </section>
-  
-  <!-- ===============================
-       ポートフォリオの主旨（学習目的の明記）
-       ※下記の案内が「学習した主機能」であることを明確化
-  ================================== -->
-  <section class="portfolio-note" aria-label="ポートフォリオの主旨">
-    <h3>このサイトについて（学習ポートフォリオ）</h3>
-    <p>
-      本サイトは <strong>Nakamura</strong> の学習継続・習熟を目的として制作したポートフォリオです。
-      下記の <strong>「物件を探す / お気に入り・履歴 / 社員のブログ」など</strong> の項目は、
-      学習した内容を反映した <strong>本サイトの主機能（主要実装）</strong> です。
-    </p>
-	<p class="small">
-	  ※クリックで各実装ページへ移動できます。実運用サービスではなく、学習・検証のために機能追加・改善を継続しています。
-	</p>
-	<p class="portfolio-links">
-	  <a href="https://github.com/shogonakamura2026/pf1-real-estate"
-	     target="_blank" rel="noopener noreferrer">
-	    GitHubでソースコードを見る
-	  </a>
-	</p>
-  </section>
-
-  <!-- ===============================
-       学習内容の案内（イメージカラー）
-  ================================== -->
-  <section class="cards" aria-label="サイト案内">
-    <div class="card card-search">
-      <a class="card-link" th:href="@{/properties}">
-        <h3>物件を探す</h3>
-        <p>家賃・地域・間取りで絞り込み。気になる物件は詳細からチェックできます。（DBにて管理）</p>
-      </a>
-    </div>
-
-    <div class="card card-favorite">
-      <a class="card-link" th:href="@{/favorites}">
-        <h3>お気に入り・履歴</h3>
-        <p>お気に入り・閲覧履歴はブラウザに保存。後から見返せて便利です。（技術：localStorageを採用）</p>
-      </a>
-    </div>
-
-    <div class="card card-blog">
-      <a class="card-link" th:href="@{/staff/blog(page=1)}">
-        <h3>社員のブログ</h3>
-        <p>スタッフが最新情報を発信。学習用にJSON保存で投稿・削除ができます。（擬似的なDBを作成）</p>
-      </a>
-    </div>
-	
-	<div class="card card-search">
-	  <a class="card-link" th:href="@{/staff/login}">
-	    <h3>ログインセッション</h3>
-	    <p>
-	      HttpSessionによるログイン状態管理とControllerでの認証チェックを組み合わせ、
-	      スタッフのみがブログ投稿・削除などの管理操作を行えるアクセス制御を実装。（アクセス制御）
-	    </p>
-	  </a>
-	</div>
-
-	 <div class="card card-favorite">
-	   <a class="card-link" th:href="@{/contact}">
-	     <h3>お問い合わせフォーム（1）</h3>
-	     <p>電話、メールの選択肢により「必須」切り替え。電話番号は「-」を取り除きDB保存。現時点より前の日付、時間、定休日等を選択時アラート実装。（DBを構築）</p>
-	   </a>
-	 </div>
-	 
-
-	 <div class="card card-blog">
-	   <a class="card-link" th:href="@{/#footer-anchor}">
-	     <h3>フッター等を共通パーツ化</h3>
-	     <p>
-	       サイト全体で共通要素をThymeleafのフラグメント機能にて共通パーツ化。
-	       footer要素の一部にSpringの@ControllerAdviceを利用。（保守性の向上）
-	     </p>
-	   </a>
-	 </div>
-
-
-	 <div class="card card-search"> 
-		<a class="card-link" href="https://github.com/shogonakamura2026/pf1-real-estate"> 
-	     <h3>レスポンシブ時の調整</h3>
-	       <p>レスポンシブ時にストレスが無い閲覧環境になるよう調整。
-	       お気に入り、履歴にアクセスできるフロートボタンを下部に配置しUX、UIを意識しました。（レイアウト調整）<br>※GitHubを参照願います。
-	     </p>
-	   </a>
-	 </div>
-
-	  <div class="card card-favorite">
-	    <a class="card-link" th:href="@{/contact}">
-	      <h3>お問い合わせフォーム（2）</h3>
-	      <p>全角入力を許可、DB追加時には半角へ変換するよう調整しました。電話番号、メールアドレスの不正な入力、テキストエリアに不正なScriptを弾く設計を導入（バリデーション実装）</p>
-	    </a>
-	  </div>
-
-	 <div class="card card-blog">
-		<a class="card-link" href="https://github.com/shogonakamura2026/pf1-real-estate">
-	      <h3>保守性を意識した階層管理。</h3>
-	      <p>実業務でサイトのレイアウトや実装機能追加時、修正を考慮した階層構造にてファイル管理。共通CSS、ページ固有のCSSファイルを作成しています。（保守性の向上）<br>※GitHubを参照願います。</p>
-		</a>
-	  </div>
-	 
-	
-  </section>
-  
-
-
-  <!-- ===============================
-       追加トピック（お知らせ / スタッフ紹介）
-  ================================== -->
-  <section class="topics" aria-label="トピック">
-    <!-- お知らせ -->
-    <article class="topic-card" aria-label="お知らせ">
-      <h3 class="topic-title">物件トピック</h3>
-
-      <ul class="news-list">
-        <li><time datetime="2026-01-11">2026/01/11</time>【完成宅地の分譲】豊見城市長堂＜全６区画＞／事前予約制です！</li>
-        <li><time datetime="2026-02-02">2026/02/02</time>【オーガニックハウス泡瀬】世代をこえて住み継がれる家　モデルハウス公開中！！</li>
-        <li><time datetime="2026-03-03">2026/03/03</time>【予約制】夢のマイホーム相談会　in 宜野湾市嘉数 のご紹介</li>
-      </ul>
-
-      <div class="topic-actions">
-        <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
+        <!-- キャッチ：クリックで物件一覧へ -->
+        <a class="hero-caption" th:href="@{/properties}" aria-label="物件一覧へ">
+          <h2>理想のマイホーム探し</h2>
+          <p>まずはこちら。素敵な物件がきっと見つかる！</p>
+        </a>
       </div>
-    </article>
 
-    <!-- スタッフ紹介 -->
-    <article class="topic-card" aria-label="スタッフ紹介">
-      <h3 class="topic-title">NEW FACE</h3>
+      <!-- CTAボタン -->
+      <div class="cta-row">
+        <a class="btn primary" th:href="@{/properties}">物件一覧を見る</a>
+        <a class="btn pink" th:href="@{/contact}">相談・お問い合わせ</a>
+      </div>
+    </section>
 
-      <div class="staff-wrap">
-        <img th:src="@{/images/staff.jpg}" alt="新人営業 山田 翠（みどり）">
-        <div>
-          <h4>新人営業の山田 翠（みどり）です！</h4>
-          <p>
-            不動産は多くのお客様にとって「一生に一度の大きな買い物」。その大切な瞬間を、
-            明るさと全力の笑顔でサポートします。物件だけでなく、街の耳寄り情報も発信していきます！
-          </p>
+    <!-- ===============================
+         機能紹介（Feature）
+         ※ index 専用だが長くなってきたため fragment 化
+         ※ Featureカード一覧 + モーダル本体は
+            fragments/index-features.html 側で管理する
+    ================================== -->
+    <div th:replace="~{fragments/index-features :: indexFeatures}"></div>
 
-          <div class="highlight">【不動産Bチームのアピールポイント】</div>
-          <p>
-            透明性の高い情報公開と迅速なレスポンスを徹底し、初めての方でも安心して進められる体制を整えています。
-            お引渡し後のアフターフォローまで、末永く頼っていただける存在を目指します。
-          </p>
+    <!-- ===============================
+         追加トピック（お知らせ / スタッフ紹介）
+         - index本体側に残すセクション
+    ================================== -->
+    <section class="topics" aria-label="トピック">
 
-          <div class="bnr-row">
-            <a th:href="@{/properties}">
-              <div class="bnr-box">
-                <img th:src="@{/images/bnr_guide.png}" alt="物件検索">
-                <div class="bnr-text">物件の検索はこちら</div>
-              </div>
-            </a>
+      <!-- お知らせ -->
+      <article class="topic-card" aria-label="お知らせ">
+        <h3 class="topic-title">物件トピック</h3>
 
-            <a th:href="@{/contact}">
-              <div class="bnr-box">
-                <img th:src="@{/images/bnr_contact.png}" alt="お問い合わせ">
-                <div class="bnr-text">お問い合わせはこちら</div>
-              </div>
-            </a>
+        <ul class="news-list">
+          <li><time datetime="2026-01-11">2026/01/11</time>【完成宅地の分譲】豊見城市長堂＜全６区画＞／事前予約制です！</li>
+          <li><time datetime="2026-02-02">2026/02/02</time>【オーガニックハウス泡瀬】世代をこえて住み継がれる家　モデルハウス公開中！！</li>
+          <li><time datetime="2026-03-03">2026/03/03</time>【予約制】夢のマイホーム相談会　in 宜野湾市嘉数 のご紹介</li>
+        </ul>
+
+        <div class="topic-actions">
+          <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
+        </div>
+      </article>
+
+      <!-- スタッフ紹介 -->
+      <article class="topic-card" aria-label="スタッフ紹介">
+        <h3 class="topic-title">NEW FACE</h3>
+
+        <div class="staff-wrap">
+          <img th:src="@{/images/staff.jpg}" alt="新人営業 山田 翠（みどり）">
+
+          <div>
+            <h4>新人営業の山田 翠（みどり）です！</h4>
+            <p>
+              不動産は多くのお客様にとって「一生に一度の大きな買い物」。その大切な瞬間を、
+              明るさと全力の笑顔でサポートします。物件だけでなく、街の耳寄り情報も発信していきます！
+            </p>
+
+            <div class="highlight">【不動産Bチームのアピールポイント】</div>
+            <p>
+              透明性の高い情報公開と迅速なレスポンスを徹底し、初めての方でも安心して進められる体制を整えています。
+              お引渡し後のアフターフォローまで、末永く頼っていただける存在を目指します。
+            </p>
+
+            <!-- 追加バナー -->
+            <div class="bnr-row">
+              <a th:href="@{/properties}">
+                <div class="bnr-box">
+                  <img th:src="@{/images/bnr_guide.png}" alt="物件検索">
+                  <div class="bnr-text">物件の検索はこちら</div>
+                </div>
+              </a>
+
+              <a th:href="@{/contact}">
+                <div class="bnr-box">
+                  <img th:src="@{/images/bnr_contact.png}" alt="お問い合わせ">
+                  <div class="bnr-text">お問い合わせはこちら</div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </article>
-  </section>
+      </article>
 
-</main>
-<div id="footer-anchor"></div>
-  
+    </section>
+  </main>
 
-<!-- Contactフロート -->
-<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+  <div id="footer-anchor"></div>
 
-  <!-- 共通フッター -->
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+  <!-- ===============================
+       Contactフロート
+  ================================== -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
 
-  <!-- 共通Cookie同意 -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+  <!-- ===============================
+       共通フッター
+  ================================== -->
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
+  <!-- ===============================
+       共通Cookie同意
+  ================================== -->
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
-<!-- ===============================
-     js呼び出し
-================================== -->
-<!-- Contactフロートjs -->
-<script th:src="@{/js/contact-float.js}"></script>
-<!-- スライドショー制御 -->
-<script th:src="@{/js/slideshow.js}"></script>
-
-
+  <!-- ===============================
+       JS呼び出し
+       - slideshow.js   : Heroスライドショー
+       - index-modal.js : Featureモーダル
+  ================================== -->
+  <script th:src="@{/js/contact-float.js}"></script>
+  <script th:src="@{/js/slideshow.js}"></script>
+  <script th:src="@{/js/index-modal.js}"></script>
 </body>
 </html>

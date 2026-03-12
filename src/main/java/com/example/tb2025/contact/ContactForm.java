@@ -56,10 +56,30 @@ public class ContactForm {
     // ※ DB保存必須ではないため、Contact テーブルへの追加は不要。
     private String propertyName;
 
-    // 希望条件
+    // =========================================================
+    // 3) 希望条件
+    // =========================================================
+    // 学習ポイント：
+    // 任意入力欄でも、文字数制限をつけておくと
+    // 異常に長い入力や想定外データの流入を防ぎやすい。
+    //
+    // また、自由入力に近い項目は
+    // 危険文字列の簡易チェックも補助的に入れておくと安心。
+
+    // 希望エリア
+    @Size(max = 100, message = "希望エリアは100文字以内で入力してください")
     private String area;
+
+    // ご予算
+    @Size(max = 100, message = "ご予算は100文字以内で入力してください")
     private String budget;
+
+    // 間取り
+    @Size(max = 50, message = "間取りは50文字以内で入力してください")
     private String layout;
+
+    // 入居希望時期
+    @Size(max = 50, message = "入居希望時期は50文字以内で入力してください")
     private String moveIn;
 
     // 内見希望日時（今回は String で保持）
@@ -71,7 +91,7 @@ public class ContactForm {
     private String time3;
 
     // =========================================================
-    // 3) 相談内容・自由入力欄
+    // 4) 相談内容・自由入力欄
     // =========================================================
     // 学習ポイント：
     // 自由入力欄は何でも入れられるため、
@@ -83,7 +103,7 @@ public class ContactForm {
     private String message;
 
     // =========================================================
-    // 4) 同意チェック
+    // 5) 同意チェック
     // =========================================================
     // checkbox は未チェック時に false / null になるため、
     // 「必須でチェックしてほしい」場合は @AssertTrue が向いている
@@ -91,7 +111,7 @@ public class ContactForm {
     private Boolean consent;
 
     // =========================================================
-    // 5) 共通の正規化メソッド
+    // 6) 共通の正規化メソッド
     // =========================================================
     // 学習ポイント：
     // 入力値はそのまま使わず、
@@ -105,7 +125,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 6) 物件情報からメッセージ初期文を作る補助メソッド
+    // 7) 物件情報からメッセージ初期文を作る補助メソッド
     // =========================================================
     // 学習ポイント：
     // 物件詳細ページからお問い合わせ画面へ来たとき、
@@ -127,7 +147,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 7) 条件付きバリデーション（名前の危険文字列）
+    // 8) 条件付きバリデーション（名前の危険文字列）
     // =========================================================
     // 学習ポイント：
     // 名前は文字種を厳しく制限しすぎると、
@@ -155,7 +175,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 8) 条件付きバリデーション（電話番号）
+    // 9) 条件付きバリデーション（電話番号）
     // =========================================================
     // 学習ポイント：
     // 「電話」を選んだときだけ電話番号を必須にしたいので、
@@ -186,7 +206,48 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 9) 条件付きバリデーション（相談内容の危険文字列）
+    // 10) 条件付きバリデーション（希望エリアの危険文字列）
+    // =========================================================
+    // 学習ポイント：
+    // 希望エリアは任意入力なので、
+    // 「那覇市」「浦添市」「ゆいレール沿線」など
+    // 柔軟に入力できるようにしつつ、
+    // 明らかに危険な文字列だけ簡易的に弾く。
+    @AssertTrue(message = "希望エリアに使用できない文字列が含まれています")
+    public boolean isAreaSafe() {
+        if (area == null || area.isBlank()) {
+            return true;
+        }
+
+        String lower = area.toLowerCase(Locale.ROOT);
+
+        return !lower.contains("<script")
+                && !lower.contains("</script>")
+                && !lower.contains("javascript:");
+    }
+
+    // =========================================================
+    // 11) 条件付きバリデーション（ご予算の危険文字列）
+    // =========================================================
+    // 学習ポイント：
+    // ご予算も自由入力に近いため、
+    // 「3000万円以内」「月8万円台」などは許可しつつ、
+    // script 系の危険文字列だけは弾く。
+    @AssertTrue(message = "ご予算に使用できない文字列が含まれています")
+    public boolean isBudgetSafe() {
+        if (budget == null || budget.isBlank()) {
+            return true;
+        }
+
+        String lower = budget.toLowerCase(Locale.ROOT);
+
+        return !lower.contains("<script")
+                && !lower.contains("</script>")
+                && !lower.contains("javascript:");
+    }
+
+    // =========================================================
+    // 12) 条件付きバリデーション（相談内容の危険文字列）
     // =========================================================
     // 学習ポイント：
     // これは XSS 対策の「補助」。
@@ -217,7 +278,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 10) getter / setter
+    // 13) getter / setter
     // =========================================================
 
     public String getName() {
@@ -322,16 +383,18 @@ public class ContactForm {
         return area;
     }
 
+    // 希望エリアも全角英数字や前後空白の揺れを軽く整える
     public void setArea(String area) {
-        this.area = area;
+        this.area = normalizeToHalfWidth(area);
     }
 
     public String getBudget() {
         return budget;
     }
 
+    // ご予算も同様に軽く正規化しておく
     public void setBudget(String budget) {
-        this.budget = budget;
+        this.budget = normalizeToHalfWidth(budget);
     }
 
     public String getLayout() {
@@ -339,7 +402,7 @@ public class ContactForm {
     }
 
     public void setLayout(String layout) {
-        this.layout = layout;
+        this.layout = normalizeToHalfWidth(layout);
     }
 
     public String getMoveIn() {
@@ -347,7 +410,7 @@ public class ContactForm {
     }
 
     public void setMoveIn(String moveIn) {
-        this.moveIn = moveIn;
+        this.moveIn = normalizeToHalfWidth(moveIn);
     }
 
     public String getDate1() {
@@ -417,7 +480,7 @@ public class ContactForm {
     }
 
     // =========================================================
-    // 11) Thymeleaf のエラー表示補助
+    // 14) Thymeleaf のエラー表示補助
     // =========================================================
     // @AssertTrue のメソッド名に対応したエラー表示用
     public boolean getNameSafe() {
@@ -426,6 +489,14 @@ public class ContactForm {
 
     public boolean getTelRequiredWhenPhone() {
         return isTelRequiredWhenPhone();
+    }
+
+    public boolean getAreaSafe() {
+        return isAreaSafe();
+    }
+
+    public boolean getBudgetSafe() {
+        return isBudgetSafe();
     }
 
     public boolean getMessageSafe() {

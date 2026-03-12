@@ -260,3 +260,63 @@ footer{
   }
 }
 
+/* =========================================================
+   Feature Section / Modal responsive
+   ========================================================= */
+@media (max-width: 960px){
+  .feature-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature-modal__dialog{
+    grid-template-columns: minmax(260px, 1fr) minmax(240px, 0.95fr);
+    width: min(980px, calc(100% - 24px));
+  }
+}
+
+@media (max-width: 767px){
+  .feature-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card{
+    min-height: 190px;
+  }
+
+  .feature-card__body{
+    padding: 16px 14px;
+  }
+
+  .feature-card__head{
+    gap: 8px;
+  }
+  
+  .feature-modal__dialog{
+    display: block;
+    width: min(100% - 20px, 100%);
+    max-height: calc(100vh - 20px);
+    margin: 10px auto;
+    border-radius: 16px;
+    overflow: auto;
+  }
+
+  .feature-modal__media{
+    min-height: auto;
+  }
+
+  .feature-modal__media img{
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    object-fit: contain;
+  }
+
+  .feature-modal__content{
+    padding: 20px 16px 18px;
+  }
+
+  .feature-modal__content h3{
+    font-size: 1.35rem;
+  }
+}
+

@@ -143,7 +143,7 @@
                      inputmode="tel"
                      autocomplete="tel"
                      placeholder="例）090-1234-5678 / 09012345678">
-              <div class="hint">数字と「-」のみ入力できます。保存時はハイフンを除いた数字のみで登録されます。</div>
+             <div class="hint">数字と「-」のみ入力できます。送信時に全角数字やハイフン表記ゆれは自動で整えられます。</div>
 
               <div class="error"
                    th:if="${#fields.hasErrors('tel')}"
@@ -162,6 +162,14 @@
               <input type="text"
                      th:field="*{area}"
                      placeholder="例）那覇市 / 宜野湾市 / 浦添市 など">
+			
+             <div class="error"
+				  th:if="${#fields.hasErrors('area')}"
+				  th:errors="*{area}">エラー</div>
+
+		     <div class="error"
+			      th:if="${#fields.hasErrors('areaSafe')}"
+			      th:errors="*{areaSafe}">エラー</div>
             </div>
           </div>
 
@@ -172,6 +180,13 @@
               <input type="text"
                      th:field="*{budget}"
                      placeholder="例）家賃 8万円まで / 価格 3,000万円まで など">
+			<div class="error"
+			     th:if="${#fields.hasErrors('budget')}"
+			     th:errors="*{budget}">エラー</div>
+
+			<div class="error"
+				 th:if="${#fields.hasErrors('budgetSafe')}"
+			     th:errors="*{budgetSafe}">エラー</div>
             </div>
           </div>
 

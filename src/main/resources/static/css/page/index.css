@@ -111,80 +111,8 @@
       color: #1f2a44;
     }
 
-	/* -------------------------------
-	   ポートフォリオ注記（主旨明記）
-	   ※全体デザインを崩さない控えめなカード
-	-------------------------------- */
-	.portfolio-note{
-	  margin-top: 16px;
-	  background:rgb(237, 241, 245);
-	  border:1px solid #e5e7eb;
-	  border-radius: 12px;
-	  padding: 14px;
-	}
-	.portfolio-note h3{
-	  margin: 0 0 8px;
-	  font-size: 15px;
-	  font-weight: 900;
-	  color:#0f172a;
-	}
-	.portfolio-note p{
-	  margin: 0;
-	  color:#334155;
-	  font-weight: 600;
-	  line-height: 1.7;
-	  font-size: 14px;
-	}
-	.portfolio-note .small{
-	  margin-top: 8px;
-	  color:#64748b;
-	  font-weight: 700;
-	  font-size: 13px;
-	}
-	
-    /* -------------------------------
-       3カラム案内カード
-    -------------------------------- */
-    .cards{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 14px;
-    }
-    .card-link{
-      display:block;
-      text-decoration:none;
-      color:inherit;
-    }
-    .card h3{
-      margin: 0 0 8px;
-      font-size: 16px;
-      font-weight: 900;
-      color:#0f172a;
-    }
-    .card p{
-      margin: 0;
-      color:#334155;
-      font-weight: 600;
-      line-height: 1.6;
-      font-size: 14px;
-    }
 
-    /* 案内カード背景色（イメージカラー） */
-    .card-search { background:#e0f2fe; border-color:#7dd3fc; }
-    .card-favorite{ background:#fce7f3; border-color:#f9a8d4; }
-    .card-blog{ background:#ecfdf5; border-color:#6ee7b7; }
 
-    /* hover */
-    .card-search:hover { background:#bae6fd; }
-    .card-favorite:hover { background:#fbcfe8; }
-    .card-blog:hover { background:#bbf7d0; }
 
     /* -------------------------------
        Topic（追加トピック：お知らせ / スタッフ）
@@ -304,10 +232,8 @@
     }
   
 
-
-.topic-actions{
-  margin-top:12px;
-  text-align:right;
-}
-
+	.topic-actions{
+	  margin-top:12px;
+	  text-align:right;
+	}
 
