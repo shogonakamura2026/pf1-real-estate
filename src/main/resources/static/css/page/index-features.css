@@ -22,7 +22,7 @@
   padding: 14px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  background: rgb(237, 241, 245);
+  background: rgb(255, 206, 206);
 }
 
 .portfolio-note h3{
@@ -78,6 +78,7 @@
    }
 
    .features p{
+	 color: #0f172a;
      margin: 0 0 0 14px;
    	 border-bottom:  1px dotted #334155;
       }

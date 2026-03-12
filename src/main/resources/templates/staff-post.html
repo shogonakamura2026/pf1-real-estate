@@ -9,60 +9,112 @@
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/layout.css}">
   <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/page/staff.css}">
   <link rel="stylesheet" th:href="@{/css/page/staff-post.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
 </head>
 
-<body id="staff">
+<body id="staff-post">
+
+  <!-- 共通ヘッダー / 共通ナビ -->
   <div th:replace="~{fragments/header :: siteHeader}"></div>
   <div th:replace="~{fragments/global-nav :: globalNav}"></div>
-  <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-  <main id="contents" class="post-wrap">
-    <h2>ブログ投稿</h2>
+  <!-- パンくず -->
+  <div id="path">
+    <ol>
+      <li><a th:href="@{/}">ホーム</a></li>
+      <li><a th:href="@{/staff/blog?page=1}">スタッフブログ</a></li>
+      <li>ブログ投稿</li>
+    </ol>
+  </div>
 
-    <p class="hint">
-      タイトルと本文は必須です。画像はURL指定（任意）です。
-    </p>
+  <!-- メイン -->
+  <div id="main">
+    <article>
+      <div class="form-card">
 
-    <div class="msg-error" th:if="${error}" th:text="${error}"></div>
-
-    <div class="form-card">
-      <form th:action="@{/staff/blog}" method="post">
-        <div class="form-row">
-          <label for="title">タイトル</label>
-          <input id="title" name="title" type="text" maxlength="80"
-                 th:value="${title}">
+        <!-- エラー表示 -->
+        <div class="error-box"
+             th:if="${error}"
+             th:text="${error}">
+          エラーが表示されます
         </div>
 
-        <div class="form-row">
-          <label for="body">本文</label>
-          <textarea id="body" name="body" maxlength="2000"
-                    th:text="${body}"></textarea>
-        </div>
+        <form th:action="@{/staff/blog}" method="post">
 
-        <div class="form-row">
-          <label for="imageUrl">画像URL（任意）</label>
-          <input id="imageUrl" name="imageUrl" type="text" maxlength="300"
-                 placeholder="例：https://example.com/photo.jpg"
-                 th:value="${imageUrl}">
-          <div class="hint">※空欄なら画像なしで投稿されます。<br>
-            ※↓お試し用URLです↓<br>
-            「https://kunnren202511.com/images/staff.jpg」<br>
-            「https://kunnren202511.com/images/blogtest01.png」<br>
-            「https://kunnren202511.com/images/graphic2.png」
+          <!-- 説明 -->
+          <div class="form-row">
+			<h1>スタッフブログ投稿</h1>
+			<p>
+			  スタッフ向けの投稿画面です。タイトル・本文を入力して記事を作成できます。
+			</p>
+			<div class="blog-info">
+			<ul>
+			  <li>タイトルと本文は必須です。</li>
+			  <li>タイトルは80文字以内、本文は2000文字以内で入力してください。</li>
+			  <li>画像URLを使う場合は、http:// または https:// から始まるURLを入力してください。</li>
+			</ul>
+			</div>
+			<!-- タイトル -->
+            <label for="title">タイトル</label>
+            <input id="title"
+                   type="text"
+                   name="title"
+                   th:value="${title}"
+                   maxlength="80"
+                   required
+                   placeholder="例）新着物件のご紹介 / おすすめエリア特集">
+            <div class="hint">
+              必須入力です。最大80文字まで入力できます。
+            </div>
           </div>
-        </div>
 
-        <div class="form-actions">
-          <a th:href="@{/staff/blog(page=1)}">← 一覧に戻る</a>
-          <button type="submit">投稿する</button>
-        </div>
-      </form>
-    </div>
-  </main>
+          <!-- 本文 -->
+          <div class="form-row">
+            <label for="body">本文</label>
+            <textarea id="body"
+                      name="body"
+                      maxlength="2000"
+                      required
+                      placeholder="記事本文を入力してください。"
+                      th:text="${body}"></textarea>
+            <div class="hint">
+              必須入力です。最大2000文字まで入力できます。本文は通常の文章として表示されます。
+            </div>
+          </div>
 
+          <!-- 画像URL -->
+          <div class="form-row">
+            <label for="imageUrl">画像URL</label>
+            <input id="imageUrl"
+                   type="url"
+                   name="imageUrl"
+                   th:value="${imageUrl}"
+                   maxlength="300"
+                   placeholder="https://example.com/sample.jpg">
+            <div class="hint">
+             <p>任意入力です。http:// または https:// から始まるURLのみ対応です。</p>
+            <p>※テスト用画像：<br>
+				「https://kunnren202511.com/images/staff.jpg」<br>
+				「https://kunnren202511.com/images/blogtest01.png」
+			</p>
+			 </div>
+          </div>
+
+          <!-- ボタン -->
+          <div class="actions">
+            <a class="btn sub" th:href="@{/staff/blog?page=1}">一覧へ戻る</a>
+            <button type="submit" class="btn">投稿する</button>
+          </div>
+
+        </form>
+      </div>
+    </article>
+  </div>
+
+  <!-- 共通フッター -->
   <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
-  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+
 </body>
 </html>
