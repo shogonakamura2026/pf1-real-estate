@@ -67,20 +67,19 @@
      margin: 16px auto 0;
      padding: 14px;
      background-color: #cbd5e1;
-     border: 1px solid #e5e7eb;
+     border: 1px solid rgb(0, 0, 0);
      border-radius: 12px;
    }
 
    .features h2{
-     margin: 0 0 0 14px;
-	 border-top:  1px dotted #334155;
-	
+     margin: 0 0 0 14px;	
+	 color: #000; 
    }
 
    .features p{
 	 color: #0f172a;
      margin: 0 0 0 14px;
-   	 border-bottom:  1px dotted #334155;
+	 font-size: 18px;
       }
    
 .feature-grid{
@@ -102,7 +101,7 @@
   position: relative;
   overflow: hidden;
   min-height: 220px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
@@ -113,7 +112,7 @@
   width: 100%;
   margin: 0;
   padding: 0;
-  border: 1px solid #e5e7eb;
+  border: 2px solid rgb(0, 0, 0);
   background: #ffffff;
   color: inherit;
   font: inherit;
@@ -469,7 +468,7 @@
   margin: 24px auto;
   overflow: hidden;
   border-radius: 20px;
-  background: #ffffff;
+  background: rgb(192, 192, 192);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
 }
 
@@ -529,12 +528,14 @@
   margin: 0 0 14px;
   color: #0f172a;
   font-size: 1.7rem;
+  border-bottom: 1px dotted #000;
 }
 
 .feature-modal__content p{
   margin: 0;
-  color: #334155;
+  color: rgb(0, 0, 0);
   line-height: 1.9;
+  font-weight: 800;
 }
 
 .feature-modal__points{

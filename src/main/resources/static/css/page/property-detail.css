@@ -194,6 +194,22 @@
     }
 
 
+	.agency-info{
+	  margin-top: 12px;
+	  line-height: 1.8;
+	}
+
+	.agency-info a{
+	  color: #0f766e;
+	  font-weight: 700;
+	  text-decoration: underline;
+	}
+
+	.agency-info a:hover{
+	  color: #115e59;
+	}
+
+	
 
     /* レスポンシブ */
     @media (max-width: 860px){

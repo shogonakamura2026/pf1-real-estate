@@ -37,16 +37,14 @@
     <div class="top2">
       <div class="card">
         <div class="photo">
-          <img th:src="@{/images/{img}(img=${property.imageUrl})}"
-               src="images/house1.jpg"
-               alt="物件写真">
+			<img th:src="${property.imageFullPath}" alt="物件写真">
         </div>
       </div>
 
       <div class="card pad">
         <h2 class="title" th:text="${property.title}">サンプル物件</h2>
 
-        <p class="price">¥ <span th:text="${property.price}">78000</span> / 月</p>
+		<p class="price"><span th:text="${property.priceDisplay}">0万円</span> / 月</p>
 
         <div class="meta">
           <div>住所：<span th:text="${property.address}">住所</span></div>
@@ -82,19 +80,55 @@
             <button class="btn small outline" type="button" onclick="copyShareUrl()">リンクをコピー</button>
           </div>
         </div>
+		
+		<hr>
+
+		<div class="meta agency-info">
+		  <div>
+		    不動産仲介業者：
+		    <span th:text="${property.managementCompanyName != null and !#strings.isEmpty(property.managementCompanyName) ? property.managementCompanyName : '管理会社未設定'}">
+		      株式会社サンプル不動産
+		    </span>
+		  </div>
+
+		  <div>
+		    電話番号：
+		    <a th:if="${property.managementCompanyTel != null and !#strings.isEmpty(property.managementCompanyTel)}"
+		       th:href="${'tel:' + #strings.replace(property.managementCompanyTel, '-', '')}"
+		       th:text="${property.managementCompanyTel}">
+		      098-0000-0000
+		    </a>
+		    <span th:if="${property.managementCompanyTel == null or #strings.isEmpty(property.managementCompanyTel)}">
+		      電話番号未設定
+		    </span>
+		  </div>
+		</div>
+
+		
       </div>
     </div>
+	
+	
   </section>
 
   <!-- 詳細テーブル -->
   <section class="card detail pad section-gap">
     <table>
       <tr><th>建物名</th><td th:text="${property.title}"></td></tr>
-      <tr><th>家賃</th><td th:text="${property.price}"></td></tr>
+	  <tr><th>家賃</th><td th:text="${property.priceDisplay}"></td></tr>
       <tr><th>住所</th><td th:text="${property.address}"></td></tr>
       <tr><th>間取り</th><td th:text="${property.layout}"></td></tr>
       <tr><th>面積</th><td><span th:text="${property.floorArea}"></span>㎡</td></tr>
       <tr><th>説明</th><td th:text="${property.description}"></td></tr>
+	  <tr><th>共益費</th><td th:text="${property.commonFeeDisplay}"></td></tr>
+	  <tr><th>駐車場</th><td th:text="${property.parkingDisplay}"></td></tr>
+	  <tr><th>ペット</th><td th:text="${property.petAllowedDisplay}"></td></tr>
+	  <tr><th>築年数</th><td th:text="${property.buildingAgeDisplay}"></td></tr>
+	  <tr><th>敷金</th><td th:text="${property.securityDepositDisplay}"></td></tr>
+	  <tr><th>礼金</th><td th:text="${property.keyMoneyDisplay}"></td></tr>
+	  <tr><th>管理会社</th><td th:text="${property.managementCompanyName}"></td></tr>
+	  <tr><th>電話番号</th><td th:text="${property.managementCompanyTel}"></td></tr>
+
     </table>
   </section>
 
@@ -114,11 +148,11 @@
       <div class="rec-grid">
         <article class="rec-item" th:each="p : ${recommendations}">
           <a class="rec-photo" th:href="@{/properties/{id}(id=${p.id})}">
-            <img th:src="@{/images/{img}(img=${p.imageUrl})}" alt="物件写真">
+			<img th:src="${p.imageFullPath}" alt="物件写真">
           </a>
 
           <div class="rec-body">
-            <div class="rec-price">¥ <span th:text="${p.price}"></span> / 月</div>
+			<div class="rec-price"><span th:text="${p.priceDisplay}"></span> / 月</div>
             <div class="rec-meta"><span th:text="${p.layout}"></span></div>
 
             <div class="rec-actions">

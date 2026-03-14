@@ -13,267 +13,377 @@
   <link rel="stylesheet" th:href="@{/css/components.css}">
   <link rel="stylesheet" th:href="@{/css/page/history.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-
-  
 </head>
 
 <body id="history">
-	<!-- ===============================
-	     共通ヘッダー
-	================================== -->
-  <div th:replace="~{fragments/header :: siteHeader}"></div> 
-  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <!-- ===============================
+       共通ヘッダー
+  ================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
   <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
 
-  
-<!-- =========================================================
-     メイン
-     ---------------------------------------------------------
-     役割分離（学習ポイント）
-     - 保存（履歴を追加し10件に制限）：本来は物件詳細ページで実施
-     - 表示（このページ）：history を読んで描画する
-     - 連携（このページ）：favorites を読んでトグルできるようにする
-========================================================= -->
-<main class="container">
+  <!-- =========================================================
+       メイン
+       ---------------------------------------------------------
+       このページの役割
+       1) localStorage に保存された「閲覧履歴」を読む
+       2) 画面にカード一覧として表示する
+       3) 各履歴カードからお気に入り追加/削除をできるようにする
 
-  <div class="header-row">
-    <div>
-      <h2 class="page-title">閲覧履歴</h2>
+       設計メモ
+       - 履歴を「保存する」のは物件詳細ページ側の役割
+       - history.html は「表示・削除・お気に入り連携」が主役
+       - 履歴データは localStorage の "history" キーに配列で保存
+       - お気に入りデータは localStorage の "favorites" キーに配列で保存
+  ========================================================= -->
+  <main class="container">
 
-      <!-- ✅ 仕様が伝わる「最新10件」表記 -->
-      <div class="note">
-        ※閲覧履歴は最新10件まで保存されます（古い履歴から自動削除）
+    <!-- =======================================================
+         ページ上部
+         -------------------------------------------------------
+         - タイトル表示
+         - 履歴保存仕様の説明
+         - 一覧ページへ戻る導線
+         - 履歴全削除ボタン
+    ======================================================== -->
+    <div class="header-row">
+      <div>
+        <h2 class="page-title">閲覧履歴</h2>
+
+        <!-- 最新10件まで保存される仕様を表示 -->
+        <div class="note">
+          ※閲覧履歴は最新10件まで保存されます（古い履歴から自動削除）
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
+        <button class="btn danger" type="button" id="clearHistoryBtn">履歴を全削除</button>
       </div>
     </div>
 
-    <div class="header-actions">
-      <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
-      <button class="btn danger" type="button" id="clearHistoryBtn">履歴を全削除</button>
+    <!-- =======================================================
+         空状態表示
+         -------------------------------------------------------
+         履歴が1件も無い場合だけ表示する案内メッセージ
+         JS側で display の出し分けを行う
+    ======================================================== -->
+    <div class="empty empty-box" id="emptyBox">
+      まだ閲覧履歴がありません。物件を見るとここに追加されます。
     </div>
-  </div>
 
-  <div class="empty empty-box" id="emptyBox">
-    まだ閲覧履歴がありません。物件を見るとここに追加されます。
-  </div>
+    <!-- =======================================================
+         履歴カード描画エリア
+         -------------------------------------------------------
+         JSで localStorage から読み込んだ履歴をここへ差し込む
+    ======================================================== -->
+    <section class="grid" id="historyGrid" aria-label="閲覧履歴一覧"></section>
+  </main>
 
-  <section class="grid" id="historyGrid" aria-label="閲覧履歴一覧"></section>
-</main>
-
-
-<!-- Contactフロート -->
-<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+  <!-- Contactフロート -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
 
   <!-- 共通フッター -->
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
   <!-- 共通Cookie同意 -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
-<script>
-  // =========================================================
-  // localStorage keys
-  // ---------------------------------------------------------
-  // HISTORY_KEY: 閲覧履歴の保存場所（配列）
-  // FAV_KEY:     お気に入りの保存場所（favorites.html と共通）
-  // =========================================================
-  const HISTORY_KEY = "history";
-  const FAV_KEY = "favorites";
+  <script>
+    // =========================================================
+    // localStorage key 定義
+    // ---------------------------------------------------------
+    // HISTORY_KEY : 閲覧履歴の保存先
+    // FAV_KEY     : お気に入りの保存先
+    //
+    // 履歴の各要素は以下のような形を想定
+    // {
+    //   id: 物件ID,
+    //   title: 物件名,
+    //   price: 家賃（円）,
+    //   layout: 間取り,
+    //   imageUrl: "chintai/house1.jpg" のような相対パス
+    // }
+    // =========================================================
+    const HISTORY_KEY = "history";
+    const FAV_KEY = "favorites";
 
-  // =========================================================
-  // 共通：JSON配列を安全に読み書き
-  // ---------------------------------------------------------
-  // localStorageは「文字列」保存なので JSON.parse/stringify を使う
-  // 壊れたJSONが入っていても画面が落ちないように try/catch
-  // =========================================================
-  function loadJsonArray(key){
-    try { return JSON.parse(localStorage.getItem(key) || "[]"); }
-    catch(e){ return []; }
-  }
-
-  function saveJsonArray(key, list){
-    localStorage.setItem(key, JSON.stringify(list));
-  }
-
-  // =========================================================
-  // XSS対策：innerHTMLに埋める文字列の最小エスケープ
-  // ---------------------------------------------------------
-  // favorites.html は createElement + textContent 中心で比較的安全
-  // history.html は innerHTML を使うため escapeHtml が重要
-  // =========================================================
-  function escapeHtml(v){
-    return String(v ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
-  }
-
-  // =========================================================
-  // お気に入り判定 / ボタン文言更新
-  // =========================================================
-  function isFavorite(favs, id){
-    return favs.some(x => Number(x.id) === Number(id));
-  }
-
-  function updateFavBtnText(btn, favs){
-    const id = Number(btn.dataset.id);
-    btn.textContent = isFavorite(favs, id)
-      ? "お気に入り削除"
-      : "お気に入り追加";
-  }
-
-  // =========================================================
-  // お気に入りトグル（追加/削除）
-  // ---------------------------------------------------------
-  // ★ favorites.html と同じ保存形式に合わせる（整合性）
-  // { id, title, price, layout, imageUrl }
-  //
-  // ★ data-* 属性に必要情報を詰めておき、押したときに保存する
-  // =========================================================
-  function toggleFavoriteByBtn(btn){
-    const id = Number(btn.dataset.id);
-
-    // 他ページで変更されてもズレないよう「押下時に最新を読む」
-    const favs = loadJsonArray(FAV_KEY);
-
-    const idx = favs.findIndex(x => Number(x.id) === id);
-    if (idx !== -1) {
-      // すでにお気に入り → 削除
-      favs.splice(idx, 1);
-    } else {
-      // 未登録 → 追加
-      favs.push({
-        id: id,
-        title: btn.dataset.title || "",
-        price: Number(btn.dataset.price || 0),
-        layout: btn.dataset.layout || "",
-        imageUrl: btn.dataset.image || ""
-      });
+    // =========================================================
+    // 共通：JSON配列を安全に読み書き
+    // ---------------------------------------------------------
+    // localStorage は文字列しか保存できないため、
+    // 配列は JSON.stringify / JSON.parse で扱う
+    //
+    // もし保存データが壊れていてもページを落とさないように
+    // try/catch で空配列を返すようにしている
+    // =========================================================
+    function loadJsonArray(key) {
+      try {
+        return JSON.parse(localStorage.getItem(key) || "[]");
+      } catch (e) {
+        return [];
+      }
     }
 
-    saveJsonArray(FAV_KEY, favs);
-
-    // 同ページ内の全 fav-btn を “今の状態” に揃える
-    document.querySelectorAll(".fav-btn").forEach(b => updateFavBtnText(b, favs));
-  }
-
-  // =========================================================
-  // 描画：履歴をカード化して表示
-  // ---------------------------------------------------------
-  // ・history を読む
-  // ・favorites を読む（ボタン文言同期用）
-  // ・空なら emptyBox を表示
-  //
-  // ★「10件制限」は保存側（物件詳細ページ）で担保する設計
-  // =========================================================
-  function render(){
-    const grid = document.getElementById("historyGrid");
-    const empty = document.getElementById("emptyBox");
-
-    const history = loadJsonArray(HISTORY_KEY);
-    const favs = loadJsonArray(FAV_KEY);
-
-    grid.innerHTML = "";
-
-    if (!history.length){
-      empty.style.display = "block";
-      return;
+    function saveJsonArray(key, list) {
+      localStorage.setItem(key, JSON.stringify(list));
     }
-    empty.style.display = "none";
 
-    history.forEach(item => {
-      const id = Number(item.id);
+    // =========================================================
+    // 表示用：金額を「万円」表記へ変換
+    // ---------------------------------------------------------
+    // 例:
+    // 78000  -> 7.8万円
+    // 100000 -> 10万円
+    // 0/null -> なし
+    //
+    // 一覧画面や詳細画面の表示と雰囲気を揃えるため、
+    // 履歴ページでも万円表示に寄せる
+    // =========================================================
+    function formatYenToMan(value) {
+      const num = Number(value || 0);
 
-      // favorites.html と同じ想定：/images/ + imageUrl（ファイル名）
-      const imgSrc = "/images/" + (item.imageUrl || "");
+      if (!num) {
+        return "なし";
+      }
 
-      const card = document.createElement("article");
-      card.className = "card";
+      const man = num / 10000;
+      return Number.isInteger(man) ? `${man}万円` : `${man.toFixed(1)}万円`;
+    }
 
-      // ✅ 画像クリックで詳細へ（favorites.html と同じ導線）
-      // ✅ fav-btn: data-* に保存用データを詰めておく
-      card.innerHTML = `
-        <a class="thumb" href="/properties/${id}">
-          <img src="${imgSrc}" alt="物件画像">
-        </a>
+    // =========================================================
+    // XSS対策：innerHTML に埋める文字列をエスケープ
+    // ---------------------------------------------------------
+    // このページではカード描画に innerHTML を使っているため、
+    // タイトルや間取りなどの文字列をそのまま埋め込むのは危険
+    //
+    // そのため、HTML特殊文字を最小限エスケープしてから使う
+    // =========================================================
+    function escapeHtml(v) {
+      return String(v ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
 
-        <div class="body">
-          <div class="title">${escapeHtml(item.title || "")}</div>
-          <div class="price">¥ ${escapeHtml(item.price ?? "")} / 月</div>
-          <div class="meta">${escapeHtml(item.layout || "")}</div>
+    // =========================================================
+    // お気に入り判定
+    // ---------------------------------------------------------
+    // favorites 配列の中に対象 id があるかを判定する
+    // =========================================================
+    function isFavorite(favs, id) {
+      return favs.some(x => Number(x.id) === Number(id));
+    }
 
-          <div class="actions">
-            <a class="btn small outline" href="/properties/${id}">物件詳細</a>
+    // =========================================================
+    // お気に入りボタンの文言更新
+    // ---------------------------------------------------------
+    // お気に入り済みなら「お気に入り削除」
+    // 未登録なら「お気に入り追加」
+    // =========================================================
+    function updateFavBtnText(btn, favs) {
+      const id = Number(btn.dataset.id);
+      btn.textContent = isFavorite(favs, id)
+        ? "お気に入り削除"
+        : "お気に入り追加";
+    }
 
-            <button class="btn small pink fav-btn" type="button"
-              data-id="${id}"
-              data-title="${escapeHtml(item.title || "")}"
-              data-price="${escapeHtml(item.price ?? "")}"
-              data-layout="${escapeHtml(item.layout || "")}"
-              data-image="${escapeHtml(item.imageUrl || "")}">
-              お気に入りに追加
-            </button>
+    // =========================================================
+    // お気に入りトグル
+    // ---------------------------------------------------------
+    // ボタンに設定された data-* 属性をもとに、
+    // favorites 配列へ追加 / 削除を切り替える
+    //
+    // 保存するデータ構造:
+    // {
+    //   id,
+    //   title,
+    //   price,
+    //   layout,
+    //   imageUrl
+    // }
+    //
+    // imageUrl は "chintai/house1.jpg" のような相対パスを保存する
+    // 表示時は "/images/" を前につける想定
+    // =========================================================
+    function toggleFavoriteByBtn(btn) {
+      const id = Number(btn.dataset.id);
 
-            <button class="btn small danger history-del-btn" type="button" data-id="${id}">
-              履歴を削除
-            </button>
+      // 他ページで favorites が変更されている可能性もあるため、
+      // 押下時に最新状態を読み直す
+      const favs = loadJsonArray(FAV_KEY);
+
+      const idx = favs.findIndex(x => Number(x.id) === id);
+
+      if (idx !== -1) {
+        // すでに登録済み → 削除
+        favs.splice(idx, 1);
+      } else {
+        // 未登録 → 追加
+        favs.push({
+          id: id,
+          title: btn.dataset.title || "",
+          price: Number(btn.dataset.price || 0),
+          layout: btn.dataset.layout || "",
+          imageUrl: btn.dataset.image || ""
+        });
+      }
+
+      saveJsonArray(FAV_KEY, favs);
+
+      // 同ページ内の全 fav-btn の文言を最新状態に揃える
+      document.querySelectorAll(".fav-btn").forEach(b => updateFavBtnText(b, favs));
+    }
+
+    // =========================================================
+    // 履歴描画
+    // ---------------------------------------------------------
+    // 1) history を読む
+    // 2) favorites を読む
+    // 3) 空なら emptyBox を表示
+    // 4) 履歴があればカードを生成して表示
+    //
+    // 補足:
+    // - 履歴は物件詳細ページ側で「最新10件」に制限する設計
+    // - このページは表示に専念
+    // =========================================================
+    function render() {
+      const grid = document.getElementById("historyGrid");
+      const empty = document.getElementById("emptyBox");
+
+      const history = loadJsonArray(HISTORY_KEY);
+      const favs = loadJsonArray(FAV_KEY);
+
+      // 再描画前に中身をクリア
+      grid.innerHTML = "";
+
+      // 履歴が空なら空メッセージ表示
+      if (!history.length) {
+        empty.style.display = "block";
+        return;
+      }
+
+      // 履歴がある場合は空メッセージを非表示
+      empty.style.display = "none";
+
+      history.forEach(item => {
+        const id = Number(item.id);
+
+        // =====================================================
+        // 画像パス生成
+        // -----------------------------------------------------
+        // imageUrl には相対パスが入っている想定
+        // 例: "chintai/house1.jpg"
+        //
+        // 表示時に "/images/" を付与して最終URLを組み立てる
+        // 例: "/images/chintai/house1.jpg"
+        // =====================================================
+        const imgSrc = "/images/" + (item.imageUrl || "");
+
+        // カード要素を生成
+        const card = document.createElement("article");
+        card.className = "card";
+
+        // =====================================================
+        // カードHTML
+        // -----------------------------------------------------
+        // - 画像クリックで詳細ページへ
+        // - お気に入り追加/削除ボタン
+        // - 履歴の個別削除ボタン
+        //
+        // 注意:
+        // innerHTML を使うため、文字列は escapeHtml 済みで埋め込む
+        // =====================================================
+        card.innerHTML = `
+          <a class="thumb" href="/properties/${id}">
+            <img src="${imgSrc}" alt="物件画像">
+          </a>
+
+          <div class="body">
+            <div class="title">${escapeHtml(item.title || "")}</div>
+            <div class="price">${formatYenToMan(item.price)} / 月</div>
+            <div class="meta">${escapeHtml(item.layout || "")}</div>
+
+            <div class="actions">
+              <a class="btn small outline" href="/properties/${id}">物件詳細</a>
+
+              <button class="btn small pink fav-btn" type="button"
+                data-id="${id}"
+                data-title="${escapeHtml(item.title || "")}"
+                data-price="${escapeHtml(item.price ?? "")}"
+                data-layout="${escapeHtml(item.layout || "")}"
+                data-image="${escapeHtml(item.imageUrl || "")}">
+                お気に入りに追加
+              </button>
+
+              <button class="btn small danger history-del-btn" type="button" data-id="${id}">
+                履歴を削除
+              </button>
+            </div>
           </div>
-        </div>
-      `;
+        `;
 
-      grid.appendChild(card);
+        grid.appendChild(card);
+      });
+
+      // 初期描画後、お気に入り状態に合わせてボタン文言を揃える
+      document.querySelectorAll(".fav-btn").forEach(btn => updateFavBtnText(btn, favs));
+    }
+
+    // =========================================================
+    // クリック処理（イベント委譲）
+    // ---------------------------------------------------------
+    // render() で後から作られたボタンも確実に拾えるように、
+    // document に対してまとめてイベントを張る
+    // =========================================================
+    document.addEventListener("click", function(e) {
+
+      // お気に入りトグル
+      const favBtn = e.target.closest(".fav-btn");
+      if (favBtn) {
+        toggleFavoriteByBtn(favBtn);
+        return;
+      }
+
+      // 履歴の個別削除
+      const delBtn = e.target.closest(".history-del-btn");
+      if (delBtn) {
+        const id = Number(delBtn.dataset.id);
+
+        const next = loadJsonArray(HISTORY_KEY)
+          .filter(x => Number(x.id) !== id);
+
+        saveJsonArray(HISTORY_KEY, next);
+        render();
+        return;
+      }
     });
 
-    // 初期表示：お気に入り状態に合わせてボタン文言を揃える
-    document.querySelectorAll(".fav-btn").forEach(btn => updateFavBtnText(btn, favs));
-  }
-
-  // =========================================================
-  // クリック処理（イベント委譲）
-  // ---------------------------------------------------------
-  // innerHTMLで作ったボタンでも確実に拾える
-  // =========================================================
-  document.addEventListener("click", function(e){
-
-    // お気に入りトグル
-    const favBtn = e.target.closest(".fav-btn");
-    if (favBtn) {
-      toggleFavoriteByBtn(favBtn);
-      return;
-    }
-
-    // 履歴の個別削除
-    const delBtn = e.target.closest(".history-del-btn");
-    if (delBtn) {
-      const id = Number(delBtn.dataset.id);
-      const next = loadJsonArray(HISTORY_KEY).filter(x => Number(x.id) !== id);
-      saveJsonArray(HISTORY_KEY, next);
+    // =========================================================
+    // 履歴の全削除
+    // ---------------------------------------------------------
+    // localStorage から history キーを削除し、再描画する
+    // =========================================================
+    document.getElementById("clearHistoryBtn").addEventListener("click", function() {
+      localStorage.removeItem(HISTORY_KEY);
       render();
-      return;
-    }
-  });
+    });
 
-  // =========================================================
-  // 履歴の全削除
-  // =========================================================
-  document.getElementById("clearHistoryBtn").addEventListener("click", function(){
-    localStorage.removeItem(HISTORY_KEY);
-    render();
-  });
+    // =========================================================
+    // 初回描画
+    // ---------------------------------------------------------
+    // DOM 読み込み後に履歴一覧を表示する
+    // =========================================================
+    document.addEventListener("DOMContentLoaded", render);
+  </script>
 
-  // =========================================================
-  // 初回描画
-  // =========================================================
-  document.addEventListener("DOMContentLoaded", render);
-</script>
-
-<!-- ===============================
-     js呼び出し
-================================== -->
-<!-- Contactフロートjs -->
-<script th:src="@{/js/contact-float.js}"></script>
-
-
+  <!-- ===============================
+       js呼び出し
+  ================================== -->
+  <!-- Contactフロートjs -->
+  <script th:src="@{/js/contact-float.js}"></script>
 </body>
 </html>

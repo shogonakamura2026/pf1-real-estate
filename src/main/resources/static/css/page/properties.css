@@ -4,7 +4,6 @@
    properties.css
    役割：properties.html 専用スタイル
    ※ 既存HTML内の style を外出しした版
-   sticky headerにbackdrop-filter使用。
    ========================================================= */
 
 @import url(../components.css);
@@ -138,7 +137,7 @@
 
     /* ===============================
        物件一覧カード
-       画像のような「横長の一覧型」に寄せる
+       「横長の一覧型」
     =============================== */
 	.cards{
 	  display: grid;
@@ -299,6 +298,79 @@
 	  min-width: 140px;
 	}
 
+	
+	.spec-table{
+	  width: 100%;
+	  margin-top: 12px;
+	  border-collapse: collapse;
+	  table-layout: fixed;
+	  background: #fff;
+	}
+
+	.spec-table th,
+	.spec-table td{
+	  border: 1px solid #d8dee9;
+	  padding: 10px 12px;
+	  font-size: 14px;
+	  vertical-align: top;
+	  word-break: break-word;
+	}
+
+	.spec-table th{
+	  width: 90px;
+	  background: #f8fafc;
+	  color: #64748b;
+	  font-weight: 800;
+	  text-align: left;
+	}
+
+	.spec-table td{
+	  color: #0f172a;
+	  font-weight: 700;
+	}
+
+	.spec-table .desc{
+	  color: #334155;
+	  font-weight: 600;
+	  line-height: 1.55;
+	}
+
+	/* 仲介業者情報 */
+	.agency-row{
+	  align-items: center;
+	  margin-top: 10px;
+	}
+
+	.agency-name{
+	  font-size: 15px;
+	  font-weight: 800;
+	  color: #1e293b;
+	}
+
+	.agency-name span{
+	  font-weight: 900;
+	  color: #0f172a;
+	}
+
+	.agency-tel{
+	  font-size: 15px;
+	  font-weight: 800;
+	  color: #1e293b;
+	  white-space: nowrap;
+	}
+
+	.agency-tel a{
+	  color: #0f766e;
+	  font-weight: 900;
+	  text-decoration: underline;
+	}
+
+	.agency-tel a:hover{
+	  color: #115e59;
+	}
+
+	
+	
 	/* タブレット */
 	@media (max-width: 860px){
 	  .card{

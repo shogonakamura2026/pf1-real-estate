@@ -13,235 +13,282 @@
   <link rel="stylesheet" th:href="@{/css/components.css}">
   <link rel="stylesheet" th:href="@{/css/page/properties.css}">
   <link rel="stylesheet" th:href="@{/css/responsive.css}" media="screen and (max-width: 767px)">
-
-
 </head>
 
 <body id="properties">
-	<!-- ===============================
-	     共通ヘッダー
-	================================== -->
-  <div th:replace="~{fragments/header :: siteHeader}"></div>  
-  <div th:replace="~{fragments/global-nav :: globalNav}"></div> 
+  <!-- ===============================
+       共通ヘッダー
+  ================================== -->
+  <div th:replace="~{fragments/header :: siteHeader}"></div>
+  <div th:replace="~{fragments/global-nav :: globalNav}"></div>
   <div th:replace="~{fragments/quick-nav :: quickNav}"></div>
-  
-
 
   <!-- =====================================================
        メインコンテンツ
-       ===================================================== --> 
+  ===================================================== -->
+  <div class="property-filter-bar">
+    <div class="container">
+      <h2 class="property-filter-bar__title">物件一覧</h2>
 
-<div class="property-filter-bar">
-  <div class="container">
-    <h2 class="property-filter-bar__title">物件一覧</h2>
+      <form class="search-bar" th:action="@{/properties}" method="get">
+        <div class="field">
+          <label>家賃</label>
+          <div class="range">
+            <select name="minPrice">
+              <option value="">下限なし</option>
+              <option value="30000"  th:selected="${minPrice == 30000}">3万〜</option>
+              <option value="50000"  th:selected="${minPrice == 50000}">5万〜</option>
+              <option value="70000"  th:selected="${minPrice == 70000}">7万〜</option>
+              <option value="100000" th:selected="${minPrice == 100000}">10万〜</option>
+              <option value="150000" th:selected="${minPrice == 150000}">15万〜</option>
+              <option value="200000" th:selected="${minPrice == 200000}">20万〜</option>
+            </select>
 
-    <form class="search-bar" th:action="@{/properties}" method="get">
-      <div class="field">
-        <label>家賃</label>
-        <div class="range">
-          <select name="minPrice">
-            <option value="">下限なし</option>
-            <option value="30000"  th:selected="${minPrice == 30000}">3万〜</option>
-            <option value="50000"  th:selected="${minPrice == 50000}">5万〜</option>
-            <option value="70000"  th:selected="${minPrice == 70000}">7万〜</option>
-            <option value="100000" th:selected="${minPrice == 100000}">10万〜</option>
-            <option value="150000" th:selected="${minPrice == 150000}">15万〜</option>
-            <option value="200000" th:selected="${minPrice == 200000}">20万〜</option>
-          </select>
+            <span class="tilde">〜</span>
 
-          <span class="tilde">〜</span>
+            <select name="maxPrice">
+              <option value="">上限なし</option>
+              <option value="50000"  th:selected="${maxPrice == 50000}">〜5万</option>
+              <option value="80000"  th:selected="${maxPrice == 80000}">〜8万</option>
+              <option value="100000" th:selected="${maxPrice == 100000}">〜10万</option>
+              <option value="150000" th:selected="${maxPrice == 150000}">〜15万</option>
+              <option value="200000" th:selected="${maxPrice == 200000}">〜20万</option>
+            </select>
+          </div>
+        </div>
 
-          <select name="maxPrice">
-            <option value="">上限なし</option>
-            <option value="50000"  th:selected="${maxPrice == 50000}">〜5万</option>
-            <option value="80000"  th:selected="${maxPrice == 80000}">〜8万</option>
-            <option value="100000" th:selected="${maxPrice == 100000}">〜10万</option>
-            <option value="150000" th:selected="${maxPrice == 150000}">〜15万</option>
-            <option value="200000" th:selected="${maxPrice == 200000}">〜20万</option>
+        <div class="field">
+          <label>地域</label>
+          <select name="areaId">
+            <option value="">指定なし</option>
+            <option value="1" th:selected="${areaId == 1}">北部</option>
+            <option value="2" th:selected="${areaId == 2}">中部</option>
+            <option value="3" th:selected="${areaId == 3}">南部</option>
           </select>
         </div>
-      </div>
 
-      <div class="field">
-        <label>地域</label>
-        <select name="areaId">
-          <option value="">指定なし</option>
-          <option value="1" th:selected="${areaId == 1}">北部</option>
-          <option value="2" th:selected="${areaId == 2}">中部</option>
-          <option value="3" th:selected="${areaId == 3}">南部</option>
-        </select>
-      </div>
+        <div class="field">
+          <label>間取り</label>
+          <select name="layout">
+            <option value="">指定なし</option>
+            <option value="1K"   th:selected="${layout == '1K'}">1K</option>
+            <option value="1DK"  th:selected="${layout == '1DK'}">1DK</option>
+            <option value="2DK"  th:selected="${layout == '2DK'}">2DK</option>
+            <option value="3DK"  th:selected="${layout == '3DK'}">3DK</option>
+            <option value="1LDK" th:selected="${layout == '1LDK'}">1LDK</option>
+            <option value="2LDK" th:selected="${layout == '2LDK'}">2LDK</option>
+            <option value="3LDK" th:selected="${layout == '3LDK'}">3LDK</option>
+            <option value="4LDK" th:selected="${layout == '4LDK'}">4LDK</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label>間取り</label>
-        <select name="layout">
-          <option value="">指定なし</option>
-          <option value="1DK"  th:selected="${layout == '1DK'}">1DK</option>
-          <option value="2DK"  th:selected="${layout == '2DK'}">2DK</option>
-          <option value="3DK"  th:selected="${layout == '3DK'}">3DK</option>
-          <option value="1LDK" th:selected="${layout == '1LDK'}">1LDK</option>
-          <option value="2LDK" th:selected="${layout == '2LDK'}">2LDK</option>
-          <option value="3LDK" th:selected="${layout == '3LDK'}">3LDK</option>
-          <option value="4LDK" th:selected="${layout == '4LDK'}">4LDK</option>
-        </select>
-      </div>
-
-      <div class="actions">
-        <button type="submit" class="btn search-submit">この条件で検索</button>
-        <a class="btn ghost" th:href="@{/properties}">条件クリア</a>
-      </div>
-    </form>
-  </div>
-</div>
-
-<main class="container property-list-main">
-  <div class="result-meta">
-    検索結果：
-    <span th:style="'color:' + (${resultCountColor} ?: 'red')"
-          th:text="${#lists.size(properties)}"></span>件
+        <div class="actions">
+          <button type="submit" class="btn search-submit">この条件で検索</button>
+          <a class="btn ghost" th:href="@{/properties}">条件クリア</a>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <section class="cards">
-    <article class="card" th:each="spec : ${properties}">
+  <main class="container property-list-main">
+    <div class="result-meta">
+      検索結果：
+      <span th:style="'color:' + (${resultCountColor} ?: 'red')"
+            th:text="${#lists.size(properties)}"></span>件
+    </div>
 
-      <a class="thumb" th:href="@{/properties/{id}(id=${spec.id})}">
-        <img th:src="@{'/images/' + ${spec.imageUrl}}" alt="物件画像">
-        <span class="badge">NEW</span>
-      </a>
+    <section class="cards">
+      <article class="card" th:each="spec : ${properties}">
 
-      <div class="card-body">
-        <div class="top-row">
-          <div class="title-area">
-            <a class="title"
-               th:href="@{/properties/{id}(id=${spec.id})}"
-               th:text="${spec.title}">物件名</a>
-            <div class="sub">
-              <span th:text="${spec.address}">住所</span>
+        <!-- 左：物件画像 -->
+        <a class="thumb" th:href="@{/properties/{id}(id=${spec.id})}">
+          <img th:src="${spec.imageFullPath}" alt="物件画像">
+          <span class="badge">NEW</span>
+        </a>
+
+        <!-- 右：物件情報 -->
+        <div class="card-body">
+          <div class="top-row">
+            <div class="title-area">
+              <a class="title"
+                 th:href="@{/properties/{id}(id=${spec.id})}"
+                 th:text="${spec.title}">物件名</a>
+              <div class="sub">
+                <span th:text="${spec.address}">住所</span>
+              </div>
+            </div>
+
+            <div class="price">
+              <div class="price-label">家賃</div>
+              <div class="price-value">
+                <span th:text="${spec.priceDisplay}">0万円</span>
+              </div>
             </div>
           </div>
 
-          <div class="price">
-            <div class="price-label">家賃</div>
-            <div class="price-value">
-              <span th:text="${spec.price}">0</span><span class="yen">円</span>
-            </div>
+          <!-- =================================================
+               物件情報
+               ※ 既存CSSの spec-grid / kv をそのまま利用
+               ※ テーブル風に情報を整理するイメージで項目追加
+          ================================================== -->
+		  <table class="spec-table">
+		    <tbody>
+		      <tr>
+		        <th>間取り</th>
+		        <td th:text="${spec.layout}">2LDK</td>
+
+		        <th>面積</th>
+		        <td><span th:text="${spec.floorArea}">0</span>㎡</td>
+
+		        <th>築年数</th>
+		        <td th:text="${spec.buildingAgeDisplay}">築10年</td>
+		      </tr>
+
+		      <tr>
+		        <th>敷金 / 礼金</th>
+		        <td>
+		          <span th:text="${spec.securityDepositDisplay}">なし</span>
+		          /
+		          <span th:text="${spec.keyMoneyDisplay}">なし</span>
+		        </td>
+
+		        <th>ペット</th>
+		        <td th:text="${spec.petAllowedDisplay}">不可</td>
+
+		        <th>駐車場</th>
+		        <td th:text="${spec.parkingDisplay}">なし</td>
+		      </tr>
+
+		      <tr>
+		        <th>説明</th>
+		        <td colspan="5" class="desc" th:text="${spec.description}">説明文</td>
+		      </tr>
+		    </tbody>
+		  </table>
+
+
+          <div class="btn-row">
+            <a class="btn outline"
+               th:href="@{/contact(propertyId=${spec.id})}">
+              お問い合わせ
+            </a>
+
+            <button class="btn pink fav-btn" type="button"
+                    th:attr="data-id=${spec.id},
+                             data-title=${spec.title},
+                             data-price=${spec.price},
+                             data-layout=${spec.layout},
+                             data-image=${spec.imageUrl}">
+              お気に入りに追加
+            </button>
+
+            <a class="btn primary"
+               th:href="@{/properties/{id}(id=${spec.id})}">
+              詳細を見る
+            </a>
           </div>
+
+          <!-- =================================================
+               仲介業者情報
+               ※ CSSを大きくいじらず、hr + top-row + sub で分離感を出す
+          ================================================== -->
+		  <hr>
+
+		  <div class="top-row agency-row">
+		    <div class="title-area">
+		      <div class="sub agency-name">
+		        仲介業者：
+		        <span th:text="${spec.managementCompanyName != null and !#strings.isEmpty(spec.managementCompanyName) ? spec.managementCompanyName : '管理会社未設定'}">
+		          株式会社サンプル不動産
+		        </span>
+		      </div>
+		    </div>
+
+		    <div class="sub agency-tel">
+		      TEL：
+		      <a th:if="${spec.managementCompanyTel != null and !#strings.isEmpty(spec.managementCompanyTel)}"
+		         th:href="${'tel:' + #strings.replace(spec.managementCompanyTel, '-', '')}"
+		         th:text="${spec.managementCompanyTel}">
+		        098-0000-0000
+		      </a>
+		      <span th:if="${spec.managementCompanyTel == null or #strings.isEmpty(spec.managementCompanyTel)}">
+		        電話番号未設定
+		      </span>
+		    </div>
+		  </div>
         </div>
+      </article>
+    </section>
+  </main>
 
-        <dl class="spec-grid">
-          <div class="kv">
-            <dt>間取り</dt>
-            <dd th:text="${spec.layout}">2LDK</dd>
-          </div>
-          <div class="kv">
-            <dt>面積</dt>
-            <dd><span th:text="${spec.floorArea}">0</span>㎡</dd>
-          </div>
-          <div class="kv wide">
-            <dt>説明</dt>
-            <dd class="desc" th:text="${spec.description}">説明文</dd>
-          </div>
-        </dl>
-
-		<div class="btn-row">
-		  <a class="btn outline"
-		     th:href="@{/contact(propertyId=${spec.id})}">
-		    お問い合わせ
-		  </a>
-
-          <!-- ✅ 一覧も fav-btn に統一（ここがトグル対象） -->
-          <button class="btn pink fav-btn" type="button"
-                  th:attr="data-id=${spec.id},
-                           data-title=${spec.title},
-                           data-price=${spec.price},
-                           data-layout=${spec.layout},
-                           data-image=${spec.imageUrl}">
-            お気に入りに追加
-          </button>
-
-          <a class="btn primary" th:href="@{/properties/{id}(id=${spec.id})}">詳細を見る</a>
-        </div>
-      </div>
-    </article>
-  </section>
-</main>
-
-<!-- Contactフロート -->
-<div th:replace="~{fragments/contact-float :: contactFloat}"></div>
+  <!-- Contactフロート -->
+  <div th:replace="~{fragments/contact-float :: contactFloat}"></div>
 
   <!-- 共通フッター -->
-<footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
+  <footer id="footer" th:replace="~{fragments/footer :: footer}"></footer>
 
   <!-- 共通Cookie同意 -->
-<div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
+  <div th:replace="~{fragments/cookie-consent :: cookieConsent}"></div>
 
+  <!-- =======================================================
+       JS：お気に入り（トグル）
+  ======================================================= -->
+  <script>
+    const FAV_KEY = "favorites";
 
-<!-- =======================================================
-     JS：お気に入り（トグル）
-     ※詳細ページと同じロジックでOK（fav-btn を全部対象にする）
-======================================================= -->
-<script>
-  const FAV_KEY = "favorites";
+    function loadFavorites(){
+      try { return JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); }
+      catch(e){ return []; }
+    }
 
-  function loadFavorites(){
-    try { return JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); }
-    catch(e){ return []; }
-  }
+    function saveFavorites(list){
+      localStorage.setItem(FAV_KEY, JSON.stringify(list));
+    }
 
-  function saveFavorites(list){
-    localStorage.setItem(FAV_KEY, JSON.stringify(list));
-  }
+    function isFavorite(list, id){
+      return list.some(x => Number(x.id) === Number(id));
+    }
 
-  function isFavorite(list, id){
-    return list.some(x => Number(x.id) === Number(id));
-  }
-
-  function updateFavButtonText(btn, list){
-    const id = Number(btn.dataset.id);
-    btn.textContent = isFavorite(list, id)
-      ? "お気に入りから削除"
-      : "お気に入りに追加";
-  }
-
-  function bindFavButton(btn, list){
-    updateFavButtonText(btn, list);
-
-    btn.addEventListener("click", function(){
+    function updateFavButtonText(btn, list){
       const id = Number(btn.dataset.id);
+      btn.textContent = isFavorite(list, id)
+        ? "お気に入りから削除"
+        : "お気に入りに追加";
+    }
 
-      const idx = list.findIndex(x => Number(x.id) === id);
-      if (idx !== -1) {
-        // 削除
-        list.splice(idx, 1);
-      } else {
-        // 追加
-        list.push({
-          id: id,
-          title: btn.dataset.title || "",
-          price: Number(btn.dataset.price || 0),
-          layout: btn.dataset.layout || "",
-          imageUrl: btn.dataset.image || ""
-        });
-      }
+    function bindFavButton(btn, list){
+      updateFavButtonText(btn, list);
 
-      saveFavorites(list);
+      btn.addEventListener("click", function(){
+        const id = Number(btn.dataset.id);
 
-      // ✅ 同ページ内の fav-btn 全部更新（見た目がズレない）
-      document.querySelectorAll(".fav-btn").forEach(b => updateFavButtonText(b, list));
+        const idx = list.findIndex(x => Number(x.id) === id);
+        if (idx !== -1) {
+          list.splice(idx, 1);
+        } else {
+          list.push({
+            id: id,
+            title: btn.dataset.title || "",
+            price: Number(btn.dataset.price || 0),
+            layout: btn.dataset.layout || "",
+            imageUrl: btn.dataset.image || ""
+          });
+        }
+
+        saveFavorites(list);
+        document.querySelectorAll(".fav-btn").forEach(b => updateFavButtonText(b, list));
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+      const list = loadFavorites();
+      document.querySelectorAll(".fav-btn").forEach(btn => bindFavButton(btn, list));
     });
-  }
+  </script>
 
-  document.addEventListener("DOMContentLoaded", function(){
-    const list = loadFavorites();
-    document.querySelectorAll(".fav-btn").forEach(btn => bindFavButton(btn, list));
-  });
-</script>
-
-<!-- ===============================
-     js呼び出し
-================================== -->
-<!-- Contactフロートjs -->
-<script th:src="@{/js/contact-float.js}"></script>
-
+  <!-- ===============================
+       js呼び出し
+  ================================== -->
+  <script th:src="@{/js/contact-float.js}"></script>
 </body>
 </html>
