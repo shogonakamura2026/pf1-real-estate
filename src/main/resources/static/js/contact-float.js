@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* 開くボタンは表示 */
   openBtn.classList.remove("is-hidden");
+  
+  /* 「⇧」ボタンが被らないように */
+  document.body.classList.remove("contact-float-open");
 
 
   /* =========================================================
@@ -49,9 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 開くボタンを表示
     openBtn.classList.remove("is-hidden");
+	
+	/* 「⇧」ボタンが被らないように */
+	document.body.classList.remove("contact-float-open");
 
   });
 
+
+  
 
   /* =========================================================
      「開く」処理
@@ -65,6 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 開くボタンを隠す
     openBtn.classList.add("is-hidden");
+	
+	/* 「⇧」ボタンが被らないように */
+	document.body.classList.add("contact-float-open");
 
   });
 

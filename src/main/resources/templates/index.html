@@ -65,68 +65,7 @@
     ================================== -->
     <div th:replace="~{fragments/index-features :: indexFeatures}"></div>
 
-    <!-- ===============================
-         追加トピック（お知らせ / スタッフ紹介）
-         - index本体側に残すセクション
-    ================================== -->
-    <section class="topics" aria-label="トピック">
 
-      <!-- お知らせ -->
-      <article class="topic-card" aria-label="お知らせ">
-        <h3 class="topic-title">物件トピック</h3>
-
-        <ul class="news-list">
-          <li><time datetime="2026-01-11">2026/01/11</time>【完成宅地の分譲】豊見城市長堂＜全６区画＞／事前予約制です！</li>
-          <li><time datetime="2026-02-02">2026/02/02</time>【オーガニックハウス泡瀬】世代をこえて住み継がれる家　モデルハウス公開中！！</li>
-          <li><time datetime="2026-03-03">2026/03/03</time>【予約制】夢のマイホーム相談会　in 宜野湾市嘉数 のご紹介</li>
-        </ul>
-
-        <div class="topic-actions">
-          <a class="btn outline" th:href="@{/properties}">物件一覧へ</a>
-        </div>
-      </article>
-
-      <!-- スタッフ紹介 -->
-      <article class="topic-card" aria-label="スタッフ紹介">
-        <h3 class="topic-title">NEW FACE</h3>
-
-        <div class="staff-wrap">
-          <img th:src="@{/images/staff.jpg}" alt="新人営業 山田 翠（みどり）">
-
-          <div>
-            <h4>新人営業の山田 翠（みどり）です！</h4>
-            <p>
-              不動産は多くのお客様にとって「一生に一度の大きな買い物」。その大切な瞬間を、
-              明るさと全力の笑顔でサポートします。物件だけでなく、街の耳寄り情報も発信していきます！
-            </p>
-
-            <div class="highlight">【不動産Bチームのアピールポイント】</div>
-            <p>
-              透明性の高い情報公開と迅速なレスポンスを徹底し、初めての方でも安心して進められる体制を整えています。
-              お引渡し後のアフターフォローまで、末永く頼っていただける存在を目指します。
-            </p>
-
-            <!-- 追加バナー -->
-            <div class="bnr-row">
-              <a th:href="@{/properties}">
-                <div class="bnr-box">
-                  <img th:src="@{/images/bnr_guide.png}" alt="物件検索">
-                  <div class="bnr-text">物件の検索はこちら</div>
-                </div>
-              </a>
-
-              <a th:href="@{/contact}">
-                <div class="bnr-box">
-                  <img th:src="@{/images/bnr_contact.png}" alt="お問い合わせ">
-                  <div class="bnr-text">お問い合わせはこちら</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </article>
-
-    </section>
   </main>
 
   <div id="footer-anchor"></div>

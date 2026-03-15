@@ -273,23 +273,6 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 }
 
-.site-footer__pagetop-wrap {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
-
-.site-footer__pagetop {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
-  background: #f3f4f6;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-  border-radius: 999px;
-}
 
 .site-footer__body {
   display: flex;

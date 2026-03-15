@@ -375,3 +375,74 @@ body.has-quick-nav .contact-float-peek{
     bottom: 132px;
   }
 }
+
+/* =========================================================
+   ページ上部へ戻るボタン
+   - CTAの少し上に固定表示
+   - CTA開閉に合わせて位置をずらす
+   ========================================================= */
+.page-top-float{
+  position: fixed;
+  right: 18px;
+  bottom: 150px; /* CTAが閉じている時 */
+  z-index: 1590;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    bottom 0.2s ease;
+}
+
+.page-top-float:hover{
+  transform: translateY(-2px);
+  background: rgba(30, 41, 59, 0.96);
+}
+
+/* CTAが開いている時は、その少し上へ移動 */
+body.contact-float-open .page-top-float{
+  bottom: 380px;
+}
+
+/* quick-nav があるページ用 */
+body.has-quick-nav .page-top-float{
+  bottom: 166px;
+}
+
+body.has-quick-nav.contact-float-open .page-top-float{
+  bottom: 384px;
+}
+
+@media (max-width: 767px){
+  .page-top-float{
+    right: 12px;
+    bottom: 150px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  body.contact-float-open .page-top-float{
+    bottom: 320px;
+  }
+
+  body.has-quick-nav .page-top-float{
+    bottom: 144px;
+  }
+
+  body.has-quick-nav.contact-float-open .page-top-float{
+    bottom: 346px;
+  }
+}
+
